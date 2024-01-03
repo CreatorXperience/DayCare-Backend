@@ -1,15 +1,29 @@
-import express from "express"
+import express, { Application } from "express"
 import dotenv from "dotenv"
 import connectToMongoDBDatabase from "./startup/mongodb-connection"
+// import get_test_uri from "./startup/get-uri"
+import { MongoMemoryServer } from "mongodb-memory-server"
+
 dotenv.config()
 const app = express()
 
-const PORT = process.env.PORT || "3030"
+let PORT = process.env.PORT || "3030"
+
+let server:MongoMemoryServer
+
+async function mockServer(callback: (app: Application, port: string, uri: string | undefined
+  )=> void){
+ server = await MongoMemoryServer.create()
+  let uri = process.env.NODE_ENV === "test"? server.getUri(): process.env.URI
+  console.log(server)
+  
+  callback(app,PORT,uri)
+}
+
+
+mockServer(connectToMongoDBDatabase)
 
 
 
-connectToMongoDBDatabase(app,PORT).then(()=>{
-  console.log("connected successfully")
-})
 
-export {app,PORT}
+export {app,PORT,server}

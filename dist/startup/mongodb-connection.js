@@ -13,19 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const get_uri_1 = __importDefault(require("./get-uri"));
 const connection_logger_1 = require("../logger/connection-logger");
-const connectToMongoDBDatabase = (app, port) => __awaiter(void 0, void 0, void 0, function* () {
-    const { uri } = yield (0, get_uri_1.default)();
-    console.log(uri);
+const connectToMongoDBDatabase = (app, port, uri) => __awaiter(void 0, void 0, void 0, function* () {
     if (!uri) {
         return connection_logger_1.connection_logger.error("NO URI PROVIDED");
     }
     mongoose_1.default.connect(uri).then(() => {
         connection_logger_1.connection_logger.info("connected to mongodb database");
-        app.listen(port, () => {
-            connection_logger_1.connection_logger.info("Listening on port" + " " + port);
-        });
+        if (process.env.NODE_ENV !== "test") {
+            app.listen(port, () => {
+                connection_logger_1.connection_logger.info("Listening on port" + " " + port);
+            });
+        }
         app.get('/', (req, res) => {
             res.send("Welcome to this API");
         });

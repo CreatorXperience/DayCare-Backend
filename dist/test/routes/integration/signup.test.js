@@ -13,12 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-// import { server } from "../../.."
+const __1 = require("../../..");
+// import { server } from "../../../startup/mongodb-connection"
 describe("Send Request to  /Parent", () => {
+    console.log(__1.server);
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield mongoose_1.default.connection.dropDatabase();
-        // await mongoose.connection.close()
-        // await server.stop()
+        yield mongoose_1.default.connection.close();
+        console.log(__1.server);
+        yield __1.server.stop();
     }));
     describe("POST /parent", () => {
         test("post data to /parent", () => {
