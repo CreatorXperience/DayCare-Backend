@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import { connection_logger } from "../logger/connection-logger"
 import { Application } from "express"
+import Router from "../routes/routers"
 
 const connectToMongoDBDatabase = async (app: Application, port: string, uri: string | undefined)=> {
      if(!uri){
@@ -16,9 +17,11 @@ const connectToMongoDBDatabase = async (app: Application, port: string, uri: str
      }
     
 
+
     app.get('/', (req,res)=>{
       res.send("Welcome to this API")
     })
+
 
      }).catch(()=>{
        connection_logger.error("error occured while connecting")

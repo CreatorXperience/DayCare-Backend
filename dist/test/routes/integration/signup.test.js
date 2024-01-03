@@ -14,15 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const __1 = require("../../..");
+const supertest_1 = __importDefault(require("supertest"));
 describe("Send Request to  /Parent", () => {
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield mongoose_1.default.connection.dropDatabase();
         yield mongoose_1.default.connection.close();
         yield __1.server.stop();
     }));
-    describe("POST /parent", () => {
-        test("post data to /parent", () => {
-            expect(200).toBe(200);
-        });
+    describe("POST /signup/", () => {
+        test("post data to /signup", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).post("/signup");
+            expect(response.status).toBe(200);
+        }));
     });
 });

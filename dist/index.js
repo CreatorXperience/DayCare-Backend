@@ -17,6 +17,7 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongodb_connection_1 = __importDefault(require("./startup/mongodb-connection"));
 const get_uri_1 = __importDefault(require("./startup/get-uri"));
+const routers_1 = __importDefault(require("./routes/routers"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 exports.app = app;
@@ -31,3 +32,4 @@ function get_uri_and_connect(connect_database) {
     });
 }
 get_uri_and_connect(mongodb_connection_1.default);
+(0, routers_1.default)(app);
