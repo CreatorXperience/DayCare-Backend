@@ -1,37 +1,27 @@
 import mongoose from "mongoose"
-import winston from "winston"
-import dotenv from "dotenv"
+import get_test_uri from "./get-uri"
+import { connection_logger } from "../logger/connection-logger"
 import { Application } from "express"
-dotenv.config()
 
-let connection_logger = winston.createLogger({
-    level: "info",
-    transports: [
-        new winston.transports.Console(),
-    ],
-    
-})
+const connectToMongoDBDatabase = async (app: Application, port: string)=> {
+   const  {uri} =  await get_test_uri()
+   console.log(uri)
+     if(!uri){
+   return   connection_logger.error("NO URI PROVIDED")
+     }
+    mongoose.connect(uri).then(()=>{
+     connection_logger.info("connected to mongodb database")
+     
+     app.listen(port, ()=>{
+      connection_logger.info("Listening on port" + " "+ port)
+    })
 
+    app.get('/', (req,res)=>{
+      res.send("Welcome to this API")
+    })
 
-
-let URI = process.env.URI
-
-const connectToMongoDBDatabase = async (app: Application, PORT: string)=>{
-if(!URI){
-    connection_logger.error("NO URI PROVIDED")
-   return  process.exit(1)
-    }
-    try{
-        await mongoose.connect(URI)
-        app.listen(PORT, ()=>{
-            connection_logger.info("listening on port 3030")
-        })
-        connection_logger.info("connected to database sucessfully")
-    }
-    catch(e){
-        connection_logger.error("error occured while connecting to database")
-    }
-}
-
-
-export default connectToMongoDBDatabase
+     }).catch(()=>{
+       connection_logger.error("error occured while connecting")
+     })
+   }
+   export default connectToMongoDBDatabase

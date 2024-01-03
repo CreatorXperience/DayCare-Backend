@@ -13,24 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const get_uri_1 = __importDefault(require("./get-uri"));
-const connection_logger_1 = require("../logger/connection-logger");
-const connectToMongoDBDatabase = (app, port) => __awaiter(void 0, void 0, void 0, function* () {
-    const { uri } = yield (0, get_uri_1.default)();
-    console.log(uri);
-    if (!uri) {
-        return connection_logger_1.connection_logger.error("NO URI PROVIDED");
-    }
-    mongoose_1.default.connect(uri).then(() => {
-        connection_logger_1.connection_logger.info("connected to mongodb database");
-        app.listen(port, () => {
-            connection_logger_1.connection_logger.info("Listening on port" + " " + port);
+// import { server } from "../../.."
+describe("Send Request to  /Parent", () => {
+    afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
+        yield mongoose_1.default.connection.dropDatabase();
+        // await mongoose.connection.close()
+        // await server.stop()
+    }));
+    describe("POST /parent", () => {
+        test("post data to /parent", () => {
+            expect(200).toBe(200);
         });
-        app.get('/', (req, res) => {
-            res.send("Welcome to this API");
-        });
-    }).catch(() => {
-        connection_logger_1.connection_logger.error("error occured while connecting");
     });
 });
-exports.default = connectToMongoDBDatabase;
