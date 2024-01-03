@@ -16,20 +16,18 @@ exports.server = exports.PORT = exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongodb_connection_1 = __importDefault(require("./startup/mongodb-connection"));
-// import get_test_uri from "./startup/get-uri"
-const mongodb_memory_server_1 = require("mongodb-memory-server");
+const get_uri_1 = __importDefault(require("./startup/get-uri"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 exports.app = app;
 let PORT = process.env.PORT || "3030";
 exports.PORT = PORT;
 let server;
-function mockServer(callback) {
+function get_uri_and_connect(connect_database) {
     return __awaiter(this, void 0, void 0, function* () {
-        exports.server = server = yield mongodb_memory_server_1.MongoMemoryServer.create();
-        let uri = process.env.NODE_ENV === "test" ? server.getUri() : process.env.URI;
-        console.log(server);
-        callback(app, PORT, uri);
+        let { server: mockServer, uri } = yield (0, get_uri_1.default)();
+        exports.server = server = mockServer;
+        connect_database(app, PORT, uri);
     });
 }
-mockServer(mongodb_connection_1.default);
+get_uri_and_connect(mongodb_connection_1.default);

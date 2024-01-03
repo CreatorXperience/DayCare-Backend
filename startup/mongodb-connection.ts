@@ -3,8 +3,6 @@ import { connection_logger } from "../logger/connection-logger"
 import { Application } from "express"
 
 const connectToMongoDBDatabase = async (app: Application, port: string, uri: string | undefined)=> {
-
-
      if(!uri){
    return   connection_logger.error("NO URI PROVIDED")
      }
