@@ -1,7 +1,7 @@
 import express from "express"
 import Joi from "joi"
 import complexPassword from "joi-password-complexity"
-import child_care_login_model from "../models/childcare-signup-model"
+import child_care_signup_model from "../models/childcare-signup-model"
 import _ from "lodash"
 import bcrypt from "bcryptjs"
 
@@ -50,7 +50,7 @@ if(error){
 let child_care_payload = _.pick(req.body, ["fullname", "email", "password"])
 
 
-let child_care = new child_care_login_model(child_care_payload)
+let child_care = new child_care_signup_model(child_care_payload)
 
 let _salt = await bcrypt.genSalt(10)
 let _hash = await bcrypt.hash(child_care.password, _salt)

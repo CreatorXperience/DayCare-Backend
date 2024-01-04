@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const __1 = require("../../..");
 const supertest_1 = __importDefault(require("supertest"));
+const lodash_1 = __importDefault(require("lodash"));
 describe("Send Request to  /Parent", () => {
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield mongoose_1.default.connection.dropDatabase();
@@ -39,6 +40,40 @@ describe("Send Request to  /Parent", () => {
                 password: "saasdasdasdasdadad"
             });
             expect(response.status).toBe(404);
+        }));
+    });
+    describe("POST /auth", () => {
+        let userPayload = {
+            fullname: "Habeeb Muhydeen Ayinde",
+            email: "allyearmustobey2@gmail.com",
+            password: "12345678aB@0"
+        };
+        beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).post("/signup/daycare").send(userPayload);
+            expect(response.status).toBe(200);
+        }));
+        test("should return  200 response status if user sends the right paylaod with a an existing user", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(userPayload, ["email", "password"]));
+            expect(response.status).toBe(200);
+            console.log(response.body);
+        }));
+        test("should return 404 response status if payload is bad or incomplete", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(userPayload, ["email"]));
+            expect(response.status).toBe(404);
+            expect(response.body.message).toMatch("\"password\" is required");
+        }));
+        test("should return a 404 response status if we don't have the childcare owner in our database", () => __awaiter(void 0, void 0, void 0, function* () {
+            let un_existing_user = lodash_1.default.pick(userPayload, ["email", "password"]);
+            un_existing_user.email = "not_existing@gmail.com";
+            let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(un_existing_user);
+            expect(response.status).toBe(404);
+        }));
+        test("should return  404 response status if user sends the right paylaod but with wrong password", () => __awaiter(void 0, void 0, void 0, function* () {
+            let existing_user = lodash_1.default.pick(userPayload, ["email", "password"]);
+            existing_user.password = "wrongpass123@5W";
+            let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(existing_user);
+            expect(response.status).toBe(404);
+            expect(response.body.message).toMatch(/invalid email or password/i);
         }));
     });
 });
