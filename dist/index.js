@@ -17,7 +17,7 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongodb_connection_1 = __importDefault(require("./startup/mongodb-connection"));
 const get_uri_1 = __importDefault(require("./startup/get-uri"));
-const routers_1 = __importDefault(require("./routes/routers"));
+const routers_1 = __importDefault(require("./utils/routers"));
 const connection_logger_1 = require("./logger/connection-logger");
 dotenv_1.default.config();
 const app = (0, express_1.default)();

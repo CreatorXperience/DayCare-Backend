@@ -1,9 +1,9 @@
 import express, { Application} from "express"
 import dotenv from "dotenv"
-import connectToMongoDBDatabase from "./startup/mongodb-connection"
 import { MongoMemoryServer } from "mongodb-memory-server"
+import connectToMongoDBDatabase from "./startup/mongodb-connection"
 import get_test_uri from "./startup/get-uri"
-import Router from "./routes/routers"
+import Router from "./utils/routers"
 import { connection_logger } from "./logger/connection-logger"
 
 dotenv.config()

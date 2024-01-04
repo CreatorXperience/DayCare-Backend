@@ -28,6 +28,7 @@ const connectToMongoDBDatabase = (app, port, uri) => __awaiter(void 0, void 0, v
         //  app.get('/', (req,res)=>{
         //    res.send("Welcome to this API")
         //  })
+        // Router(app)
     }).catch(() => {
         connection_logger_1.connection_logger.error("error occured while connecting");
     });
