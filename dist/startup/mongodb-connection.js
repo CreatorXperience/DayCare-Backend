@@ -13,30 +13,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const winston_1 = __importDefault(require("winston"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-let connection_logger = winston_1.default.createLogger({
-    level: "info",
-    transports: [
-        new winston_1.default.transports.Console(),
-    ],
-});
-let URI = process.env.URI;
-const connectToMongoDBDatabase = (app, PORT) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!URI) {
-        connection_logger.error("NO URI PROVIDED");
-        return process.exit(1);
+const connection_logger_1 = require("../logger/connection-logger");
+const connectToMongoDBDatabase = (app, port, uri) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!uri) {
+        return connection_logger_1.connection_logger.error("NO URI PROVIDED");
     }
-    try {
-        yield mongoose_1.default.connect(URI);
-        app.listen(PORT, () => {
-            connection_logger.info("listening on port 3030");
-        });
-        connection_logger.info("connected to database sucessfully");
-    }
-    catch (e) {
-        connection_logger.error("error occured while connecting to database");
-    }
+    mongoose_1.default.connect(uri).then(() => {
+        connection_logger_1.connection_logger.info("connected to mongodb database");
+        //   if(process.env.NODE_ENV !== "test"){
+        //    app.listen(port, ()=>{
+        //       connection_logger.info("Listening on port" + " "+ port)
+        //     })
+        //   }
+        //  app.get('/', (req,res)=>{
+        //    res.send("Welcome to this API")
+        //  })
+        // Router(app)
+    }).catch(() => {
+        connection_logger_1.connection_logger.error("error occured while connecting");
+    });
 });
 exports.default = connectToMongoDBDatabase;
