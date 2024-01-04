@@ -29,6 +29,6 @@ router.post("/", (req, res) => {
             status: "Failed",
         });
     }
-    res.send("Welcome");
+    // let  user = 
 });
 exports.default = router;

@@ -20,14 +20,14 @@ const connectToMongoDBDatabase = (app, port, uri) => __awaiter(void 0, void 0, v
     }
     mongoose_1.default.connect(uri).then(() => {
         connection_logger_1.connection_logger.info("connected to mongodb database");
-        if (process.env.NODE_ENV !== "test") {
-            app.listen(port, () => {
-                connection_logger_1.connection_logger.info("Listening on port" + " " + port);
-            });
-        }
-        app.get('/', (req, res) => {
-            res.send("Welcome to this API");
-        });
+        //   if(process.env.NODE_ENV !== "test"){
+        //    app.listen(port, ()=>{
+        //       connection_logger.info("Listening on port" + " "+ port)
+        //     })
+        //   }
+        //  app.get('/', (req,res)=>{
+        //    res.send("Welcome to this API")
+        //  })
     }).catch(() => {
         connection_logger_1.connection_logger.error("error occured while connecting");
     });

@@ -1,7 +1,9 @@
 import { Application } from "express";
+import express from "express";
+import signup from "./childcare-signup"
 
-import signup from "../routes/signup"
 const Router = (app: Application)=>{
+app.use(express.json())
 app.use("/signup", signup)
 }
 

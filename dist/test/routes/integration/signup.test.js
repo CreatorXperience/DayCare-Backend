@@ -21,10 +21,25 @@ describe("Send Request to  /Parent", () => {
         yield mongoose_1.default.connection.close();
         yield __1.server.stop();
     }));
-    describe("POST /signup/", () => {
-        test("post data to /signup", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/signup");
+    describe("POST  /signup", () => {
+        let userPayload = {
+            fullname: "Habeeb Muhydeen Ayinde",
+            email: "allyearmustobey@gmail.com",
+            password: "12345678aB@0"
+        };
+        test("should return 200 if  valid payload is provided to  /signup", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).post("/signup/daycare").send(userPayload);
+            console.log(response.body.message);
             expect(response.status).toBe(200);
+            expect(response.body.message).toMatchObject({ fullname: userPayload.fullname, email: userPayload.email });
+        }));
+        test("should return  404 if wrong payload is attached", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).post("/signup/daycare").send({
+                fullname: "perter",
+                email: "fgh",
+                password: "saasdasdasdasdadad"
+            });
+            expect(response.status).toBe(404);
         }));
     });
 });

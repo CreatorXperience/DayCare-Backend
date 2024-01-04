@@ -18,6 +18,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const mongodb_connection_1 = __importDefault(require("./startup/mongodb-connection"));
 const get_uri_1 = __importDefault(require("./startup/get-uri"));
 const routers_1 = __importDefault(require("./routes/routers"));
+const connection_logger_1 = require("./logger/connection-logger");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 exports.app = app;
@@ -32,4 +33,12 @@ function get_uri_and_connect(connect_database) {
     });
 }
 get_uri_and_connect(mongodb_connection_1.default);
+if (process.env.NODE_ENV !== "test") {
+    app.listen(PORT, () => {
+        connection_logger_1.connection_logger.info("Listening on port" + " " + PORT);
+    });
+}
+app.get('/', (req, res) => {
+    res.send("Welcome to this API");
+});
 (0, routers_1.default)(app);

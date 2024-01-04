@@ -4,6 +4,7 @@ import connectToMongoDBDatabase from "./startup/mongodb-connection"
 import { MongoMemoryServer } from "mongodb-memory-server"
 import get_test_uri from "./startup/get-uri"
 import Router from "./routes/routers"
+import { connection_logger } from "./logger/connection-logger"
 
 dotenv.config()
 const app = express()
@@ -21,6 +22,17 @@ async function get_uri_and_connect(connect_database: (app: Application, port: st
 
 
 get_uri_and_connect(connectToMongoDBDatabase)
+
+
+if(process.env.NODE_ENV !== "test"){
+  app.listen(PORT, ()=>{
+     connection_logger.info("Listening on port" + " "+ PORT)
+   })
+ }
+
+ app.get('/', (req,res)=>{
+  res.send("Welcome to this API")
+})
 
 
 Router(app)
