@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { Errback } from "express";
 import winston from "winston";
 
-const error = (err: any)=> {
+const error = (err: Errback)=> {
     const errorLogger = winston.createLogger({
         level:"error",
         transports: [

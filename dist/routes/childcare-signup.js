@@ -13,35 +13,54 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const joi_1 = __importDefault(require("joi"));
-const joi_password_complexity_1 = __importDefault(require("joi-password-complexity"));
-const childcare_signup_model_1 = __importDefault(require("../models/childcare-signup-model"));
 const lodash_1 = __importDefault(require("lodash"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const nodemailer_1 = __importDefault(require("nodemailer"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const childcare_signup_model_1 = __importDefault(require("../models/childcare-signup-model"));
+const validate_1 = __importDefault(require("../utils/signup/validate"));
+const otp_model_1 = __importDefault(require("../models/otp-model"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const router = express_1.default.Router();
-const validate_signup_payload = (payload) => {
-    let passwordOption = {
-        min: 10,
-        max: 20,
-        lowerCase: 1,
-        upperCase: 1,
-        numeric: 1,
-        symbol: 1
-    };
-    let validation = joi_1.default.object({
-        fullname: joi_1.default.string().required().max(25).min(5),
-        email: joi_1.default.string().required().min(5).max(255).email(),
-        password: (0, joi_password_complexity_1.default)(passwordOption)
+let types = new mongoose_1.default.Types.ObjectId();
+const sendOtp = (email, ownerId) => __awaiter(void 0, void 0, void 0, function* () {
+    let transporter = nodemailer_1.default.createTransport({
+        service: "gmail",
+        secure: true,
+        auth: { user: "allyearmustobey@gmail.com", pass: process.env.EMAIL_PASS },
     });
-    return validation.validate(payload);
-};
+    let max = 999999;
+    let min = 100000;
+    let randomOtp = Math.floor(Math.random() * (max - min) + 1);
+    let otp = new otp_model_1.default({
+        otp: randomOtp,
+        owner: new mongoose_1.default.Types.ObjectId(ownerId),
+    });
+    yield otp.save();
+    let sender = transporter.sendMail({
+        from: "allyearmustobey@gmail.com",
+        to: email,
+        subject: "verification otp",
+        text: `Dont share this otp with anyone keep it safe  OTP: ${randomOtp} `
+    }, (error, data) => {
+        if (error) {
+            return console.log("error sending verification pin");
+        }
+        return console.log("sent successfully");
+    });
+});
 router.post("/daycare", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { error } = validate_signup_payload(req.body);
+    let { error } = (0, validate_1.default)(req.body);
     if (error) {
         return res.status(404).send({
             message: error.details[0].message,
             status: "Failed",
         });
+    }
+    let getChildCare = yield childcare_signup_model_1.default.findOne({ email: req.body.email });
+    if (getChildCare) {
+        return res.status(404).send({ message: "user with this email already exist" });
     }
     let child_care_payload = lodash_1.default.pick(req.body, ["fullname", "email", "password"]);
     let child_care = new childcare_signup_model_1.default(child_care_payload);
@@ -49,12 +68,13 @@ router.post("/daycare", (req, res) => __awaiter(void 0, void 0, void 0, function
     let _hash = yield bcryptjs_1.default.hash(child_care.password, _salt);
     child_care.password = _hash;
     let response = yield child_care.save();
-    if (response) {
-        return res.send({
-            message: lodash_1.default.pick(response, ["fullname", "email"]),
-            status: "Succesfull"
-        });
+    if (!response) {
+        return res.status(404).send({ message: "couldn't save file to database" });
     }
-    return res.status(404).send({ message: "couldn't save file to database" });
+    yield sendOtp(req.body.email, child_care._id);
+    return res.send({
+        message: lodash_1.default.pick(response, ["fullname", "email"]),
+        status: " verification email send Succesfull"
+    });
 }));
 exports.default = router;
