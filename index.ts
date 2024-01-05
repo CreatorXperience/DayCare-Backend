@@ -5,6 +5,7 @@ import connectToMongoDBDatabase from "./startup/mongodb-connection"
 import get_test_uri from "./startup/get-uri"
 import Router from "./utils/routers"
 import { connection_logger } from "./logger/connection-logger"
+require("express-async-errors")
 
 dotenv.config()
 const app = express()

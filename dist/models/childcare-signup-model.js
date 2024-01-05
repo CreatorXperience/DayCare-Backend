@@ -14,11 +14,8 @@ const child_care_signup_schema = new mongoose_1.default.Schema({
 }, {
     methods: {
         generateAuthToken: function () {
-            if (process.env.DAYCARE_PRIVATE_KEY) {
-                let token = jsonwebtoken_1.default.sign({ _id: this._id }, process.env.DAYCARE_PRIVATE_KEY);
-                console.log(token);
-                return token;
-            }
+            let token = jsonwebtoken_1.default.sign({ _id: this._id }, process.env.DAYCARE_PRIVATE_KEY);
+            return token;
         }
     }
 });

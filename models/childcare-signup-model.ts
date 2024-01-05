@@ -10,11 +10,9 @@ password: {type: String, required: true,  maxLength: 255}
 }, {
     methods: {
         generateAuthToken: function(){
-            if(process.env.DAYCARE_PRIVATE_KEY){
-                let token = jwt.sign({_id: this._id}, process.env.DAYCARE_PRIVATE_KEY)
-                console.log(token)
+                let token = jwt.sign({_id: this._id}, process.env.DAYCARE_PRIVATE_KEY as string)
                return  token
-            }
+            
         }
     }
 })

@@ -29,25 +29,25 @@ const validateUserPayload = (userPayload: TUser)=>{
    return  validation.validate(userPayload)
 }
 router.post("/", async (req,res)=>{
-let {error} = validateUserPayload(req.body)
-if(error){
-    return res.status(404).send({message: error.details[0].message, status: "Failed"})
-}
-let child_care = await child_care_signup_model.findOne({email: req.body.email})
-if(!child_care){
-    return res.status(404).send({message: "child care with the specified email doesn't exist"})
-}
+    throw new Error("error occured on auth")
+// let {error} = validateUserPayload(req.body)
+// if(error){
+//     return res.status(404).send({message: error.details[0].message, status: "failed"})
+// }
+// let child_care = await child_care_signup_model.findOne({email: req.body.email})
+// if(!child_care){
+//     return res.status(404).send({message: "child care with the specified email doesn't exist", status: "failed"})
+// }
 
-let isPasswordEqual =  await bcrypt.compare(req.body.password, child_care.password)
+// let isPasswordEqual =  await bcrypt.compare(req.body.password, child_care.password)
 
-if(!isPasswordEqual){
-    return res.status(404).send({message: "Invalid email or Password"})
-}
+// if(!isPasswordEqual){
+//     return res.status(404).send({message: "Invalid email or Password"})
+// }
 
-res.send(child_care.generateAuthToken)
+// let token = child_care.generateAuthToken()
+// res.setHeader("authorization", token).send({message: "user logged in successfully", status: "successfull"})
 
-
-// res.send("")
 })
 
 export default router

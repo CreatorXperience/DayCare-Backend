@@ -6,9 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const childcare_signup_1 = __importDefault(require("../routes/childcare-signup"));
 const childcare_login_1 = __importDefault(require("../routes/childcare-login"));
+const error_1 = __importDefault(require("../middlewares/error"));
 const Router = (app) => {
     app.use(express_1.default.json());
     app.use("/signup", childcare_signup_1.default);
     app.use("/auth", childcare_login_1.default);
+    app.use(error_1.default);
 };
 exports.default = Router;

@@ -55,18 +55,20 @@ describe("Send Request to  /Parent", () => {
         test("should return  200 response status if user sends the right paylaod with a an existing user", () => __awaiter(void 0, void 0, void 0, function* () {
             let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(userPayload, ["email", "password"]));
             expect(response.status).toBe(200);
-            console.log(response.body);
+            expect(response.body.status).toMatch(/successfull/i);
         }));
         test("should return 404 response status if payload is bad or incomplete", () => __awaiter(void 0, void 0, void 0, function* () {
             let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(userPayload, ["email"]));
             expect(response.status).toBe(404);
             expect(response.body.message).toMatch("\"password\" is required");
+            expect(response.body.status).toMatch(/failed/i);
         }));
         test("should return a 404 response status if we don't have the childcare owner in our database", () => __awaiter(void 0, void 0, void 0, function* () {
             let un_existing_user = lodash_1.default.pick(userPayload, ["email", "password"]);
             un_existing_user.email = "not_existing@gmail.com";
             let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(un_existing_user);
             expect(response.status).toBe(404);
+            expect(response.body.status).toMatch(/failed/i);
         }));
         test("should return  404 response status if user sends the right paylaod but with wrong password", () => __awaiter(void 0, void 0, void 0, function* () {
             let existing_user = lodash_1.default.pick(userPayload, ["email", "password"]);
