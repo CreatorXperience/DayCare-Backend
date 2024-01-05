@@ -5,7 +5,24 @@ import connectToMongoDBDatabase from "./startup/mongodb-connection"
 import get_test_uri from "./startup/get-uri"
 import Router from "./utils/routers"
 import { connection_logger } from "./logger/connection-logger"
+import winston from "winston"
+
 require("express-async-errors")
+
+
+
+let  expressLogger = winston.createLogger({
+  level: "info",
+  transports: [
+    new winston.transports.Console()
+  ],
+  exceptionHandlers: [
+    new winston.transports.Console()
+  ],
+  rejectionHandlers: [
+    new winston.transports.Console()
+]
+})
 
 dotenv.config()
 const app = express()

@@ -19,7 +19,20 @@ const mongodb_connection_1 = __importDefault(require("./startup/mongodb-connecti
 const get_uri_1 = __importDefault(require("./startup/get-uri"));
 const routers_1 = __importDefault(require("./utils/routers"));
 const connection_logger_1 = require("./logger/connection-logger");
+const winston_1 = __importDefault(require("winston"));
 require("express-async-errors");
+let expressLogger = winston_1.default.createLogger({
+    level: "info",
+    transports: [
+        new winston_1.default.transports.Console()
+    ],
+    exceptionHandlers: [
+        new winston_1.default.transports.Console()
+    ],
+    rejectionHandlers: [
+        new winston_1.default.transports.Console()
+    ]
+});
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 exports.app = app;

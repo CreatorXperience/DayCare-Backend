@@ -15,41 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const lodash_1 = __importDefault(require("lodash"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 const childcare_signup_model_1 = __importDefault(require("../models/childcare-signup-model"));
 const validate_1 = __importDefault(require("../utils/signup/validate"));
-const otp_model_1 = __importDefault(require("../models/otp-model"));
-const mongoose_1 = __importDefault(require("mongoose"));
+const sendOtp_1 = __importDefault(require("../utils/signup/sendOtp"));
+dotenv_1.default.config();
 const router = express_1.default.Router();
-let types = new mongoose_1.default.Types.ObjectId();
-const sendOtp = (email, ownerId) => __awaiter(void 0, void 0, void 0, function* () {
-    let transporter = nodemailer_1.default.createTransport({
-        service: "gmail",
-        secure: true,
-        auth: { user: "allyearmustobey@gmail.com", pass: process.env.EMAIL_PASS },
-    });
-    let max = 999999;
-    let min = 100000;
-    let randomOtp = Math.floor(Math.random() * (max - min) + 1);
-    let otp = new otp_model_1.default({
-        otp: randomOtp,
-        owner: new mongoose_1.default.Types.ObjectId(ownerId),
-    });
-    yield otp.save();
-    let sender = transporter.sendMail({
-        from: "allyearmustobey@gmail.com",
-        to: email,
-        subject: "verification otp",
-        text: `Dont share this otp with anyone keep it safe  OTP: ${randomOtp} `
-    }, (error, data) => {
-        if (error) {
-            return console.log("error sending verification pin");
-        }
-        return console.log("sent successfully");
-    });
-});
 router.post("/daycare", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { error } = (0, validate_1.default)(req.body);
     if (error) {
@@ -69,12 +40,12 @@ router.post("/daycare", (req, res) => __awaiter(void 0, void 0, void 0, function
     child_care.password = _hash;
     let response = yield child_care.save();
     if (!response) {
-        return res.status(404).send({ message: "couldn't save file to database" });
+        return res.status(500).send({ message: "couldn't save file to database" });
     }
-    yield sendOtp(req.body.email, child_care._id);
+    yield (0, sendOtp_1.default)(req.body.email, child_care._id);
     return res.send({
         message: lodash_1.default.pick(response, ["fullname", "email"]),
-        status: " verification email send Succesfull"
+        status: " verification email sent succesfully"
     });
 }));
 exports.default = router;

@@ -22,8 +22,17 @@ describe("Send Request to  /Parent", ()=>{
         test("should return 200 if  valid payload is provided to  /signup", async()=>{
             let response = await request(app).post("/signup/daycare").send(userPayload)
             expect(response.status).toBe(200)
+            console.log(response.body)
             expect(response.body.message).toMatchObject( {fullname: userPayload.fullname,email: userPayload.email})
         })
+
+        test("should return 200 if  valid payload is provided to  /signup", async()=>{
+            let response = await request(app).post("/signup/daycare").send(userPayload)
+            expect(response.status).toBe(404)
+            expect(response.body.message).toMatch("user with this email already exist")
+        })
+
+
 
 
         test("should return  404 if wrong payload is attached", async()=>{
@@ -54,6 +63,9 @@ describe("Send Request to  /Parent", ()=>{
             expect(response.status).toBe(200)
             expect(response.body.status).toMatch(/successfull/i)
         })
+
+
+
 
         test("should return 404 response status if payload is bad or incomplete", async()=>{
             let response = await request(app).post("/auth").send(_.pick(userPayload, ["email"]))
