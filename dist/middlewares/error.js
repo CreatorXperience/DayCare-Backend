@@ -9,7 +9,6 @@ const error = (err) => {
         level: "error",
         transports: [
             new winston_1.default.transports.Console(),
-            new winston_1.default.transports.File({ filename: "errorlogger.log" })
         ],
     });
     errorLogger.error(err);

@@ -2,6 +2,8 @@ import mongoose from "mongoose"
 import nodemailer from "nodemailer"
 import Otp_model from "../../models/otp-model"
 import bcrypt from "bcryptjs"
+import dotenv from "dotenv"
+dotenv.config()
 
 let types = new mongoose.Types.ObjectId()
 
@@ -11,7 +13,7 @@ const sendOtp = async(email: string, ownerId: typeof types)=>{
 let transporter = nodemailer.createTransport({
     service: "gmail",
     secure: true,
-    auth: {user: "allyearmustobey@gmail.com", pass: process.env.EMAIL_PASS},
+    auth: {user: process.env.EMAIL, pass: process.env.EMAIL_PASS},
 })
 
 let max =999999

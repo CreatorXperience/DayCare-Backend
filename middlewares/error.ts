@@ -6,7 +6,6 @@ const error = (err: Errback)=> {
         level:"error",
         transports: [
             new winston.transports.Console(),
-            new winston.transports.File({filename: "errorlogger.log"})
         ],
     })
 errorLogger.error(err)

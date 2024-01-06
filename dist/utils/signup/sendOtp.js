@@ -16,12 +16,14 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const otp_model_1 = __importDefault(require("../../models/otp-model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 let types = new mongoose_1.default.Types.ObjectId();
 const sendOtp = (email, ownerId) => __awaiter(void 0, void 0, void 0, function* () {
     let transporter = nodemailer_1.default.createTransport({
         service: "gmail",
         secure: true,
-        auth: { user: "allyearmustobey@gmail.com", pass: process.env.EMAIL_PASS },
+        auth: { user: process.env.EMAIL, pass: process.env.EMAIL_PASS },
     });
     let max = 999999;
     let min = 100000;

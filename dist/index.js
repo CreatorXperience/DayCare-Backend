@@ -27,7 +27,7 @@ let expressLogger = winston_1.default.createLogger({
         new winston_1.default.transports.Console()
     ],
     exceptionHandlers: [
-        new winston_1.default.transports.Console()
+        new winston_1.default.transports.Console(),
     ],
     rejectionHandlers: [
         new winston_1.default.transports.Console()

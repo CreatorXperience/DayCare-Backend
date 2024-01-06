@@ -4,7 +4,7 @@
   "description": "An effective Day care system for parent and Kids",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll",
+    "test": "jest --watchAll --coverage",
     "build": "npx tsc --watch",
     "dev": "concurrently  \"npm run  build\" \"nodemon -q ./dist/index.js\"  \"npm test\""
   },
