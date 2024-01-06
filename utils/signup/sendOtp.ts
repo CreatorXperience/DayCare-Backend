@@ -31,7 +31,7 @@ let hash = await bcrypt.hash(randomOtp.toString(), salt)
 newOtp.otp = hash
 
 await newOtp.save()
-
+ if(process.env.NODE_ENV !== "test")
  transporter.sendMail({
     from: "allyearmustobey@gmail.com",
     to: email,

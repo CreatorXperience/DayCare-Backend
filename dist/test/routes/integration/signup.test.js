@@ -16,6 +16,15 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const __1 = require("../../..");
 const supertest_1 = __importDefault(require("supertest"));
 const lodash_1 = __importDefault(require("lodash"));
+let sendMail = jest.fn();
+jest.mock("nodemailer", () => {
+    const nodemailer = jest.requireActual("nodemailer");
+    return Object.assign(Object.assign({}, nodemailer), { createTransport: (params) => {
+            return {
+                sendMail: sendMail.mockImplementation(() => { })
+            };
+        } });
+});
 describe("Send Request to  /Parent", () => {
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield mongoose_1.default.connection.dropDatabase();

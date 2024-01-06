@@ -36,17 +36,18 @@ const sendOtp = (email, ownerId) => __awaiter(void 0, void 0, void 0, function* 
     let hash = yield bcryptjs_1.default.hash(randomOtp.toString(), salt);
     newOtp.otp = hash;
     yield newOtp.save();
-    transporter.sendMail({
-        from: "allyearmustobey@gmail.com",
-        to: email,
-        subject: "verification otp",
-        text: `Dont share this otp with anyone keep it safe  OTP: ${randomOtp} `
-    }, (error, data) => {
-        if (error) {
-            return console.log("error occured while send email");
-        }
-        console.log("sent successfully");
-        return;
-    });
+    if (process.env.NODE_ENV !== "test")
+        transporter.sendMail({
+            from: "allyearmustobey@gmail.com",
+            to: email,
+            subject: "verification otp",
+            text: `Dont share this otp with anyone keep it safe  OTP: ${randomOtp} `
+        }, (error, data) => {
+            if (error) {
+                return console.log("error occured while send email");
+            }
+            console.log("sent successfully");
+            return;
+        });
 });
 exports.default = sendOtp;
