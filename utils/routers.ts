@@ -1,7 +1,7 @@
 import { Application } from "express";
 import express from "express";
-import signup from "../routes/childcare-signup"
-import auth from "../routes/childcare-login"
+import signup from "../routes/signup"
+import auth from "../routes/auth"
 import verify_otp from "../routes/verify-otp"
 import error from "../middlewares/error";
 

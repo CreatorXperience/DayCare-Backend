@@ -2,7 +2,7 @@ import express from "express"
 import _ from "lodash"
 import bcrypt from "bcryptjs"
 import dotenv from "dotenv"
-import child_care_signup_model from "../models/childcare-signup-model"
+import user_signup_model from "../models/childcare-signup-model"
 import validate_signup_payload from "../utils/signup/validate"
 import sendOtp from "../utils/signup/sendOtp"
 
@@ -11,7 +11,7 @@ dotenv.config()
 const router = express.Router()
 
 
-router.post("/daycare", async (req,res)=>{
+router.post("/", async (req,res)=>{
 let {error} = validate_signup_payload(req.body)
 
 
@@ -22,7 +22,7 @@ if(error){
    })
 }
 
-let getChildCare =  await child_care_signup_model.findOne({email: req.body.email})
+let getChildCare =  await user_signup_model.findOne({email: req.body.email})
 if(getChildCare){
     return res.status(404).send({message: "user with this email already exist"})
 }
@@ -30,7 +30,7 @@ if(getChildCare){
 let child_care_payload = _.pick(req.body, ["fullname", "email", "password"])
 
 
-let child_care = new child_care_signup_model(child_care_payload)
+let child_care = new user_signup_model(child_care_payload)
 
 let _salt = await bcrypt.genSalt(10)
 let _hash = await bcrypt.hash(child_care.password, _salt)

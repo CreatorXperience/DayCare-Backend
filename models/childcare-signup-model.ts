@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 dotenv.config()
 
-const child_care_signup_schema = new mongoose.Schema({
+const user_signup_schema = new mongoose.Schema({
 fullname: {type: String, required: true, maxLength: 25, minLength: 5},
 email: {type: String, required: true, minLength: 5, maxLength: 255, unique: true},
 password: {type: String, required: true,  maxLength: 255},
@@ -18,5 +18,5 @@ return token
 }
 						    )
 
-const child_care_signup_model = mongoose.model("child-care-accounts", child_care_signup_schema)
-export default child_care_signup_model
+const user_signup_model = mongoose.model("child-care-accounts", user_signup_schema)
+export default user_signup_model

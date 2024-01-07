@@ -1,7 +1,7 @@
 import express from "express"
 import Joi from "joi"
 import complexPassword from "joi-password-complexity"
-import child_care_signup_model from "../models/childcare-signup-model"
+import user_signup_model from "../models/childcare-signup-model"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
@@ -34,7 +34,7 @@ let {error} = validateUserPayload(req.body)
 if(error){
     return res.status(404).send({message: error.details[0].message, status: "failed"})
 }
-let child_care = await child_care_signup_model.findOne({email: req.body.email})
+let child_care = await user_signup_model.findOne({email: req.body.email})
 if(!child_care){
     return res.status(404).send({message: "child care with the specified email doesn't exist", status: "failed"})
 }

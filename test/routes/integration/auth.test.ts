@@ -5,74 +5,14 @@ import _ from "lodash"
 
 
 
-type TParams = {
-service: string,
-auth: {
-user: string;
-pass: string;
-}
-secure: boolean
-}
-
-type  TUserPayload =  {
-from: string,
-to: string,
-subject: string,
-text: string
-}
-
-let sendMail = jest.fn()
-jest.mock("nodemailer", ()=> {
-const nodemailer =  jest.requireActual("nodemailer")	
-return	{...nodemailer, createTransport: (params: TParams)=> {
-
-return {
-
-	sendMail: sendMail.mockImplementation(()=> {}) 
-}
-} }})
 
 
-
-describe("Send Request to  /Parent", ()=>{
+describe("Send Request to  /auth", ()=>{
     afterAll(async()=>{
         await mongoose.connection.dropDatabase()
         await mongoose.connection.close()
         await server.stop()
      })
-    describe("POST  /signup", ()=>{
-        let userPayload= {
-            fullname: "Habeeb Muhydeen Ayinde",
-            email: "allyearmustobey@gmail.com",
-            password: "12345678aB@0"
-        }
-        
-        test("should return 200 if  valid payload is provided to  /signup", async()=>{
-            let response = await request(app).post("/signup/daycare").send(userPayload)
-            expect(response.status).toBe(200)
-            console.log(response.body)
-            expect(response.body.message).toMatchObject( {fullname: userPayload.fullname,email: userPayload.email})
-        })
-
-        test("should return 200 if  valid payload is provided to  /signup", async()=>{
-            let response = await request(app).post("/signup/daycare").send(userPayload)
-            expect(response.status).toBe(404)
-            expect(response.body.message).toMatch("user with this email already exist")
-        })
-
-
-          
-
-        test("should return  404 if wrong payload is attached", async()=>{
-            let response = await request(app).post("/signup/daycare").send({
-                fullname: "perter",
-                email: "fgh",
-                password:  "saasdasdasdasdadad"
-            })
-            expect(response.status).toBe(404)
-        })
-    })
-
 
     describe("POST /auth", ()=>{
         let userPayload= {
@@ -81,7 +21,7 @@ describe("Send Request to  /Parent", ()=>{
             password: "12345678aB@0"
         }
         beforeAll(async ()=>{
-            let response = await request(app).post("/signup/daycare").send(userPayload)
+            let response = await request(app).post("/signup").send(userPayload)
             expect(response.status).toBe(200)
         })
 
