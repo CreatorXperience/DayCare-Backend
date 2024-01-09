@@ -1,7 +1,7 @@
 import express from "express"
 import Joi from "joi"
 import bcrypt from "bcryptjs"
-import user_signup_model from "../models/childcare-signup-model"
+import user_signup_model from "../models/user-account-model"
 import Otp_model from "../models/otp-model"
 
 const router =  express.Router()
@@ -9,7 +9,7 @@ const router =  express.Router()
 
 let otpValidation = (otpPayload: {otp: string})=>{
     let otpSchema = Joi.object({
-        otp: Joi.string().required().min(4).max(4),
+        otp: Joi.string().required().min(6).max(6),
         ownerId: Joi.string().required()
     })
 

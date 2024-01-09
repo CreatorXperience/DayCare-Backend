@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const childcare_signup_model_1 = __importDefault(require("../models/childcare-signup-model"));
+const user_account_model_1 = __importDefault(require("../models/user-account-model"));
 const profileMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let token = req.header("authorization");
     if (!token) {
@@ -23,7 +23,7 @@ const profileMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     if (!userPayload) {
         return res.status(400).send({ message: "Permission denied. Bad token" });
     }
-    let user = yield childcare_signup_model_1.default.findOne({ _id: userPayload._id });
+    let user = yield user_account_model_1.default.findOne({ _id: userPayload._id });
     if (!user) {
         return res.status(400).send({ message: "Permission denied. User not found" });
     }

@@ -2,7 +2,7 @@ import express from "express"
 import _ from "lodash"
 import bcrypt from "bcryptjs"
 import dotenv from "dotenv"
-import user_signup_model from "../models/childcare-signup-model"
+import user_signup_model from "../models/user-account-model"
 import validate_signup_payload from "../utils/signup/validate"
 import sendOtp from "../utils/signup/sendOtp"
 

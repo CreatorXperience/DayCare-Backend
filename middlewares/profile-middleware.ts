@@ -1,6 +1,6 @@
 import {Request, Response,NextFunction} from "express"
 import jwt from "jsonwebtoken"
-import user_signup_model  from "../models/childcare-signup-model"
+import user_signup_model  from "../models/user-account-model"
 
 const profileMiddleware = async  (req: Request & {user?: any}, res: Response, next: NextFunction)=> {
 let token =  req.header("authorization" )	

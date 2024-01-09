@@ -18,5 +18,5 @@ return token
 }
 })
 
-const user_signup_model = mongoose.model("child-care-accounts", user_signup_schema)
+const user_signup_model = mongoose.model("user_accounts", user_signup_schema)
 export default user_signup_model

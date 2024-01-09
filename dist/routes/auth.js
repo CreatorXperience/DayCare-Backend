@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const joi_1 = __importDefault(require("joi"));
 const joi_password_complexity_1 = __importDefault(require("joi-password-complexity"));
-const childcare_signup_model_1 = __importDefault(require("../models/childcare-signup-model"));
+const user_account_model_1 = __importDefault(require("../models/user-account-model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const router = express_1.default.Router();
 const validateUserPayload = (userPayload) => {
@@ -38,7 +38,7 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (error) {
         return res.status(404).send({ message: error.details[0].message, status: "failed" });
     }
-    let child_care = yield childcare_signup_model_1.default.findOne({ email: req.body.email });
+    let child_care = yield user_account_model_1.default.findOne({ email: req.body.email });
     if (!child_care) {
         return res.status(404).send({ message: "child care with the specified email doesn't exist", status: "failed" });
     }
