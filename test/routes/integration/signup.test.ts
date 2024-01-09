@@ -5,12 +5,7 @@ import _ from "lodash"
 
 
 
-
-
-
-
-
-describe("Send Request to  /Parent", ()=>{
+describe("Send Request to  /Signup", ()=>{
     afterAll(async()=>{
         await mongoose.connection.dropDatabase()
         await mongoose.connection.close()

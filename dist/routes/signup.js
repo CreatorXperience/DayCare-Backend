@@ -44,7 +44,7 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     yield (0, sendOtp_1.default)(req.body.email, child_care._id);
     return res.send({
-        message: lodash_1.default.pick(response, ["fullname", "email"]),
+        message: lodash_1.default.pick(response, ["fullname", "email", "_id"]),
         status: " verification email sent succesfully"
     });
 }));

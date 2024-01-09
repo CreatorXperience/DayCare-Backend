@@ -11,7 +11,8 @@ const user_signup_schema = new mongoose_1.default.Schema({
     fullname: { type: String, required: true, maxLength: 25, minLength: 5 },
     email: { type: String, required: true, minLength: 5, maxLength: 255, unique: true },
     password: { type: String, required: true, maxLength: 255 },
-    is_verfied: { type: Boolean, default: true }
+    is_verfied: { type: Boolean, default: false },
+    day_care_owner: { type: Boolean, default: false }
 }, {
     methods: {
         generateAuthToken: function () {

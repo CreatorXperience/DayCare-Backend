@@ -14,8 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const joi_1 = __importDefault(require("joi"));
-const otp_model_1 = __importDefault(require("../models/otp-model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const childcare_signup_model_1 = __importDefault(require("../models/childcare-signup-model"));
+const otp_model_1 = __importDefault(require("../models/otp-model"));
 const router = express_1.default.Router();
 let otpValidation = (otpPayload) => {
     let otpSchema = joi_1.default.object({
@@ -36,6 +37,10 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let isOtpEqual = yield bcryptjs_1.default.compare(req.body.otp, getOtp.otp);
     if (!isOtpEqual) {
         return res.status(404).send({ message: "wrong otp" });
+    }
+    let updateUser = yield childcare_signup_model_1.default.updateOne({ _id: req.body.ownerId }, { $set: { is_verfied: true } });
+    if (!updateUser) {
+        return res.status(500).send({ message: "error occured while updating user" });
     }
     res.send({ message: "email verified successfully", status: "successfull" });
 }));
