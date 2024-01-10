@@ -14,12 +14,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const child_care_profile_1 = __importDefault(require("../models/child-care-profile"));
+const joi_1 = __importDefault(require("joi"));
 const router = express_1.default.Router();
+const validation = (payload) => {
+    let schema = joi_1.default.object({
+        long: joi_1.default.number().required(),
+        lat: joi_1.default.number().required()
+    });
+    return schema.validate(payload);
+};
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let profiles = yield child_care_profile_1.default.find();
-    if (!profiles) {
-        return res.status(404).send({ message: "profiles not found" });
+    let { error } = validation(req.body);
+    if (error) {
+        return res.status(404).send({ message: error.details[0].message });
     }
-    res.send(profiles);
+    let child_care = yield child_care_profile_1.default.findOne({ location: { $nearSphere: { $geometry: { type: "Point", coordinates: [req.body.long, req.body.lat] } } } });
+    if (!child_care) {
+        return res.status(404).send({ message: "No child care is available at the specified location" });
+    }
+    res.send(child_care);
 }));
 exports.default = router;

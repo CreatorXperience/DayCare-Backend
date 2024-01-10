@@ -14,12 +14,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const child_care_profile_1 = __importDefault(require("../models/child-care-profile"));
+const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
+const validation_1 = __importDefault(require("../utils/profile/validation"));
 const router = express_1.default.Router();
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let profiles = yield child_care_profile_1.default.find();
-    if (!profiles) {
-        return res.status(404).send({ message: "profiles not found" });
+router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { error } = (0, validation_1.default)(req.body);
+    if (error) {
+        return res.status(404).send({ message: error.details[0].message });
     }
-    res.send(profiles);
+    let newProfile = new child_care_profile_1.default(req.body);
+    let saved = yield newProfile.save();
+    if (!saved) {
+        return res.status(404).send({ message: "couldn't save profile to database", status: "successfull" });
+    }
+    return res.send(saved);
 }));
 exports.default = router;

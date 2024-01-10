@@ -4,5 +4,7 @@
 *.log
 .log
 .rest
+.swp
+*.swp
 *.rest
 /coverage
