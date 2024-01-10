@@ -14,21 +14,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const connection_logger_1 = require("../logger/connection-logger");
-const connectToMongoDBDatabase = (app, port, uri) => __awaiter(void 0, void 0, void 0, function* () {
+const routers_1 = __importDefault(require("../utils/routers"));
+const multer_1 = __importDefault(require("multer"));
+const childcare_upload_1 = __importDefault(require("../routes/childcare-upload"));
+const connectToMongoDBDatabase = (app, uri) => __awaiter(void 0, void 0, void 0, function* () {
     if (!uri) {
         return connection_logger_1.connection_logger.error("NO URI PROVIDED");
     }
     mongoose_1.default.connect(uri).then(() => {
         connection_logger_1.connection_logger.info("connected to mongodb database");
-        //   if(process.env.NODE_ENV !== "test"){
-        //    app.listen(port, ()=>{
-        //       connection_logger.info("Listening on port" + " "+ port)
-        //     })
-        //   }
-        //  app.get('/', (req,res)=>{
-        //    res.send("Welcome to this API")
-        //  })
-        // Router(app)
+        let storage = multer_1.default.memoryStorage();
+        let upload = (0, multer_1.default)({ storage });
+        let bucket = new mongoose_1.default.mongo.GridFSBucket(mongoose_1.default.connection.db);
+        (0, childcare_upload_1.default)(upload, bucket);
+        (0, routers_1.default)(app);
     }).catch(() => {
         connection_logger_1.connection_logger.error("error occured while connecting");
     });

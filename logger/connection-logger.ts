@@ -7,6 +7,22 @@ let connection_logger = winston.createLogger({
     ],
 })
 
+let exceptionRejectionLogger = ()=> {
 
-export {connection_logger}
+    let  expressLogger = winston.createLogger({
+        level: "info",
+        transports: [
+          new winston.transports.Console()
+        ],
+        exceptionHandlers: [
+          new winston.transports.Console(),
+        ],
+        rejectionHandlers: [
+          new winston.transports.Console()
+      ]
+      })
+      
+}
+
+export {connection_logger, exceptionRejectionLogger}
 

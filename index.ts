@@ -4,38 +4,26 @@ import { MongoMemoryServer } from "mongodb-memory-server"
 import connectToMongoDBDatabase from "./startup/mongodb-connection"
 import get_test_uri from "./startup/get-uri"
 import Router from "./utils/routers"
-import { connection_logger } from "./logger/connection-logger"
-import winston from "winston"
-
+import { connection_logger, exceptionRejectionLogger } from "./logger/connection-logger"
 require("express-async-errors")
 
-
-
-let  expressLogger = winston.createLogger({
-  level: "info",
-  transports: [
-    new winston.transports.Console()
-  ],
-  exceptionHandlers: [
-    new winston.transports.Console(),
-  ],
-  rejectionHandlers: [
-    new winston.transports.Console()
-]
-})
-
 dotenv.config()
+
+
+exceptionRejectionLogger()
+
+
 const app = express()
 
 let PORT = process.env.PORT || "3030"
 
 let server:MongoMemoryServer
 
-async function get_uri_and_connect(connect_database: (app: Application, port: string, uri: string | undefined
+async function get_uri_and_connect(connect_database: (app: Application, uri: string | undefined
   )=> void){
  let {server:mockServer,uri} = await get_test_uri()
   server = mockServer
-  connect_database(app,PORT,uri)
+  connect_database(app,uri)
 }
 
 
@@ -53,7 +41,11 @@ if(process.env.NODE_ENV !== "test"){
 })
 
 
-Router(app)
+
+
+if(process.env.NODE_ENV === "test"){
+  Router(app)
+}
 
 
 export {app,PORT,server}
