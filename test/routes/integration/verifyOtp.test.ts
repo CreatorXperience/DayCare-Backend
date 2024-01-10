@@ -2,7 +2,6 @@ import mongoose from "mongoose"
 import {app, server} from "../../.."
 import request from  "supertest"
 import Otp_model from "../../../models/otp-model"
-import bcrypt from "bcryptjs"
 
 describe("sends request to /verify", ()=>{
 

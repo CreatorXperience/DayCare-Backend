@@ -14,29 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const child_care_profile_1 = __importDefault(require("../models/child-care-profile"));
-const joi_1 = __importDefault(require("joi"));
 const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const validation_1 = __importDefault(require("../utils/childcares/validation"));
+const get_childcare_validation_1 = require("../utils/childcares/get-childcare-validation");
 dotenv_1.default.config();
 const router = express_1.default.Router();
-const validation = (payload) => {
-    let schema = joi_1.default.object({
-        long: joi_1.default.number().required(),
-        lat: joi_1.default.number().required()
-    });
-    return schema.validate(payload);
-};
-const filterChildCareValidation = (payload) => {
-    let schema = joi_1.default.object({
-        sortby: joi_1.default.string().required(),
-        location: joi_1.default.string().required(),
-        maxp: joi_1.default.number().required(),
-        minp: joi_1.default.number().required()
-    });
-    return schema.validate(payload);
-};
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { error } = validation(req.body);
+    let { error } = (0, validation_1.default)(req.body);
     if (error) {
         return res.status(404).send({ message: error.details[0].message });
     }
@@ -47,19 +32,17 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send(child_care);
 }));
 router.post("/filter", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { error } = filterChildCareValidation(req.body);
+    let { error } = (0, get_childcare_validation_1.filterChildCareValidation)(req.body);
     if (error) {
         return res.status(404).send({ message: error.details[0].message });
     }
     let [city, country] = req.body.location.split(",");
-    // console.log(city,country)
     let get_location = yield axios_1.default.get(`https://api.api-ninjas.com/v1/geocoding?city=${city}&country=${country}`, {
         headers: {
             "X-Api-Key": process.env.API_KEY
         }
     });
     let location_data = get_location.data;
-    console.log(location_data);
     if (!location_data) {
         return res.status(500).send({ message: "error occured, couldn't get location" });
     }

@@ -21,7 +21,6 @@ describe("Send Request to  /Signup", ()=>{
         test("should return 200 if  valid payload is provided to  /signup", async()=>{
             let response = await request(app).post("/signup").send(userPayload)
             expect(response.status).toBe(200)
-            console.log(response.body)
             expect(response.body.message).toMatchObject( {fullname: userPayload.fullname,email: userPayload.email})
         })
 

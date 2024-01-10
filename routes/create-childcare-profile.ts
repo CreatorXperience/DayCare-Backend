@@ -1,7 +1,7 @@
 import express from "express"
 import childcare_profile_model from "../models/child-care-profile"
 import profileMiddleware from "../middlewares/profile-middleware"
-import validation from "../utils/profile/validation"
+import validation from "../utils/childcares/validation"
 
 const router = express.Router()
 
