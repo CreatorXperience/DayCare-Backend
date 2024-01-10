@@ -31,8 +31,6 @@ describe("Send Request to  /Signup", ()=>{
         })
 
 
-          
-
         test("should return  404 if wrong payload is attached", async()=>{
             let response = await request(app).post("/signup").send({
                 fullname: "perter",

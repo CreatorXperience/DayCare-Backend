@@ -19,5 +19,6 @@ const child_care_profile_schema = new mongoose_1.default.Schema({
     location: { type: location_schema_1.default, required: true },
     userId: { type: String, required: true }
 });
+child_care_profile_schema.index({ location: "2dsphere" });
 const child_care_model = mongoose_1.default.model("child-cares", child_care_profile_schema);
 exports.default = child_care_model;

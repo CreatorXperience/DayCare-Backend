@@ -16,6 +16,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const __1 = require("../../..");
 const supertest_1 = __importDefault(require("supertest"));
 const lodash_1 = __importDefault(require("lodash"));
+const signup_1 = require("./test-utils/signup");
+const signin_1 = __importDefault(require("./test-utils/signin"));
 describe("Send Request to  /auth", () => {
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield mongoose_1.default.connection.dropDatabase();
@@ -29,16 +31,16 @@ describe("Send Request to  /auth", () => {
             password: "12345678aB@0"
         };
         beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/signup").send(userPayload);
+            let response = yield (0, signup_1.signupUser)(userPayload);
             expect(response.status).toBe(200);
         }));
         test("should return  200 response status if user sends the right paylaod with a an existing user", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(userPayload, ["email", "password"]));
+            let response = yield (0, signin_1.default)(lodash_1.default.pick(userPayload, ["email", "password"]));
             expect(response.status).toBe(200);
             expect(response.body.status).toMatch(/successfull/i);
         }));
         test("should return 404 response status if payload is bad or incomplete", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(userPayload, ["email"]));
+            let response = yield (0, signin_1.default)(lodash_1.default.pick(userPayload, ["email"]));
             expect(response.status).toBe(404);
             expect(response.body.message).toMatch("\"password\" is required");
             expect(response.body.status).toMatch(/failed/i);
@@ -46,7 +48,7 @@ describe("Send Request to  /auth", () => {
         test("should return a 404 response status if we don't have the childcare owner in our database", () => __awaiter(void 0, void 0, void 0, function* () {
             let un_existing_user = lodash_1.default.pick(userPayload, ["email", "password"]);
             un_existing_user.email = "not_existing@gmail.com";
-            let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(un_existing_user);
+            let response = yield (0, signin_1.default)(un_existing_user);
             expect(response.status).toBe(404);
             expect(response.body.status).toMatch(/failed/i);
         }));

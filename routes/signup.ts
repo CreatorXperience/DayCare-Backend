@@ -44,7 +44,6 @@ if(!response){
 
 await sendOtp(req.body.email, child_care._id)
 
-
 return  res.send({
     message: _.pick(response, ["fullname", "email", "_id"]),
     status: " verification email sent succesfully"

@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 import request from "supertest"
 import { app, server } from "../../.."
 import _ from "lodash"
+import { signupUser } from "./test-utils/signup"
 
 describe("POST /profile", ()=>{
 describe("POST  ", ()=> {
@@ -22,8 +23,7 @@ let token: string;
 let userId: string;
 
 beforeAll(async ()=>{
-	let response = await request(app).post("/signup").send(newUserPayload)
-	console.log(response.body._id)
+	let response = await signupUser(newUserPayload)
 })
 
 beforeEach(async()=>{
@@ -57,7 +57,6 @@ test("should return 404 error if a token is provided to /payload  but with bad p
 }
     let response = await request(app).post("/create-profile").send(bad_payload).set("authorization", token)
     expect(response.status).toBe(404)
-    console.log(response.body.message)
 })
 
 test("should return a 401 error if token is not provided to /profile",async ()=> {

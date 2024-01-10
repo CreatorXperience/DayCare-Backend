@@ -41,11 +41,13 @@ let get_location =  await axios.get(`https://api.api-ninjas.com/v1/geocoding?cit
 
 let location_data = get_location.data
 
+
 if(!location_data){
     return res.status(500).send({message: "error occured, couldn't get location"})
 }
 
 let child_care = await child_care_model.find({location: {$nearSphere: {$geometry: {type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude]}}}, amount: {$lt: req.body.maxp, $gt: req.body.minp}})
+
 if(!child_care){
     return res.status(404).send({message:"Couldn't get childcares at the specified location"})
 }

@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 import {app, server} from "../../.."
 import request from  "supertest"
 import Otp_model from "../../../models/otp-model"
+import { signupUser } from "./test-utils/signup"
 
 describe("sends request to /verify", ()=>{
 
@@ -19,7 +20,7 @@ beforeAll(async()=> {
 	email: "peter@gmail.com",
 	password: "12345678Ha$"	
 	}
-let response = await request(app).post("/signup").send(user)
+let response = await signupUser(user)
 userId = response.body.message._id
 
 let getOtp = await Otp_model.findOne({owner: userId})

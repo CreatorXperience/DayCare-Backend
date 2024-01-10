@@ -3,7 +3,6 @@ import Joi from "joi"
 import complexPassword from "joi-password-complexity"
 import user_signup_model from "../models/user-account-model"
 import bcrypt from "bcryptjs"
-import jwt from "jsonwebtoken"
 
 const router = express.Router()
 

@@ -12,11 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signupUser = void 0;
 const supertest_1 = __importDefault(require("supertest"));
-const __1 = require("../../..");
-const signupUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    let response = yield (0, supertest_1.default)(__1.app).post("/signup").send(payload);
+const __1 = require("../../../..");
+const signInUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(payload);
     return response;
 });
-exports.signupUser = signupUser;
+exports.default = signInUser;
