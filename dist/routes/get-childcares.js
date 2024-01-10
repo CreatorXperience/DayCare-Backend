@@ -35,7 +35,7 @@ const filterChildCareValidation = (payload) => {
     });
     return schema.validate(payload);
 };
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { error } = validation(req.body);
     if (error) {
         return res.status(404).send({ message: error.details[0].message });
@@ -46,7 +46,7 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     res.send(child_care);
 }));
-router.get("/filter", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/filter", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { error } = filterChildCareValidation(req.body);
     if (error) {
         return res.status(404).send({ message: error.details[0].message });
@@ -58,9 +58,15 @@ router.get("/filter", (req, res) => __awaiter(void 0, void 0, void 0, function* 
             "X-Api-Key": process.env.API_KEY
         }
     });
-    if (!get_location.data) {
+    let location_data = get_location.data;
+    console.log(location_data);
+    if (!location_data) {
         return res.status(500).send({ message: "error occured, couldn't get location" });
     }
-    res.send(get_location.data);
+    let child_care = yield child_care_profile_1.default.find({ location: { $nearSphere: { $geometry: { type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude] } } }, amount: { $lt: req.body.maxp, $gt: req.body.minp } });
+    if (!child_care) {
+        return res.status(404).send({ message: "Couldn't get childcares at the specified location" });
+    }
+    res.send(child_care);
 }));
 exports.default = router;

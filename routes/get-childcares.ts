@@ -36,7 +36,7 @@ const  filterChildCareValidation = (payload: TPayload)=>{
         return schema.validate(payload)
 }
 
-router.get("/", async (req,res)=> {
+router.post("/", async (req,res)=> {
 let {error} = validation(req.body)
 if(error){
 return  res.status(404).send({message: error.details[0].message})
@@ -50,7 +50,7 @@ if(!child_care){
 res.send(child_care)
 })
 
-router.get("/filter", async(req,res)=>{
+router.post("/filter", async(req,res)=>{
 let {error} = filterChildCareValidation(req.body)
 if(error){
     return res.status(404).send({message: error.details[0].message})
@@ -63,10 +63,18 @@ let get_location =  await axios.get(`https://api.api-ninjas.com/v1/geocoding?cit
     }
 })
 
-if(!get_location.data){
+let location_data = get_location.data
+console.log(location_data)
+
+if(!location_data){
     return res.status(500).send({message: "error occured, couldn't get location"})
 }
-res.send(get_location.data)
+
+let child_care = await child_care_model.find({location: {$nearSphere: {$geometry: {type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude]}}}, amount: {$lt: req.body.maxp, $gt: req.body.minp}})
+if(!child_care){
+    return res.status(404).send({message:"Couldn't get childcares at the specified location"})
+}
+res.send(child_care)
 })
 
 
