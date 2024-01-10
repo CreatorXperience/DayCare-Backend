@@ -10,6 +10,7 @@ const verify_otp_1 = __importDefault(require("../routes/verify-otp"));
 const create_childcare_profile_1 = __importDefault(require("../routes/create-childcare-profile"));
 const error_1 = __importDefault(require("../middlewares/error"));
 const get_childcares_1 = __importDefault(require("../routes/get-childcares"));
+const childcare_upload_1 = __importDefault(require("../routes/childcare-upload"));
 const Router = (app) => {
     app.use(express_1.default.json());
     app.use("/signup", signup_1.default);
@@ -17,6 +18,7 @@ const Router = (app) => {
     app.use("/verify-email", verify_otp_1.default);
     app.use("/create-profile", create_childcare_profile_1.default);
     app.use("/locate-childcares", get_childcares_1.default);
+    app.use("/childcare-upload", childcare_upload_1.default);
     app.use(error_1.default);
 };
 exports.default = Router;
