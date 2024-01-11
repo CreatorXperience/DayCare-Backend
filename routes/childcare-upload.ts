@@ -8,17 +8,6 @@ import { app } from ".."
 const router = express.Router()
 
 
-
-const connection  = async()=> {
-    let connection = mongoose.connection
-    let db = connection.db
-    connection.on("open",()=>{
-        db = mongoose.connection.db
-    })
-    return db
-}
-
-
 let handleUploadChildCareProfile = (upload: multer.Multer, bucket: mongoose.mongo.GridFSBucket)=> {
 
     app.post("/childcare-upload",upload.single("file"), async(req,res)=>{
@@ -29,10 +18,6 @@ let handleUploadChildCareProfile = (upload: multer.Multer, bucket: mongoose.mong
         }
            let file = req.file as Express.Multer.File
         
-           let db =  await connection()
-           if(!db){
-           return res.status(500).send({message: "database not found"})
-           }
         
          if(!file){
            return res.status(404).send({message: "file not attached"})

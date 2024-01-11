@@ -18,14 +18,6 @@ const stream_1 = require("stream");
 const child_care_image_1 = __importDefault(require("../models/child-care-image"));
 const __1 = require("..");
 const router = express_1.default.Router();
-const connection = () => __awaiter(void 0, void 0, void 0, function* () {
-    let connection = mongoose_1.default.connection;
-    let db = connection.db;
-    connection.on("open", () => {
-        db = mongoose_1.default.connection.db;
-    });
-    return db;
-});
 let handleUploadChildCareProfile = (upload, bucket) => {
     __1.app.post("/childcare-upload", upload.single("file"), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         let { owner } = req.query;
@@ -33,10 +25,6 @@ let handleUploadChildCareProfile = (upload, bucket) => {
             return res.status(404).send({ message: "owner params is missing" });
         }
         let file = req.file;
-        let db = yield connection();
-        if (!db) {
-            return res.status(500).send({ message: "database not found" });
-        }
         if (!file) {
             return res.status(404).send({ message: "file not attached" });
         }
