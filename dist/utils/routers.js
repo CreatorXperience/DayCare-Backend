@@ -20,5 +20,8 @@ const Router = (app) => {
     app.use("/locate-childcares", get_childcares_1.default);
     // app.use("/childcare-upload", child_care_upload)
     app.use(error_1.default);
+    app.get('/', (req, res) => {
+        res.send("Welcome to this API");
+    });
 };
 exports.default = Router;

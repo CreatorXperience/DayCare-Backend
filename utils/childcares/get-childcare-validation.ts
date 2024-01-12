@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-const validation = (payload: {long: number,lat: number})=> {
+const locateUserValidation = (payload: {long: number,lat: number})=> {
     let schema = Joi.object({
     long: Joi.number().required(),
     lat: Joi.number().required()
@@ -30,4 +30,4 @@ const validation = (payload: {long: number,lat: number})=> {
     }
 
 
-    export {validation, filterChildCareValidation}
+    export {locateUserValidation, filterChildCareValidation}

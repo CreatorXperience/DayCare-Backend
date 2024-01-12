@@ -1,19 +1,20 @@
-import express from "express"
+import express, { Request, Response } from "express"
 import mongoose from "mongoose"
 import multer from "multer"
 import {Readable} from "stream"
 import childcare_image_model from "../models/child-care-image"
 import { app } from ".."
+import authMiddleware from "../middlewares/profile-middleware"
 
 const router = express.Router()
 
 
 let handleUploadChildCareProfile = (upload: multer.Multer, bucket: mongoose.mongo.GridFSBucket)=> {
 
-    app.post("/childcare-upload",upload.single("file"), async(req,res)=>{
-        let {owner} = req.query
+    app.post("/childcare-upload",[authMiddleware, upload.single("file")], async(req: Request & {user?: string},res:Response)=>{
+        let user = req.user
         
-        if(!owner){
+        if(!user){
             return res.status(404).send({message: "owner params is missing"})
         }
            let file = req.file as Express.Multer.File
@@ -47,7 +48,7 @@ let handleUploadChildCareProfile = (upload: multer.Multer, bucket: mongoose.mong
             })
             
             newProfileImage.imageString = uploadStream.id.toString()
-            newProfileImage.owner = owner as string
+            newProfileImage.owner = user 
            let savedImage =  await newProfileImage.save()
            if(!savedImage){
         return res.status(404).send({message: "couldn't save image"})

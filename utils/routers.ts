@@ -17,6 +17,12 @@ app.use("/create-profile",create_profile)
 app.use("/locate-childcares", child_care_location)
 // app.use("/childcare-upload", child_care_upload)
 app.use(error)
+
+
+
+app.get('/', (req,res)=>{
+    res.send("Welcome to this API")
+  })
 }
 
 export default Router

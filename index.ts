@@ -9,9 +9,7 @@ require("express-async-errors")
 
 dotenv.config()
 
-
 exceptionRejectionLogger()
-
 
 const app = express()
 
@@ -26,9 +24,7 @@ async function get_uri_and_connect(connect_database: (app: Application, uri: str
   connect_database(app,uri)
 }
 
-
 get_uri_and_connect(connectToMongoDBDatabase)
-
 
 if(process.env.NODE_ENV !== "test"){
   app.listen(PORT, ()=>{
@@ -36,16 +32,8 @@ if(process.env.NODE_ENV !== "test"){
    })
  }
 
- app.get('/', (req,res)=>{
-  res.send("Welcome to this API")
-})
-
-
-
-
 if(process.env.NODE_ENV === "test"){
   Router(app)
 }
-
 
 export {app,PORT,server}

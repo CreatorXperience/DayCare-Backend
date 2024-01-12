@@ -1,8 +1,9 @@
 import {Request, Response,NextFunction} from "express"
 import jwt from "jsonwebtoken"
 import user_signup_model  from "../models/user-account-model"
+import _ from "lodash"
 
-const profileMiddleware = async  (req: Request & {user?: any}, res: Response, next: NextFunction)=> {
+const authMiddleware = async  (req: Request & {user?: any}, res: Response, next: NextFunction)=> {
 let token =  req.header("authorization")	
 if(!token){
 return res.status(401).send({message: "Permission denied. No token provided"})
@@ -19,8 +20,8 @@ if(!user){
 return  res.status(400).send({message: "Permission denied. User not found"})
 }
 
-req.user = user
+req.user = user._id.toString()
 next()
 }
 
-export default profileMiddleware
+export default authMiddleware

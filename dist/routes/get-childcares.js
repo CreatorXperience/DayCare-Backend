@@ -16,12 +16,12 @@ const express_1 = __importDefault(require("express"));
 const child_care_profile_1 = __importDefault(require("../models/child-care-profile"));
 const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const validation_1 = __importDefault(require("../utils/childcares/validation"));
 const get_childcare_validation_1 = require("../utils/childcares/get-childcare-validation");
+const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 dotenv_1.default.config();
 const router = express_1.default.Router();
-router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { error } = (0, validation_1.default)(req.body);
+router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { error } = (0, get_childcare_validation_1.locateUserValidation)(req.body);
     if (error) {
         return res.status(404).send({ message: error.details[0].message });
     }
@@ -31,7 +31,7 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     res.send(child_care);
 }));
-router.post("/filter", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/filter", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { error } = (0, get_childcare_validation_1.filterChildCareValidation)(req.body);
     if (error) {
         return res.status(404).send({ message: error.details[0].message });

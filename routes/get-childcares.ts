@@ -3,16 +3,16 @@ import child_care_model from "../models/child-care-profile"
 import axios from "axios"
 import dotenv from "dotenv"
 import validation from "../utils/childcares/validation"
-import { filterChildCareValidation } from "../utils/childcares/get-childcare-validation"
+import { filterChildCareValidation,locateUserValidation} from "../utils/childcares/get-childcare-validation"
+import authMiddleware from "../middlewares/profile-middleware"
 
 dotenv.config()
 
 const router = express.Router()
 
 
-
-router.post("/", async (req,res)=> {
-let {error} = validation(req.body)
+router.post("/", authMiddleware, async (req,res)=> {
+let {error} = locateUserValidation(req.body)
 if(error){
 return  res.status(404).send({message: error.details[0].message})
 }
@@ -26,7 +26,7 @@ res.send(child_care)
 })
 
 
-router.post("/filter", async(req,res)=>{
+router.post("/filter", authMiddleware, async(req,res)=>{
 let {error} = filterChildCareValidation(req.body)
 if(error){
     return res.status(404).send({message: error.details[0].message})

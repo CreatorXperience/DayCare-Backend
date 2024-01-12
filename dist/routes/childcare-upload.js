@@ -17,11 +17,12 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const stream_1 = require("stream");
 const child_care_image_1 = __importDefault(require("../models/child-care-image"));
 const __1 = require("..");
+const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const router = express_1.default.Router();
 let handleUploadChildCareProfile = (upload, bucket) => {
-    __1.app.post("/childcare-upload", upload.single("file"), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        let { owner } = req.query;
-        if (!owner) {
+    __1.app.post("/childcare-upload", [profile_middleware_1.default, upload.single("file")], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        let user = req.user;
+        if (!user) {
             return res.status(404).send({ message: "owner params is missing" });
         }
         let file = req.file;
@@ -47,7 +48,7 @@ let handleUploadChildCareProfile = (upload, bucket) => {
             });
         });
         newProfileImage.imageString = uploadStream.id.toString();
-        newProfileImage.owner = owner;
+        newProfileImage.owner = user;
         let savedImage = yield newProfileImage.save();
         if (!savedImage) {
             return res.status(404).send({ message: "couldn't save image" });

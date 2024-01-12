@@ -18,7 +18,8 @@ const profile_middleware_1 = __importDefault(require("../middlewares/profile-mid
 const validation_1 = __importDefault(require("../utils/childcares/validation"));
 const router = express_1.default.Router();
 router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { error } = (0, validation_1.default)(req.body);
+    let requestPayload = Object.assign(Object.assign({}, req.body), { userId: req.user });
+    let { error } = (0, validation_1.default)(requestPayload);
     if (error) {
         return res.status(404).send({ message: error.details[0].message });
     }

@@ -40,9 +40,6 @@ if (process.env.NODE_ENV !== "test") {
         connection_logger_1.connection_logger.info("Listening on port" + " " + PORT);
     });
 }
-app.get('/', (req, res) => {
-    res.send("Welcome to this API");
-});
 if (process.env.NODE_ENV === "test") {
     (0, routers_1.default)(app);
 }

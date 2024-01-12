@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_account_model_1 = __importDefault(require("../models/user-account-model"));
-const profileMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let token = req.header("authorization");
     if (!token) {
         return res.status(401).send({ message: "Permission denied. No token provided" });
@@ -27,7 +27,7 @@ const profileMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     if (!user) {
         return res.status(400).send({ message: "Permission denied. User not found" });
     }
-    req.user = user;
+    req.user = user._id.toString();
     next();
 });
-exports.default = profileMiddleware;
+exports.default = authMiddleware;

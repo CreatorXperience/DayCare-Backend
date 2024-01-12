@@ -20,7 +20,7 @@ const signup_1 = require("./test-utils/signup");
 const signin_1 = __importDefault(require("./test-utils/signin"));
 let axiosMock = jest.mock("axios");
 axios_1.default.get = jest.fn().mockResolvedValue({ data: [{ "latitude": 1.0, "longitude": 2.1 }] });
-describe("", () => {
+describe("POST /locate-childcares", () => {
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield mongoose_1.default.connection.dropDatabase();
         yield mongoose_1.default.connection.close();
@@ -39,6 +39,7 @@ describe("", () => {
         location: { type: "Point", coordinates: [3.005, 2.0344] },
         userId: "659bdb0ad66c81e2ac3e5628"
     };
+    let token;
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         let newuser = {
             fullname: "peterson samuell",
@@ -53,10 +54,36 @@ describe("", () => {
             password: "1234567899As@"
         };
         let response = yield (0, signin_1.default)(existing_user);
-        let token = response.header.authorization;
+        token = response.header.authorization;
         yield (0, supertest_1.default)(__1.app).post("/create-profile").send(profile_payload).set("authorization", token);
     }));
-    describe("", () => {
+    describe("POST /locate-childcares", () => {
+        let locationPayload = {
+            long: "10.00",
+            lat: "5.3"
+        };
+        test("should return 200 response status if input is a valid payload", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(locationPayload).set("authorization", token);
+            expect(response.status).toBe(200);
+        }));
+        test("should return 401 error response if no token is provided but with valid payload", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(locationPayload);
+            expect(response.status).toBe(401);
+        }));
+        test("should return 401 error response if no token is provided and with invalid payload", () => __awaiter(void 0, void 0, void 0, function* () {
+            let badPayload = {};
+            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(badPayload);
+            expect(response.status).toBe(401);
+        }));
+        test("should return 404 response status if input is an  invalid payload", () => __awaiter(void 0, void 0, void 0, function* () {
+            let badPayload = {
+                long: ""
+            };
+            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(badPayload).set("authorization", token);
+            expect(response.status).toBe(404);
+        }));
+    });
+    describe("POST /locate-childcares/filter", () => {
         let locationPayload = {
             "sortby": "reviews",
             "location": "Abuja,Nigeria",
@@ -64,17 +91,26 @@ describe("", () => {
             "minp": 20
         };
         test("should return 200 response status if input is a valid payload", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares/filter").send(locationPayload);
+            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares/filter").send(locationPayload).set("authorization", token);
             expect(response.status).toBe(200);
+        }));
+        test("should return 401 error response if no token is provided but with valid payload", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(locationPayload);
+            expect(response.status).toBe(401);
+        }));
+        test("should return 401 error response if no token is provided but with invalid payload", () => __awaiter(void 0, void 0, void 0, function* () {
+            let badPayload = {};
+            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(badPayload);
+            expect(response.status).toBe(401);
         }));
         test("should return 404 response status if input is a bad or incomplete payload", () => __awaiter(void 0, void 0, void 0, function* () {
             let badPayload = {};
-            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares/filter").send(badPayload);
+            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares/filter").send(badPayload).set("authorization", token);
             expect(response.status).toBe(404);
         }));
         test("should return 404 response status if input is a bad or incomplete payload", () => __awaiter(void 0, void 0, void 0, function* () {
             axios_1.default.get = jest.fn().mockResolvedValue({ data: null });
-            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares/filter").send(locationPayload);
+            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares/filter").send(locationPayload).set("authorization", token);
             expect(response.status).toBe(500);
         }));
     });
