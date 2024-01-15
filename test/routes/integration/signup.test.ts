@@ -1,11 +1,11 @@
 import mongoose from "mongoose"
 import { app, server } from "../../.."
 import request from "supertest"
+import _ from "lodash"
 
 
 
-
-describe("Send Request to  /Parent", ()=>{
+describe("Send Request to  /Signup", ()=>{
     afterAll(async()=>{
         await mongoose.connection.dropDatabase()
         await mongoose.connection.close()
@@ -19,14 +19,20 @@ describe("Send Request to  /Parent", ()=>{
         }
         
         test("should return 200 if  valid payload is provided to  /signup", async()=>{
-            let response = await request(app).post("/signup/daycare").send(userPayload)
+            let response = await request(app).post("/signup").send(userPayload)
             expect(response.status).toBe(200)
             expect(response.body.message).toMatchObject( {fullname: userPayload.fullname,email: userPayload.email})
         })
 
+        test("should return 200 if  valid payload is provided to  /signup", async()=>{
+            let response = await request(app).post("/signup").send(userPayload)
+            expect(response.status).toBe(404)
+            expect(response.body.message).toMatch("user with this email already exist")
+        })
+
 
         test("should return  404 if wrong payload is attached", async()=>{
-            let response = await request(app).post("/signup/daycare").send({
+            let response = await request(app).post("/signup").send({
                 fullname: "perter",
                 email: "fgh",
                 password:  "saasdasdasdasdadad"

@@ -15,11 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const joi_1 = __importDefault(require("joi"));
 const joi_password_complexity_1 = __importDefault(require("joi-password-complexity"));
-const childcare_signup_model_1 = __importDefault(require("../models/childcare-signup-model"));
-const lodash_1 = __importDefault(require("lodash"));
+const user_account_model_1 = __importDefault(require("../models/user-account-model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const router = express_1.default.Router();
-const validate_signup_payload = (payload) => {
+const validateUserPayload = (userPayload) => {
     let passwordOption = {
         min: 10,
         max: 20,
@@ -28,33 +27,26 @@ const validate_signup_payload = (payload) => {
         numeric: 1,
         symbol: 1
     };
-    let validation = joi_1.default.object({
-        fullname: joi_1.default.string().required().max(25).min(5),
+    const validation = joi_1.default.object({
         email: joi_1.default.string().required().min(5).max(255).email(),
-        password: (0, joi_password_complexity_1.default)(passwordOption)
+        password: (0, joi_password_complexity_1.default)(passwordOption).required().min(5).max(30)
     });
-    return validation.validate(payload);
+    return validation.validate(userPayload);
 };
-router.post("/daycare", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { error } = validate_signup_payload(req.body);
+router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { error } = validateUserPayload(req.body);
     if (error) {
-        return res.status(404).send({
-            message: error.details[0].message,
-            status: "Failed",
-        });
+        return res.status(404).send({ message: error.details[0].message, status: "failed" });
     }
-    let child_care_payload = lodash_1.default.pick(req.body, ["fullname", "email", "password"]);
-    let child_care = new childcare_signup_model_1.default(child_care_payload);
-    let _salt = yield bcryptjs_1.default.genSalt(10);
-    let _hash = yield bcryptjs_1.default.hash(child_care.password, _salt);
-    child_care.password = _hash;
-    let response = yield child_care.save();
-    if (response) {
-        return res.send({
-            message: lodash_1.default.pick(response, ["fullname", "email"]),
-            status: "Succesfull"
-        });
+    let child_care = yield user_account_model_1.default.findOne({ email: req.body.email });
+    if (!child_care) {
+        return res.status(404).send({ message: "user with the specified email doesn't exist", status: "failed" });
     }
-    return res.status(404).send({ message: "couldn't save file to database" });
+    let isPasswordEqual = yield bcryptjs_1.default.compare(req.body.password, child_care.password);
+    if (!isPasswordEqual) {
+        return res.status(404).send({ message: "Invalid email or Password" });
+    }
+    let token = child_care.generateAuthToken();
+    res.setHeader("authorization", token).send({ message: "user logged in successfully", status: "successfull" });
 }));
 exports.default = router;
