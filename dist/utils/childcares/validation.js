@@ -15,10 +15,7 @@ const validation = (profilePayload) => {
         phonenumber: joi_1.default.string().required().min(10).max(10),
         isOpen: joi_1.default.string().required(),
         image: joi_1.default.string().required(),
-        location: joi_1.default.object({
-            type: joi_1.default.string().required(),
-            coordinates: joi_1.default.array().items(joi_1.default.number()).required()
-        }).required(),
+        location: joi_1.default.string().required(),
         userId: joi_1.default.string().required()
     });
     return payloadSchema.validate(profilePayload);

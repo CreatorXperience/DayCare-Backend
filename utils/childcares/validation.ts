@@ -22,10 +22,7 @@ owner: Joi.string().required(),
 phonenumber: Joi.string().required().min(10).max(10),
 isOpen: Joi.string().required(),
 image: Joi.string().required(),
-location:  Joi.object({
-type: Joi.string().required(),
-coordinates: Joi.array().items(Joi.number()).required()
-}).required(),
+location:  Joi.string().required(),
 userId: Joi.string().required()
 })
 

@@ -17,6 +17,9 @@ const supertest_1 = __importDefault(require("supertest"));
 const __1 = require("../../..");
 const lodash_1 = __importDefault(require("lodash"));
 const signup_1 = require("./test-utils/signup");
+const axios_1 = __importDefault(require("axios"));
+let axiosMock = jest.mock("axios");
+axios_1.default.get = jest.fn().mockResolvedValue({ data: [{ "latitude": 1.0, "longitude": 2.1 }] });
 describe("POST /profile", () => {
     describe("POST  ", () => {
         afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
@@ -48,11 +51,11 @@ describe("POST /profile", () => {
             phonenumber: "0099999999",
             isOpen: "yes",
             image: "daycare.png",
-            location: { type: "Point", coordinates: [3.005, 2.0344] },
-            userId: "659bdb0ad66c81e2ac3e5628"
+            location: "Abuja,Lagos",
         };
-        test("send post request to /profile", () => __awaiter(void 0, void 0, void 0, function* () {
+        test("should return 200 response status if sent to /profile correct input", () => __awaiter(void 0, void 0, void 0, function* () {
             let response = yield (0, supertest_1.default)(__1.app).post("/create-profile").send(profile_payload).set("authorization", token);
+            console.log(response.status);
             expect(response.status).toBe(200);
         }));
         test("should return 404 error if a token is provided to /payload  but with bad payload", () => __awaiter(void 0, void 0, void 0, function* () {

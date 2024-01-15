@@ -16,10 +16,28 @@ const express_1 = __importDefault(require("express"));
 const child_care_profile_1 = __importDefault(require("../models/child-care-profile"));
 const router = express_1.default.Router();
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let profiles = yield child_care_profile_1.default.find();
-    if (!profiles) {
-        return res.status(404).send({ message: "profiles not found" });
+    let { q } = req.query;
+    if (!q) {
+        return res.status(404).send({ message: "query not found" });
     }
-    res.send(profiles);
+    let pipeline = [
+        {
+            $search: {
+                index: "search-childcares",
+                text: {
+                    query: q,
+                    path: {
+                        wildcard: "*"
+                    },
+                    fuzzy: {}
+                }
+            }
+        }
+    ];
+    let childcares = yield child_care_profile_1.default.aggregate(pipeline);
+    if (!childcares) {
+        return res.status(404).send("no childcares");
+    }
+    res.send(childcares);
 }));
 exports.default = router;
