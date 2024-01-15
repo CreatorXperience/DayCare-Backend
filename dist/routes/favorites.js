@@ -31,4 +31,17 @@ router.post("/:id", profile_middleware_1.default, (req, res) => __awaiter(void 0
     }
     res.send({ message: "added to user's favorite" });
 }));
+router.delete("/:id", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let user = req.user;
+    let { id } = req.params;
+    let get_childcare = yield child_care_profile_1.child_care_model.findById(id);
+    if (!get_childcare) {
+        return res.status(404).send({ message: "no childcares with these id" });
+    }
+    let removeUser = yield user_account_model_1.default.findOneAndUpdate({ _id: new mongoose_1.default.Types.ObjectId(user) }, { $pull: { favorite: { _id: id } } }, { safe: true, multi: false });
+    if (!removeUser) {
+        return res.status(500).send({ message: "Couldn't favorite from user" });
+    }
+    res.send(removeUser);
+}));
 exports.default = router;
