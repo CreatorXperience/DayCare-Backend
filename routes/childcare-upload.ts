@@ -9,9 +9,17 @@ import authMiddleware from "../middlewares/profile-middleware"
 const router = express.Router()
 
 
-let handleUploadChildCareProfile = (upload: multer.Multer, bucket: mongoose.mongo.GridFSBucket)=> {
+type TUploadOptions = {
+    storage: multer.Multer,
+    bucket:mongoose.mongo.GridFSBucket,
+    database:  any,
+    path: string
+}
 
-    app.post("/childcare-upload",[authMiddleware, upload.single("file")], async(req: Request & {user?: string},res:Response)=>{
+let handleUploadChildCareProfile = (options: TUploadOptions)=> {
+    let {database,storage,bucket,path} = options
+
+    app.post(path,[authMiddleware, storage.single("file")], async(req: Request & {user?: string},res:Response)=>{
         let user = req.user
         
         if(!user){
@@ -26,7 +34,7 @@ let handleUploadChildCareProfile = (upload: multer.Multer, bucket: mongoose.mong
       
         
             let {fieldname, originalname,mimetype, buffer,size} = file
-            let newProfileImage = new  childcare_image_model({
+            let newProfileImage = new database({
                 filename: originalname,
                 size: size,
                 type: mimetype,
@@ -58,7 +66,7 @@ let handleUploadChildCareProfile = (upload: multer.Multer, bucket: mongoose.mong
         })
 
 
-        app.get("/childcare-upload/:id", (req,res)=>{
+        app.get("/upload/:id", (req,res)=>{
             let {id} = req.params
         
            let downloadStream =  bucket.openDownloadStream(new mongoose.Types.ObjectId(id))

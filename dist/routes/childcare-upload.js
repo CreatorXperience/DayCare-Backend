@@ -15,12 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const stream_1 = require("stream");
-const child_care_image_1 = __importDefault(require("../models/child-care-image"));
 const __1 = require("..");
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const router = express_1.default.Router();
-let handleUploadChildCareProfile = (upload, bucket) => {
-    __1.app.post("/childcare-upload", [profile_middleware_1.default, upload.single("file")], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+let handleUploadChildCareProfile = (options) => {
+    let { database, storage, bucket, path } = options;
+    __1.app.post(path, [profile_middleware_1.default, storage.single("file")], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         let user = req.user;
         if (!user) {
             return res.status(404).send({ message: "owner params is missing" });
@@ -30,7 +30,7 @@ let handleUploadChildCareProfile = (upload, bucket) => {
             return res.status(404).send({ message: "file not attached" });
         }
         let { fieldname, originalname, mimetype, buffer, size } = file;
-        let newProfileImage = new child_care_image_1.default({
+        let newProfileImage = new database({
             filename: originalname,
             size: size,
             type: mimetype,
@@ -55,7 +55,7 @@ let handleUploadChildCareProfile = (upload, bucket) => {
         }
         res.send({ message: "image successfully uploaded", id: uploadStream.id });
     }));
-    __1.app.get("/childcare-upload/:id", (req, res) => {
+    __1.app.get("/upload/:id", (req, res) => {
         let { id } = req.params;
         let downloadStream = bucket.openDownloadStream(new mongoose_1.default.Types.ObjectId(id));
         downloadStream.on("file", (file) => {
