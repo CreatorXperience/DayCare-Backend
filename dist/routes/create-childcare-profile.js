@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const child_care_profile_1 = __importDefault(require("../models/child-care-profile"));
+const child_care_profile_1 = require("../models/child-care-profile");
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const validation_1 = __importDefault(require("../utils/childcares/validation"));
 const axios_1 = __importDefault(require("axios"));
@@ -37,7 +37,7 @@ router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, v
         return res.status(500).send({ message: "error occured, couldn't get location" });
     }
     requestPayload.location = { type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude] };
-    let newProfile = new child_care_profile_1.default(requestPayload);
+    let newProfile = new child_care_profile_1.child_care_model(requestPayload);
     let saved = yield newProfile.save();
     if (!saved) {
         return res.status(404).send({ message: "couldn't save profile to database", status: "successfull" });

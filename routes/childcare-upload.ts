@@ -2,7 +2,6 @@ import express, { Request, Response } from "express"
 import mongoose from "mongoose"
 import multer from "multer"
 import {Readable} from "stream"
-import childcare_image_model from "../models/child-care-image"
 import { app } from ".."
 import authMiddleware from "../middlewares/profile-middleware"
 
@@ -12,15 +11,20 @@ const router = express.Router()
 type TUploadOptions = {
     storage: multer.Multer,
     bucket:mongoose.mongo.GridFSBucket,
-    database:  any,
+    collection:  any,
     path: string
 }
 
 let handleUploadChildCareProfile = (options: TUploadOptions)=> {
-    let {database,storage,bucket,path} = options
+    let {collection,storage,bucket,path} = options
 
     app.post(path,[authMiddleware, storage.single("file")], async(req: Request & {user?: string},res:Response)=>{
         let user = req.user
+
+        let getImage = await collection.findOne({owner: user})
+        if(getImage){
+            return res.send
+        }
         
         if(!user){
             return res.status(404).send({message: "owner params is missing"})
@@ -34,7 +38,7 @@ let handleUploadChildCareProfile = (options: TUploadOptions)=> {
       
         
             let {fieldname, originalname,mimetype, buffer,size} = file
-            let newProfileImage = new database({
+            let newProfileImage = new collection({ 
                 filename: originalname,
                 size: size,
                 type: mimetype,

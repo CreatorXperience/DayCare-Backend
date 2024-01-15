@@ -19,9 +19,13 @@ const __1 = require("..");
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const router = express_1.default.Router();
 let handleUploadChildCareProfile = (options) => {
-    let { database, storage, bucket, path } = options;
+    let { collection, storage, bucket, path } = options;
     __1.app.post(path, [profile_middleware_1.default, storage.single("file")], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         let user = req.user;
+        let getImage = yield collection.findOne({ owner: user });
+        if (getImage) {
+            return res.send;
+        }
         if (!user) {
             return res.status(404).send({ message: "owner params is missing" });
         }
@@ -30,7 +34,7 @@ let handleUploadChildCareProfile = (options) => {
             return res.status(404).send({ message: "file not attached" });
         }
         let { fieldname, originalname, mimetype, buffer, size } = file;
-        let newProfileImage = new database({
+        let newProfileImage = new collection({
             filename: originalname,
             size: size,
             type: mimetype,

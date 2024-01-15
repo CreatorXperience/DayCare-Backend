@@ -40,7 +40,7 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     let child_care = yield user_account_model_1.default.findOne({ email: req.body.email });
     if (!child_care) {
-        return res.status(404).send({ message: "child care with the specified email doesn't exist", status: "failed" });
+        return res.status(404).send({ message: "user with the specified email doesn't exist", status: "failed" });
     }
     let isPasswordEqual = yield bcryptjs_1.default.compare(req.body.password, child_care.password);
     if (!isPasswordEqual) {

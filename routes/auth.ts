@@ -35,7 +35,7 @@ if(error){
 }
 let child_care = await user_signup_model.findOne({email: req.body.email})
 if(!child_care){
-    return res.status(404).send({message: "child care with the specified email doesn't exist", status: "failed"})
+    return res.status(404).send({message: "user with the specified email doesn't exist", status: "failed"})
 }
 
 let isPasswordEqual =  await bcrypt.compare(req.body.password, child_care.password)

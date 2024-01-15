@@ -11,6 +11,7 @@ const create_childcare_profile_1 = __importDefault(require("../routes/create-chi
 const error_1 = __importDefault(require("../middlewares/error"));
 const get_childcares_1 = __importDefault(require("../routes/get-childcares"));
 const search_childcares_1 = __importDefault(require("../routes/search-childcares"));
+const favorites_1 = __importDefault(require("../routes/favorites"));
 const Router = (app) => {
     app.use(express_1.default.json());
     app.use(express_1.default.urlencoded({ extended: true }));
@@ -20,6 +21,7 @@ const Router = (app) => {
     app.use("/create-profile", create_childcare_profile_1.default);
     app.use("/locate-childcares", get_childcares_1.default);
     app.use("/search-childcares", search_childcares_1.default);
+    app.use("/favorite", favorites_1.default);
     app.get('/', (req, res) => {
         res.send("Welcome to this API");
     });

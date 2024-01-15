@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const child_care_profile_1 = __importDefault(require("../models/child-care-profile"));
+const child_care_profile_1 = require("../models/child-care-profile");
 const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const get_childcare_validation_1 = require("../utils/childcares/get-childcare-validation");
@@ -25,7 +25,7 @@ router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, v
     if (error) {
         return res.status(404).send({ message: error.details[0].message });
     }
-    let child_care = yield child_care_profile_1.default.find({ location: { $nearSphere: { $geometry: { type: "Point", coordinates: [req.body.long, req.body.lat] } } } });
+    let child_care = yield child_care_profile_1.child_care_model.find({ location: { $nearSphere: { $geometry: { type: "Point", coordinates: [req.body.long, req.body.lat] } } } });
     if (!child_care) {
         return res.status(404).send({ message: "No child care is available at the specified location" });
     }
@@ -46,7 +46,7 @@ router.post("/filter", profile_middleware_1.default, (req, res) => __awaiter(voi
     if (!location_data) {
         return res.status(500).send({ message: "error occured, couldn't get location" });
     }
-    let child_care = yield child_care_profile_1.default.find({ location: { $nearSphere: { $geometry: { type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude] } } }, amount: { $lt: req.body.maxp, $gt: req.body.minp } });
+    let child_care = yield child_care_profile_1.child_care_model.find({ location: { $nearSphere: { $geometry: { type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude] } } }, amount: { $lt: req.body.maxp, $gt: req.body.minp } });
     if (!child_care) {
         return res.status(404).send({ message: "Couldn't get childcares at the specified location" });
     }

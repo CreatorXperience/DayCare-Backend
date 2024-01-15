@@ -14,30 +14,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const child_care_profile_1 = require("../models/child-care-profile");
+const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
+const user_account_model_1 = __importDefault(require("../models/user-account-model"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const router = express_1.default.Router();
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { q } = req.query;
-    if (!q) {
-        return res.status(404).send({ message: "query not found" });
+router.post("/:id", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let user = req.user;
+    let { id } = req.params;
+    let get_childcare = yield child_care_profile_1.child_care_model.findById(id);
+    if (!get_childcare) {
+        return res.status(404).send({ message: "no childcares with these id" });
     }
-    let pipeline = [
-        {
-            $search: {
-                index: "search-childcares",
-                text: {
-                    query: q,
-                    path: {
-                        wildcard: "*"
-                    },
-                    fuzzy: {}
-                }
-            }
-        }
-    ];
-    let childcares = yield child_care_profile_1.child_care_model.aggregate(pipeline);
-    if (!childcares) {
-        return res.status(404).send("no childcares");
+    let updateUser = yield user_account_model_1.default.updateOne({ _id: new mongoose_1.default.Types.ObjectId(user) }, { $push: { favorite: get_childcare } });
+    if (!updateUser) {
+        return res.status(500).send({ message: "Internal Serval error" });
     }
-    res.send(childcares);
+    res.send({ message: "added to user's favorite" });
 }));
 exports.default = router;

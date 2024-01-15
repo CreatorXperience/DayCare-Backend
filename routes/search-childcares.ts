@@ -1,5 +1,5 @@
 import express from "express"
-import child_care_model from "../models/child-care-profile"
+import {child_care_model} from "../models/child-care-profile"
 
 const router =  express.Router()
 

@@ -1,5 +1,5 @@
 import express, { Request } from "express"
-import childcare_profile_model from "../models/child-care-profile"
+import {child_care_model} from "../models/child-care-profile"
 import authMiddleware from "../middlewares/profile-middleware"
 import validation from "../utils/childcares/validation"
 import axios from "axios"
@@ -34,7 +34,7 @@ if(!location_data){
 
 requestPayload.location = {type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude]}
 
-	 let newProfile = new childcare_profile_model(requestPayload)
+	 let newProfile = new child_care_model(requestPayload)
 	 let saved =  await newProfile.save()
 	 if(!saved){
 return res.status(404).send({message: "couldn't save profile to database", status: "successfull"})

@@ -38,4 +38,4 @@ child_care_profile_schema.index({location: "2dsphere"})
 
 const child_care_model = mongoose.model("child-cares", child_care_profile_schema)
 
-export default child_care_model
+export { child_care_model, child_care_profile_schema}
