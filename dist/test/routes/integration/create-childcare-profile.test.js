@@ -44,7 +44,8 @@ describe("POST /profile", () => {
         let profile_payload = {
             title: "David's Daycare",
             amount: "50",
-            perDuration: 2,
+            from: "2024-10-20",
+            to: "2024-12-12",
             rating: 5,
             description: "Am gonna do you well",
             owner: "Peter Parker",
@@ -55,7 +56,6 @@ describe("POST /profile", () => {
         };
         test("should return 200 response status if sent to /profile correct input", () => __awaiter(void 0, void 0, void 0, function* () {
             let response = yield (0, supertest_1.default)(__1.app).post("/create-profile").send(profile_payload).set("authorization", token);
-            console.log(response.status);
             expect(response.status).toBe(200);
         }));
         test("should return 404 error if a token is provided to /payload  but with bad payload", () => __awaiter(void 0, void 0, void 0, function* () {
