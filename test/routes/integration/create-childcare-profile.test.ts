@@ -71,5 +71,4 @@ test("should return a 401 error if token is not provided to /profile",async ()=>
 })
 
 }
-
 )})
