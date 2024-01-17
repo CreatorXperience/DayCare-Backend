@@ -29,7 +29,7 @@ router.post("/:id", profile_middleware_1.default, (req, res) => __awaiter(void 0
     if (!updateUser) {
         return res.status(500).send({ message: "Internal Serval error" });
     }
-    res.send({ message: "added to user's favorite" });
+    return res.send({ message: "added to user's favorite" });
 }));
 router.delete("/:id", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.user;
@@ -42,6 +42,6 @@ router.delete("/:id", profile_middleware_1.default, (req, res) => __awaiter(void
     if (!removeUser) {
         return res.status(500).send({ message: "Couldn't favorite from user" });
     }
-    res.send(removeUser);
+    return res.send(removeUser);
 }));
 exports.default = router;

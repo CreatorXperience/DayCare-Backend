@@ -6,8 +6,6 @@ import mongoose from "mongoose"
 
 const router  =  express.Router()
 
-
-
 router.post("/:id", authMiddleware, async(req: Request & {user?: string},res)=>{
     let user = req.user
     let {id} = req.params
@@ -23,7 +21,7 @@ let updateUser = await user_signup_model.updateOne({_id: new mongoose.Types.Obje
 if(!updateUser){
    return  res.status(500).send({message: "Internal Serval error"})
 }
-res.send({message: "added to user's favorite"})
+return res.send({message: "added to user's favorite"})
 })
 
 router.delete("/:id",authMiddleware, async(req: Request & {user?: string},res)=> {
@@ -39,7 +37,7 @@ let removeUser =  await user_signup_model.findOneAndUpdate({_id: new mongoose.Ty
 if(!removeUser){
     return res.status(500).send({message:  "Couldn't favorite from user"})
 }
-res.send(removeUser)
+return res.send(removeUser)
 })
 
 export default router
