@@ -16,7 +16,7 @@ let saved = await userProfile.save()
 if(!saved){
     return res.status(404).send({message: "error occurred while saving user"})
 }
-res.send("")
+res.send(saved)
 })
 
 export default router 

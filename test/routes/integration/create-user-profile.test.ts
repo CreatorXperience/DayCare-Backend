@@ -3,7 +3,7 @@ import { app, server } from "../../.."
 import request from "supertest"
 import { signupUser } from "./test-utils/signup"
 import signInUser from "./test-utils/signin"
-import _, { last } from "lodash"
+import _ from "lodash"
 
 
 
@@ -12,7 +12,6 @@ import _, { last } from "lodash"
 
 describe("Send request to /favorite/:id", ()=>{
     let token: string;
-    let daycare_id: string
 
     let userPayload = {
         fullname: "Samson Peter",
@@ -38,7 +37,7 @@ describe("Send request to /favorite/:id", ()=>{
 
 
     beforeAll(async ()=>{
-        let response = await signupUser(userPayload)
+         await signupUser(userPayload)
 
         let res = await signInUser(_.pick(userPayload, ["email", "password"]))
         token = res.header.authorization

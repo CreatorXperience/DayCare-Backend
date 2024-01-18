@@ -27,6 +27,6 @@ router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, v
     if (!saved) {
         return res.status(404).send({ message: "error occurred while saving user" });
     }
-    res.send("");
+    res.send(saved);
 }));
 exports.default = router;

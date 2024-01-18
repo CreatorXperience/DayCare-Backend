@@ -20,7 +20,6 @@ const signin_1 = __importDefault(require("./test-utils/signin"));
 const lodash_1 = __importDefault(require("lodash"));
 describe("Send request to /favorite/:id", () => {
     let token;
-    let daycare_id;
     let userPayload = {
         fullname: "Samson Peter",
         email: "testerpeter@gmail.com",
@@ -41,7 +40,7 @@ describe("Send request to /favorite/:id", () => {
         yield __1.server.stop();
     }));
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
-        let response = yield (0, signup_1.signupUser)(userPayload);
+        yield (0, signup_1.signupUser)(userPayload);
         let res = yield (0, signin_1.default)(lodash_1.default.pick(userPayload, ["email", "password"]));
         token = res.header.authorization;
     }));
