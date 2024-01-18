@@ -52,11 +52,18 @@ describe("Sends request to /create-article", () => {
         }));
     });
     describe("GET  /articles", () => {
+        let articleId;
+        beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).post("/article/create-article").send(article).set("authorization", token);
+            articleId = response.body._id;
+        }));
         test("should return 200 response if valid  token and payload is provided", () => __awaiter(void 0, void 0, void 0, function* () {
             let response = yield (0, supertest_1.default)(__1.app).get("/article/articles").set("authorization", token);
             expect(response.status).toBe(200);
         }));
-        test("should return 404 response if token and invalid pyaload is provided", () => __awaiter(void 0, void 0, void 0, function* () {
+        test("should return 200 response if valid token and valid articleId  is provided", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).get(`/article/author/${articleId}`).set("authorization", token);
+            expect(response.status).toBe(200);
         }));
     });
 });

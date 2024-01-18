@@ -17,7 +17,6 @@ const joi_1 = __importDefault(require("joi"));
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const article_1 = __importDefault(require("../models/article"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const lodash_1 = __importDefault(require("lodash"));
 const router = express_1.default.Router();
 const schemaValidation = (article) => {
     let schema = joi_1.default.object({
@@ -48,12 +47,12 @@ router.get("/articles", profile_middleware_1.default, (req, res) => __awaiter(vo
     }
     res.send(articles);
 }));
-router.get("/author/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/author/:id", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { id } = req.params;
-    let article = yield article_1.default.findById(id).populate("author");
+    let article = yield article_1.default.findOne({ _id: new mongoose_1.default.Types.ObjectId(id) }).populate("author", { email: 1, _id: 1, fullname: 1 });
     if (!article) {
         return res.status(404).send({ message: "author not found" });
     }
-    res.send(lodash_1.default.pick(article, ["_id", "fullname", "email"]));
+    res.send(article);
 }));
 exports.default = router;

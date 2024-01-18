@@ -50,13 +50,13 @@ res.send(articles)
 })
 
 
-router.get("/author/:id", async (req,res)=> {
+router.get("/author/:id",authMiddleware, async (req,res)=> {
   let {id} = req.params
-  let article = await article_model.findById(id).populate("author")
+  let article = await article_model.findOne({_id: new mongoose.Types.ObjectId(id)}).populate("author",{email: 1, _id: 1, fullname:1})
   if(!article){
     return  res.status(404).send({message: "author not found"})
   }
-  res.send(_.pick(article, ["_id", "fullname", "email"]))
+  res.send(article)
 })
 
 export default router

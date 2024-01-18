@@ -48,13 +48,20 @@ describe("Sends request to /create-article", () => {
   });
 
   describe("GET  /articles", () => {
+    let articleId: string;
+
+    beforeAll(async()=>{
+      let response = await request(app).post("/article/create-article").send(article).set("authorization", token);
+      articleId =  response.body._id
+    })
     test("should return 200 response if valid  token and payload is provided", async () => {
       let response = await request(app).get("/article/articles").set("authorization", token);
       expect(response.status).toBe(200)
     });
 
-    test("should return 404 response if token and invalid pyaload is provided", async () => {
-
+    test("should return 200 response if valid token and valid articleId  is provided", async () => {
+      let response = await request(app).get(`/article/author/${articleId}`).set("authorization", token);
+      expect(response.status).toBe(200)
     });
   });
 });
