@@ -4,6 +4,7 @@ import request from "supertest"
 import _ from "lodash"
 import { signupUser } from "./test-utils/signup"
 import signInUser from "./test-utils/signin"
+import userPayload from "./test-utils/signupPayload"
 
 
 
@@ -17,11 +18,7 @@ describe("Send Request to  /auth", ()=>{
      })
 
     describe("POST /auth", ()=>{
-        let userPayload= {
-            fullname: "Habeeb Muhydeen Ayinde",
-            email: "allyearmustobey2@gmail.com",
-            password: "12345678aB@0"
-        }
+   
         beforeAll(async ()=>{
             let response = await signupUser(userPayload)
             expect(response.status).toBe(200)

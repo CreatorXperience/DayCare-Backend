@@ -18,6 +18,7 @@ const __1 = require("../../..");
 const lodash_1 = __importDefault(require("lodash"));
 const signup_1 = require("./test-utils/signup");
 const axios_1 = __importDefault(require("axios"));
+const signupPayload_1 = __importDefault(require("./test-utils/signupPayload"));
 let axiosMock = jest.mock("axios");
 axios_1.default.get = jest.fn().mockResolvedValue({ data: [{ "latitude": 1.0, "longitude": 2.1 }] });
 describe("POST /profile", () => {
@@ -27,17 +28,12 @@ describe("POST /profile", () => {
             yield mongoose_1.default.connection.close();
             yield __1.server.stop();
         }));
-        let newUserPayload = {
-            fullname: "Habeeb Muhydeen Ayinde",
-            email: "creatorXperience@example.com",
-            password: "1233455Ha#lll"
-        };
         let token;
         beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
-            yield (0, signup_1.signupUser)(newUserPayload);
+            yield (0, signup_1.signupUser)(signupPayload_1.default);
         }));
         beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(newUserPayload, ["email", "password"]));
+            let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(signupPayload_1.default, ["email", "password"]));
             token = response.header.authorization;
         }));
         let profile_payload = {

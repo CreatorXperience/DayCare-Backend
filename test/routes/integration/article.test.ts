@@ -4,15 +4,12 @@ import request from "supertest";
 import { signupUser } from "./test-utils/signup";
 import signInUser from "./test-utils/signin";
 import _ from "lodash";
+import userPayload from "./test-utils/signupPayload";
 
 describe("Sends request to /create-article", () => {
   let token: string;
 
-  let userPayload = {
-    fullname: "Samson Peter",
-    email: "testerpeter@gmail.com",
-    password: "123456789@Hs",
-  };
+;
 
   let article = {
     title: "hello testerizer",

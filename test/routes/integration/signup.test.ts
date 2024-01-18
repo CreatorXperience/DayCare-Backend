@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 import { app, server } from "../../.."
 import request from "supertest"
 import _ from "lodash"
+import userPayload from "./test-utils/signupPayload"
 
 
 
@@ -12,11 +13,7 @@ describe("Send Request to  /Signup", ()=>{
         await server.stop()
      })
     describe("POST  /signup", ()=>{
-        let userPayload= {
-            fullname: "Habeeb Muhydeen Ayinde",
-            email: "allyearmustobey@gmail.com",
-            password: "12345678aB@0"
-        }
+   
         
         test("should return 200 if  valid payload is provided to  /signup", async()=>{
             let response = await request(app).post("/signup").send(userPayload)

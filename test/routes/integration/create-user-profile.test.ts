@@ -4,15 +4,12 @@ import request from "supertest"
 import { signupUser } from "./test-utils/signup"
 import signInUser from "./test-utils/signin"
 import _ from "lodash"
+import userPayload from "./test-utils/signupPayload"
 
 describe("Send request to /favorite/:id", ()=>{
     let token: string;
 
-    let userPayload = {
-        fullname: "Samson Peter",
-        email: "testerpeter@gmail.com",
-        password: "123456789@Hs"
-    }
+
 
     let user_profile_payload = {
         name: "hello tester",

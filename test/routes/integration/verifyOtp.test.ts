@@ -3,6 +3,7 @@ import {app, server} from "../../.."
 import request from  "supertest"
 import Otp_model from "../../../models/otp-model"
 import { signupUser } from "./test-utils/signup"
+import userPayload from "./test-utils/signupPayload"
 
 describe("sends request to /verify", ()=>{
 
@@ -15,12 +16,7 @@ await server.stop()
 let userId: string;
 let hash: string;
 beforeAll(async()=> {
-	let user = {
-	fullname: "peter parker",
-	email: "peter@gmail.com",
-	password: "12345678Ha$"	
-	}
-let response = await signupUser(user)
+let response = await signupUser(userPayload)
 userId = response.body.message._id
 
 let getOtp = await Otp_model.findOne({owner: userId})

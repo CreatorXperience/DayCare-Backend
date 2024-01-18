@@ -17,6 +17,7 @@ const __1 = require("../../..");
 const supertest_1 = __importDefault(require("supertest"));
 const otp_model_1 = __importDefault(require("../../../models/otp-model"));
 const signup_1 = require("./test-utils/signup");
+const signupPayload_1 = __importDefault(require("./test-utils/signupPayload"));
 describe("sends request to /verify", () => {
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield mongoose_1.default.connection.dropDatabase();
@@ -26,12 +27,7 @@ describe("sends request to /verify", () => {
     let userId;
     let hash;
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
-        let user = {
-            fullname: "peter parker",
-            email: "peter@gmail.com",
-            password: "12345678Ha$"
-        };
-        let response = yield (0, signup_1.signupUser)(user);
+        let response = yield (0, signup_1.signupUser)(signupPayload_1.default);
         userId = response.body.message._id;
         let getOtp = yield otp_model_1.default.findOne({ owner: userId });
     }));
