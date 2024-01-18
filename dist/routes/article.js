@@ -16,6 +16,8 @@ const express_1 = __importDefault(require("express"));
 const joi_1 = __importDefault(require("joi"));
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const article_1 = __importDefault(require("../models/article"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const lodash_1 = __importDefault(require("lodash"));
 const router = express_1.default.Router();
 const schemaValidation = (article) => {
     let schema = joi_1.default.object({
@@ -27,11 +29,12 @@ const schemaValidation = (article) => {
     return schema.validate(article);
 };
 router.post("/create-article", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { error } = schemaValidation(req.body);
+    let payloadArticle = Object.assign(Object.assign({}, req.body), { author: new mongoose_1.default.Types.ObjectId(req.user) });
+    let { error } = schemaValidation(payloadArticle);
     if (error) {
         return res.status(404).send({ message: "Bad Payload" });
     }
-    let article = new article_1.default(Object.assign({}, req.body));
+    let article = new article_1.default(payloadArticle);
     let saved = yield article.save();
     if (!saved) {
         return res.status(404).send({ message: "error occured while saving article" });
@@ -44,5 +47,13 @@ router.get("/articles", profile_middleware_1.default, (req, res) => __awaiter(vo
         return res.status(404).send({ message: "articles not found!" });
     }
     res.send(articles);
+}));
+router.get("/author/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { id } = req.params;
+    let article = yield article_1.default.findById(id).populate("author");
+    if (!article) {
+        return res.status(404).send({ message: "author not found" });
+    }
+    res.send(lodash_1.default.pick(article, ["_id", "fullname", "email"]));
 }));
 exports.default = router;

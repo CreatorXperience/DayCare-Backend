@@ -28,7 +28,6 @@ describe("Sends request to /create-article", () => {
     let article = {
         title: "hello testerizer",
         cover_image: "python.png",
-        author: new mongoose_1.default.Types.ObjectId(),
         content: "npm, which stands for Node Package Manager, is a widely used package manager for the JavaScript programming language. It is the default package manager for Node.js, a runtime environment for executing JavaScript code outside of a web browser. npm facilitates the installation, management, and sharing of third-party libraries and tools that developers use in their JavaScript projects",
     };
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
