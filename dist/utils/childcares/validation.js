@@ -8,7 +8,8 @@ const validation = (profilePayload) => {
     let payloadSchema = joi_1.default.object({
         title: joi_1.default.string().required().min(5).max(20),
         amount: joi_1.default.string().required(),
-        perDuration: joi_1.default.number().required().min(1).max(24),
+        from: joi_1.default.string().required(),
+        to: joi_1.default.string().required(),
         rating: joi_1.default.number().required(),
         description: joi_1.default.string().required().min(10),
         owner: joi_1.default.string().required(),

@@ -8,6 +8,7 @@ import error from "../middlewares/error";
 import child_care_location from "../routes/get-childcares"
 import seach_childcares from "../routes/search-childcares"
 import favorite from "../routes/favorites"
+import create_user_profile from "../routes/create-user-profile"
 
 
 
@@ -22,6 +23,7 @@ app.use("/create-profile",create_profile)
 app.use("/locate-childcares", child_care_location)
 app.use("/search-childcares", seach_childcares)
 app.use("/favorite", favorite)
+app.use("/create-user-profile", create_user_profile)
 
 
 app.get('/', (req,res)=>{

@@ -39,7 +39,8 @@ token = response.header.authorization
 let profile_payload = {
     title:  "David's Daycare",
     amount: "50",
-    perDuration: 2,
+    from: "2024-10-20",
+    to: "2024-12-12",
     rating: 5,
     description: "Am gonna do you well",
     owner: "Peter Parker", 
@@ -51,7 +52,6 @@ let profile_payload = {
 
 test("should return 200 response status if sent to /profile correct input",async ()=> {
     let response = await request(app).post("/create-profile").send(profile_payload).set("authorization", token)
-    console.log(response.status)
     expect(response.status).toBe(200)
 }) 
 
@@ -71,5 +71,4 @@ test("should return a 401 error if token is not provided to /profile",async ()=>
 })
 
 }
-
 )})

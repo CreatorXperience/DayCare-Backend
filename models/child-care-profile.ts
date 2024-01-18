@@ -1,27 +1,12 @@
 import mongoose from "mongoose"
 import location_schema from "./location_schema"
 
-type TMongooseSchema = {
-    title: string;
-    amount: number;
-    perDuration: string;
-    rating: number;
-    isVerified: boolean;
-    description: string;
-    owner: string;
-    phonenumber: string;
-    isOpen: boolean;
-    image: string;
-    location: {
-        x: string;
-        y: string;
-    };
-    userId: any;
-}
-const child_care_profile_schema = new mongoose.Schema<TMongooseSchema>({
+
+const child_care_profile_schema = new mongoose.Schema({
     title:  {type: String,required: true, maxLength: 25, minLength: 5},
     amount: {type: Number, required: true},
-    perDuration: {type: String, required: true},
+    from: {type: String, required: true},
+    to: {type: String, required: true},
     rating: {type: Number, required: true},
     isVerified: {type: Boolean, default: false},
     description: {type: String, required: true, maxLength: 1000, minLength: 20},

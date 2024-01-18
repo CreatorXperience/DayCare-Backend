@@ -15,7 +15,8 @@ const validation = (profilePayload: TProfile )=>{
 let payloadSchema = Joi.object({
 title: Joi.string().required().min(5).max(20),
 amount: Joi.string().required(),
-perDuration: Joi.number().required().min(1).max(24),
+from: Joi.string().required(),
+to: Joi.string().required(),
 rating: Joi.number().required(),
 description: Joi.string().required().min(10),
 owner: Joi.string().required(),

@@ -9,7 +9,8 @@ const location_schema_1 = __importDefault(require("./location_schema"));
 const child_care_profile_schema = new mongoose_1.default.Schema({
     title: { type: String, required: true, maxLength: 25, minLength: 5 },
     amount: { type: Number, required: true },
-    perDuration: { type: String, required: true },
+    from: { type: String, required: true },
+    to: { type: String, required: true },
     rating: { type: Number, required: true },
     isVerified: { type: Boolean, default: false },
     description: { type: String, required: true, maxLength: 1000, minLength: 20 },
