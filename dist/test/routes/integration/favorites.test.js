@@ -53,7 +53,7 @@ describe("Send request to /favorite/:id", () => {
         token = res.header.authorization;
     }));
     beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
-        let profileRes = yield (0, supertest_1.default)(__1.app).post("/create-profile").send(profile_payload).set("authorization", token);
+        let profileRes = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profile_payload).set("authorization", token);
         daycare_id = profileRes.body._id.toString();
     }));
     describe("POST /favorie/:id", () => {

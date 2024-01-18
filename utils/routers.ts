@@ -9,6 +9,7 @@ import child_care_location from "../routes/get-childcares"
 import seach_childcares from "../routes/search-childcares"
 import favorite from "../routes/favorites"
 import create_user_profile from "../routes/create-user-profile"
+import article from "../routes/article"
 
 
 
@@ -19,11 +20,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/signup", signup)
 app.use("/auth", auth)
 app.use("/verify-email", verify_email)
-app.use("/create-profile",create_profile)
+app.use("/create-childcare-profile",create_profile)
 app.use("/locate-childcares", child_care_location)
 app.use("/search-childcares", seach_childcares)
 app.use("/favorite", favorite)
 app.use("/create-user-profile", create_user_profile)
+app.use("/article",  article)
 
 
 app.get('/', (req,res)=>{

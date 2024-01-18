@@ -24,10 +24,9 @@ password: "1233455Ha#lll"
 }
 
 let token: string; 
-let userId: string;
 
 beforeAll(async ()=>{
-	let response = await signupUser(newUserPayload)
+	 await signupUser(newUserPayload)
 })
 
 beforeEach(async()=>{
@@ -51,7 +50,7 @@ let profile_payload = {
 }
 
 test("should return 200 response status if sent to /profile correct input",async ()=> {
-    let response = await request(app).post("/create-profile").send(profile_payload).set("authorization", token)
+    let response = await request(app).post("/create-childcare-profile").send(profile_payload).set("authorization", token)
     expect(response.status).toBe(200)
 }) 
 
@@ -61,12 +60,12 @@ test("should return 404 error if a token is provided to /payload  but with bad p
     amount: "50",
     perDuration: 2
 }
-    let response = await request(app).post("/create-profile").send(bad_payload).set("authorization", token)
+    let response = await request(app).post("/create-childcare-profile").send(bad_payload).set("authorization", token)
     expect(response.status).toBe(404)
 })
 
 test("should return a 401 error if token is not provided to /profile",async ()=> {
-    let response = await request(app).post("/create-profile").send(profile_payload)
+    let response = await request(app).post("/create-childcare-profile").send(profile_payload)
     expect(response.status).toBe(401)
 })
 

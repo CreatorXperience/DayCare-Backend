@@ -49,7 +49,7 @@ describe("POST /locate-childcares", ()=>{
         }
         let response = await signInUser(existing_user)
    token = response.header.authorization
-        await request(app).post("/create-profile").send(profile_payload).set("authorization", token)
+        await request(app).post("/create-childcare-profile").send(profile_payload).set("authorization", token)
      })
 
 

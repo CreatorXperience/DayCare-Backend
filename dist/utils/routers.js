@@ -13,17 +13,19 @@ const get_childcares_1 = __importDefault(require("../routes/get-childcares"));
 const search_childcares_1 = __importDefault(require("../routes/search-childcares"));
 const favorites_1 = __importDefault(require("../routes/favorites"));
 const create_user_profile_1 = __importDefault(require("../routes/create-user-profile"));
+const article_1 = __importDefault(require("../routes/article"));
 const Router = (app) => {
     app.use(express_1.default.json());
     app.use(express_1.default.urlencoded({ extended: true }));
     app.use("/signup", signup_1.default);
     app.use("/auth", auth_1.default);
     app.use("/verify-email", verify_otp_1.default);
-    app.use("/create-profile", create_childcare_profile_1.default);
+    app.use("/create-childcare-profile", create_childcare_profile_1.default);
     app.use("/locate-childcares", get_childcares_1.default);
     app.use("/search-childcares", search_childcares_1.default);
     app.use("/favorite", favorites_1.default);
     app.use("/create-user-profile", create_user_profile_1.default);
+    app.use("/article", article_1.default);
     app.get('/', (req, res) => {
         res.send("Welcome to this API");
     });

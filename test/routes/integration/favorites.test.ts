@@ -49,7 +49,7 @@ describe("Send request to /favorite/:id", ()=>{
     })
 
     beforeEach(async()=>{
-        let profileRes = await request(app).post("/create-profile").send(profile_payload).set("authorization", token)
+        let profileRes = await request(app).post("/create-childcare-profile").send(profile_payload).set("authorization", token)
         daycare_id = profileRes.body._id.toString()
     })
 

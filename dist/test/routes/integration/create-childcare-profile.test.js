@@ -33,9 +33,8 @@ describe("POST /profile", () => {
             password: "1233455Ha#lll"
         };
         let token;
-        let userId;
         beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, signup_1.signupUser)(newUserPayload);
+            yield (0, signup_1.signupUser)(newUserPayload);
         }));
         beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
             let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(newUserPayload, ["email", "password"]));
@@ -55,7 +54,7 @@ describe("POST /profile", () => {
             location: "Abuja,Lagos",
         };
         test("should return 200 response status if sent to /profile correct input", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/create-profile").send(profile_payload).set("authorization", token);
+            let response = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profile_payload).set("authorization", token);
             expect(response.status).toBe(200);
         }));
         test("should return 404 error if a token is provided to /payload  but with bad payload", () => __awaiter(void 0, void 0, void 0, function* () {
@@ -64,11 +63,11 @@ describe("POST /profile", () => {
                 amount: "50",
                 perDuration: 2
             };
-            let response = yield (0, supertest_1.default)(__1.app).post("/create-profile").send(bad_payload).set("authorization", token);
+            let response = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(bad_payload).set("authorization", token);
             expect(response.status).toBe(404);
         }));
         test("should return a 401 error if token is not provided to /profile", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/create-profile").send(profile_payload);
+            let response = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profile_payload);
             expect(response.status).toBe(401);
         }));
     });

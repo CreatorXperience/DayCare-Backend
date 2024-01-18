@@ -5,11 +5,6 @@ import { signupUser } from "./test-utils/signup"
 import signInUser from "./test-utils/signin"
 import _ from "lodash"
 
-
-
-
-
-
 describe("Send request to /favorite/:id", ()=>{
     let token: string;
 
@@ -44,15 +39,12 @@ describe("Send request to /favorite/:id", ()=>{
     })
 
     describe("Post  /create-user-profile", ()=>{
-
-
-
         test("should return 200 response if token is provided", async()=>{
             let response = await request(app).post("/create-user-profile").send(user_profile_payload).set("authorization", token)
             expect(response.status).toBe(200)
         })
 
-        test("should return 404 response if token and invalid daycareId is provided", async ()=>{
+        test("should return 404 response if invalidPayload or incomplete is provided", async ()=>{
             let invalidPayload =  {}
             let response = await request(app).post("/create-user-profile").send(invalidPayload).set("authorization", token)
             expect(response.status).toBe(404)

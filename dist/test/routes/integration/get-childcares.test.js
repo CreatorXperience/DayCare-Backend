@@ -55,7 +55,7 @@ describe("POST /locate-childcares", () => {
         };
         let response = yield (0, signin_1.default)(existing_user);
         token = response.header.authorization;
-        yield (0, supertest_1.default)(__1.app).post("/create-profile").send(profile_payload).set("authorization", token);
+        yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profile_payload).set("authorization", token);
     }));
     describe("POST /locate-childcares", () => {
         let locationPayload = {
