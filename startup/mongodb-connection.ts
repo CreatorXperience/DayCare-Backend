@@ -26,8 +26,16 @@ let childcare_options = {
   path: "/upload/childcares"
 }
 
+let article_options = {
+  storage: upload,
+  bucket,
+  collection: childcare_image_model,
+  path: "/upload/article"
+}
+
 
 handleUploadChildCareProfile(childcare_options)
+handleUploadChildCareProfile(article_options)
 
 
 Router(app)

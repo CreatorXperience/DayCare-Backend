@@ -33,7 +33,14 @@ const connectToMongoDBDatabase = (app, uri) => __awaiter(void 0, void 0, void 0,
             collection: child_care_image_1.default,
             path: "/upload/childcares"
         };
+        let article_options = {
+            storage: upload,
+            bucket,
+            collection: child_care_image_1.default,
+            path: "/upload/article"
+        };
         (0, childcare_upload_1.default)(childcare_options);
+        (0, childcare_upload_1.default)(article_options);
         (0, routers_1.default)(app);
     }).catch(() => {
         connection_logger_1.connection_logger.error("error occured while connecting");
