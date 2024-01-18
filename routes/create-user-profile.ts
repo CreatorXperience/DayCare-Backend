@@ -1,37 +1,22 @@
 import express from "express"
-import Joi from "joi"
+import authMiddleware from "../middlewares/profile-middleware";
+import user_profile_model from "../models/userprofile";
+import schemaValidation from "../utils/childcares/userProfile/userProfileValidation";
 
 const router = express.Router()
-type TPayload = {
-    name: string;
-    children_name: string;
-    gender: string,
-    age: number,
-    drop: string,
-    take: string,
-    role: string
-}
-const schemaValidation = (payload: TPayload)=>{
-    let schema = Joi.object(
-        {
-            name: Joi.string().required().min(5).max(25),
-            children_name: Joi.string().required().min(5).max(25),
-            gender: Joi.string().required(),
-            age: Joi.number().required(),
-            drop: Joi.string().required(),
-            take: Joi.string().required(),
-            role: Joi.string().required()
-        }
-    )
 
- return   schema.validate(payload)
-}
-
-router.post("/", (req,res)=> {
+router.post("/",authMiddleware, async (req,res)=> {
 let {error}=  schemaValidation(req.body)
 if(error){
     return  res.status(404).send({message: "Bad Payload"})
 }
+
+const userProfile = new user_profile_model(req.body)
+let saved = await userProfile.save()
+if(!saved){
+    return res.status(404).send({message: "error occurred while saving user"})
+}
+res.send("")
 })
 
-export default router
+export default router 
