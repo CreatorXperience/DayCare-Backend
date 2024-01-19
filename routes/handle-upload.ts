@@ -15,7 +15,7 @@ type TUploadOptions = {
     path: string
 }
 
-let handleUploadImage = (options: TUploadOptions)=> {
+let UploadImageRoutes = (options: TUploadOptions)=> {
     let {collection,storage,bucket,path} = options
 
     app.post(path,[authMiddleware, storage.single("file")], async(req: Request & {user?: string},res:Response)=>{
@@ -82,4 +82,4 @@ let handleUploadImage = (options: TUploadOptions)=> {
 
 
 
-export default handleUploadImage
+export default UploadImageRoutes

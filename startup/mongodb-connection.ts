@@ -3,7 +3,7 @@ import { connection_logger } from "../logger/connection-logger"
 import { Application } from "express"
 import Router from "../utils/routers"
 import multer from "multer"
-import handleUploadImage from "../routes/handle-upload"
+import UploadImageRoutes from "../routes/handle-upload"
 import childcare_image_model from "../models/child-care-image"
 import article_image_model from "../models/article-image-model"
 
@@ -35,10 +35,8 @@ let article_options = {
 }
 
 
-handleUploadImage(childcare_options)
-handleUploadImage(article_options)
-
-
+UploadImageRoutes(childcare_options)
+UploadImageRoutes(article_options)
 Router(app)
 
      }).catch(()=>{
