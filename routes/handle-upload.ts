@@ -15,16 +15,11 @@ type TUploadOptions = {
     path: string
 }
 
-let handleUploadChildCareProfile = (options: TUploadOptions)=> {
+let handleUploadImage = (options: TUploadOptions)=> {
     let {collection,storage,bucket,path} = options
 
     app.post(path,[authMiddleware, storage.single("file")], async(req: Request & {user?: string},res:Response)=>{
         let user = req.user
-
-        let getImage = await collection.findOne({owner: user})
-        if(getImage){
-            return res.send
-        }
         
         if(!user){
             return res.status(404).send({message: "owner params is missing"})
@@ -87,4 +82,4 @@ let handleUploadChildCareProfile = (options: TUploadOptions)=> {
 
 
 
-export default handleUploadChildCareProfile
+export default handleUploadImage

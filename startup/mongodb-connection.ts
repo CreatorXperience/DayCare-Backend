@@ -3,8 +3,9 @@ import { connection_logger } from "../logger/connection-logger"
 import { Application } from "express"
 import Router from "../utils/routers"
 import multer from "multer"
-import handleUploadChildCareProfile from "../routes/childcare-upload"
+import handleUploadImage from "../routes/handle-upload"
 import childcare_image_model from "../models/child-care-image"
+import article_image_model from "../models/article-image-model"
 
 const connectToMongoDBDatabase = async (app: Application, uri: string | undefined)=> {
      if(!uri){
@@ -29,13 +30,13 @@ let childcare_options = {
 let article_options = {
   storage: upload,
   bucket,
-  collection: childcare_image_model,
+  collection: article_image_model,
   path: "/upload/article"
 }
 
 
-handleUploadChildCareProfile(childcare_options)
-handleUploadChildCareProfile(article_options)
+handleUploadImage(childcare_options)
+handleUploadImage(article_options)
 
 
 Router(app)
