@@ -10,7 +10,8 @@ email: {type: String, required: true, minLength: 5, maxLength: 255, unique: true
 password: {type: String, required: true,  maxLength: 255},
 is_verfied:  {type:  Boolean, default: false}, 
 day_care_owner: {type: Boolean, default: false},
-favorite: {type: [child_care_profile_schema],default: [] }
+favorite: {type: [child_care_profile_schema],default: [] },
+article: {type:   mongoose.Schema.Types.ObjectId, ref: "articles"}
 }, {
 methods:  {
 generateAuthToken: function(){

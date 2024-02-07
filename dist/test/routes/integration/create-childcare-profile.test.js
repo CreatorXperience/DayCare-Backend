@@ -18,6 +18,7 @@ const __1 = require("../../..");
 const lodash_1 = __importDefault(require("lodash"));
 const signup_1 = require("./test-utils/signup");
 const axios_1 = __importDefault(require("axios"));
+const signupPayload_1 = __importDefault(require("./test-utils/signupPayload"));
 let axiosMock = jest.mock("axios");
 axios_1.default.get = jest.fn().mockResolvedValue({ data: [{ "latitude": 1.0, "longitude": 2.1 }] });
 describe("POST /profile", () => {
@@ -27,18 +28,12 @@ describe("POST /profile", () => {
             yield mongoose_1.default.connection.close();
             yield __1.server.stop();
         }));
-        let newUserPayload = {
-            fullname: "Habeeb Muhydeen Ayinde",
-            email: "creatorXperience@example.com",
-            password: "1233455Ha#lll"
-        };
         let token;
-        let userId;
         beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, signup_1.signupUser)(newUserPayload);
+            yield (0, signup_1.signupUser)(signupPayload_1.default);
         }));
         beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(newUserPayload, ["email", "password"]));
+            let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(signupPayload_1.default, ["email", "password"]));
             token = response.header.authorization;
         }));
         let profile_payload = {
@@ -55,7 +50,7 @@ describe("POST /profile", () => {
             location: "Abuja,Lagos",
         };
         test("should return 200 response status if sent to /profile correct input", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/create-profile").send(profile_payload).set("authorization", token);
+            let response = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profile_payload).set("authorization", token);
             expect(response.status).toBe(200);
         }));
         test("should return 404 error if a token is provided to /payload  but with bad payload", () => __awaiter(void 0, void 0, void 0, function* () {
@@ -64,11 +59,11 @@ describe("POST /profile", () => {
                 amount: "50",
                 perDuration: 2
             };
-            let response = yield (0, supertest_1.default)(__1.app).post("/create-profile").send(bad_payload).set("authorization", token);
+            let response = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(bad_payload).set("authorization", token);
             expect(response.status).toBe(404);
         }));
         test("should return a 401 error if token is not provided to /profile", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/create-profile").send(profile_payload);
+            let response = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profile_payload);
             expect(response.status).toBe(401);
         }));
     });

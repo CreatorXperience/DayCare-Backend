@@ -16,8 +16,9 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const connection_logger_1 = require("../logger/connection-logger");
 const routers_1 = __importDefault(require("../utils/routers"));
 const multer_1 = __importDefault(require("multer"));
-const childcare_upload_1 = __importDefault(require("../routes/childcare-upload"));
+const handle_upload_1 = __importDefault(require("../routes/handle-upload"));
 const child_care_image_1 = __importDefault(require("../models/child-care-image"));
+const article_image_model_1 = __importDefault(require("../models/article-image-model"));
 const connectToMongoDBDatabase = (app, uri) => __awaiter(void 0, void 0, void 0, function* () {
     if (!uri) {
         return connection_logger_1.connection_logger.error("NO URI PROVIDED");
@@ -33,7 +34,14 @@ const connectToMongoDBDatabase = (app, uri) => __awaiter(void 0, void 0, void 0,
             collection: child_care_image_1.default,
             path: "/upload/childcares"
         };
-        (0, childcare_upload_1.default)(childcare_options);
+        let article_options = {
+            storage: upload,
+            bucket,
+            collection: article_image_model_1.default,
+            path: "/upload/article"
+        };
+        (0, handle_upload_1.default)(childcare_options);
+        (0, handle_upload_1.default)(article_options);
         (0, routers_1.default)(app);
     }).catch(() => {
         connection_logger_1.connection_logger.error("error occured while connecting");

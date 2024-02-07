@@ -5,6 +5,7 @@ import { signupUser } from "./test-utils/signup"
 import signInUser from "./test-utils/signin"
 import _ from "lodash"
 import axios from "axios"
+import userPayload from "./test-utils/signupPayload"
 
 
 let profile_payload = {
@@ -28,11 +29,7 @@ describe("Send request to /favorite/:id", ()=>{
     let token: string;
     let daycare_id: string
 
-    let userPayload = {
-        fullname: "Samson Peter",
-        email: "kel@gmail.com",
-        password: "123456789@Hs"
-    }
+
 
     afterAll(async()=>{
         await mongoose.connection.dropDatabase()
@@ -49,7 +46,7 @@ describe("Send request to /favorite/:id", ()=>{
     })
 
     beforeEach(async()=>{
-        let profileRes = await request(app).post("/create-profile").send(profile_payload).set("authorization", token)
+        let profileRes = await request(app).post("/create-childcare-profile").send(profile_payload).set("authorization", token)
         daycare_id = profileRes.body._id.toString()
     })
 
