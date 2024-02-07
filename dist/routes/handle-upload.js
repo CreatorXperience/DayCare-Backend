@@ -18,7 +18,7 @@ const stream_1 = require("stream");
 const __1 = require("..");
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const router = express_1.default.Router();
-let handleUploadImage = (options) => {
+let UploadImageRoutes = (options) => {
     let { collection, storage, bucket, path } = options;
     __1.app.post(path, [profile_middleware_1.default, storage.single("file")], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         let user = req.user;
@@ -64,4 +64,4 @@ let handleUploadImage = (options) => {
         downloadStream.pipe(res);
     });
 };
-exports.default = handleUploadImage;
+exports.default = UploadImageRoutes;
