@@ -6,8 +6,17 @@ import multer from "multer"
 import UploadImageRoutes from "../routes/handle-upload"
 import childcare_image_model from "../models/child-care-image"
 import article_image_model from "../models/article-image-model"
+import {IncomingMessage, Server, ServerResponse} from "http"
 
-const connectToMongoDBDatabase = async (app: Application, uri: string | undefined)=> {
+
+type TConnectionArgs = {
+  server: Server<typeof IncomingMessage, typeof ServerResponse>;
+  app: Application;
+  uri: string | undefined;
+  port: string;
+}
+const connectToMongoDBDatabase = async (connectionArgs: TConnectionArgs)=> {
+  let {uri, app, server, port} = connectionArgs
      if(!uri){
    return   connection_logger.error("NO URI PROVIDED")
      }
@@ -38,6 +47,13 @@ let article_options = {
 UploadImageRoutes(childcare_options)
 UploadImageRoutes(article_options)
 Router(app)
+
+
+if(process.env.NODE_ENV !== "test"){
+ server.listen(port, ()=>{
+        connection_logger.info("Listening on port" + " "+ port)
+    })
+  }
 
      }).catch(()=>{
        connection_logger.error("error occured while connecting")

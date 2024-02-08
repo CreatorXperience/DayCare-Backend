@@ -3,7 +3,7 @@ import express from "express";
 import signup from "../routes/signup"
 import auth from "../routes/auth"
 import verify_email from "../routes/verify-otp"
-import create_profile from "../routes/create-childcare-profile"
+import create_profile from "../routes/childcare-profile"
 import error from "../middlewares/error";
 import child_care_location from "../routes/get-childcares"
 import seach_childcares from "../routes/search-childcares"

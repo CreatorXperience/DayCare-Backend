@@ -19,7 +19,8 @@ const multer_1 = __importDefault(require("multer"));
 const handle_upload_1 = __importDefault(require("../routes/handle-upload"));
 const child_care_image_1 = __importDefault(require("../models/child-care-image"));
 const article_image_model_1 = __importDefault(require("../models/article-image-model"));
-const connectToMongoDBDatabase = (app, uri) => __awaiter(void 0, void 0, void 0, function* () {
+const connectToMongoDBDatabase = (connectionArgs) => __awaiter(void 0, void 0, void 0, function* () {
+    let { uri, app, server, port } = connectionArgs;
     if (!uri) {
         return connection_logger_1.connection_logger.error("NO URI PROVIDED");
     }
@@ -43,6 +44,11 @@ const connectToMongoDBDatabase = (app, uri) => __awaiter(void 0, void 0, void 0,
         (0, handle_upload_1.default)(childcare_options);
         (0, handle_upload_1.default)(article_options);
         (0, routers_1.default)(app);
+        if (process.env.NODE_ENV !== "test") {
+            server.listen(port, () => {
+                connection_logger_1.connection_logger.info("Listening on port" + " " + port);
+            });
+        }
     }).catch(() => {
         connection_logger_1.connection_logger.error("error occured while connecting");
     });
