@@ -33,18 +33,18 @@ let {error} = validateUserPayload(req.body)
 if(error){
     return res.status(404).send({message: error.details[0].message, status: "failed"})
 }
-let child_care = await user_signup_model.findOne({email: req.body.email})
-if(!child_care){
+let user = await user_signup_model.findOne({email: req.body.email})
+if(!user){
     return res.status(404).send({message: "user with the specified email doesn't exist", status: "failed"})
 }
 
-let isPasswordEqual =  await bcrypt.compare(req.body.password, child_care.password)
+let isPasswordEqual =  await bcrypt.compare(req.body.password, user.password)
 
 if(!isPasswordEqual){
     return res.status(404).send({message: "Invalid email or Password"})
 }
 
-let token = child_care.generateAuthToken()
+let token = user.generateAuthToken()
 res.setHeader("authorization", token).send({message: "user logged in successfully", status: "successfull"})
 
 })

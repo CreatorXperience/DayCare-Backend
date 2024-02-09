@@ -29,20 +29,21 @@ const connectToMongoDBDatabase = (connectionArgs) => __awaiter(void 0, void 0, v
         let storage = multer_1.default.memoryStorage();
         let upload = (0, multer_1.default)({ storage });
         let bucket = new mongoose_1.default.mongo.GridFSBucket(mongoose_1.default.connection.db);
-        let childcare_options = {
-            storage: upload,
-            bucket,
-            collection: child_care_image_1.default,
-            path: "/upload/childcares"
-        };
-        let article_options = {
-            storage: upload,
-            bucket,
-            collection: article_image_model_1.default,
-            path: "/upload/article"
-        };
-        (0, handle_upload_1.default)(childcare_options);
-        (0, handle_upload_1.default)(article_options);
+        let uploadOptions = [
+            {
+                storage: upload,
+                bucket,
+                collection: article_image_model_1.default,
+                path: "/upload/article"
+            },
+            {
+                storage: upload,
+                bucket,
+                collection: child_care_image_1.default,
+                path: "/upload/childcares"
+            }
+        ];
+        uploadOptions.forEach((options) => (0, handle_upload_1.default)(options));
         (0, routers_1.default)(app);
         if (process.env.NODE_ENV !== "test") {
             server.listen(port, () => {

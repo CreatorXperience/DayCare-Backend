@@ -10,6 +10,7 @@ import seach_childcares from "../routes/search-childcares"
 import favorite from "../routes/favorites"
 import create_user_profile from "../routes/create-user-profile"
 import article from "../routes/article"
+import chat from "../routes/chat"
 
 
 
@@ -26,6 +27,7 @@ app.use("/search-childcares", seach_childcares)
 app.use("/favorite", favorite)
 app.use("/create-user-profile", create_user_profile)
 app.use("/article",  article)
+app.use("/chat",chat)
 
 
 app.get('/', (req,res)=>{

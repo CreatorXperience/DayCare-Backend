@@ -14,6 +14,7 @@ const search_childcares_1 = __importDefault(require("../routes/search-childcares
 const favorites_1 = __importDefault(require("../routes/favorites"));
 const create_user_profile_1 = __importDefault(require("../routes/create-user-profile"));
 const article_1 = __importDefault(require("../routes/article"));
+const chat_1 = __importDefault(require("../routes/chat"));
 const Router = (app) => {
     app.use(express_1.default.json());
     app.use(express_1.default.urlencoded({ extended: true }));
@@ -26,6 +27,7 @@ const Router = (app) => {
     app.use("/favorite", favorites_1.default);
     app.use("/create-user-profile", create_user_profile_1.default);
     app.use("/article", article_1.default);
+    app.use("/chat", chat_1.default);
     app.get('/', (req, res) => {
         res.send("Welcome to this API");
     });
