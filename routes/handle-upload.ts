@@ -5,8 +5,6 @@ import {Readable} from "stream"
 import { app } from ".."
 import authMiddleware from "../middlewares/profile-middleware"
 
-const router = express.Router()
-
 
 type TUploadOptions = {
     storage: multer.Multer,

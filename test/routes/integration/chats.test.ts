@@ -4,15 +4,10 @@ import request from  "supertest"
 import { signupUser } from "./test-utils/signup"
 import signInUser from "./test-utils/signin"
 import _ from "lodash"
+import { TSignUpRes } from "./test-utils/chats.type"
 
 
-type TSignUpRes = {
-body: {
-    message: {
-        _id: string
-    }
-}
-}
+
 
 describe("chats", ()=> {
 afterAll(async()=> {
@@ -85,7 +80,7 @@ describe("GET user chat ", ()=>{
         await mongoose.connection.dropCollection("chats")
         let response =  await request(app).get(`/chat/single-chat/${secondUserRes.body.message._id}`).set("authorization", token)
         expect(response.status).toBe(404)
-        expect(response.body.body.message).toBe("chats not found")
+        expect(response.body.message).toBe("chat not found")
     })
 })
 })

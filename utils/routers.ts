@@ -11,6 +11,7 @@ import favorite from "../routes/favorites"
 import create_user_profile from "../routes/create-user-profile"
 import article from "../routes/article"
 import chat from "../routes/chat"
+import message from "../routes/message"
 
 
 
@@ -28,6 +29,7 @@ app.use("/favorite", favorite)
 app.use("/create-user-profile", create_user_profile)
 app.use("/article",  article)
 app.use("/chat",chat)
+app.use("/message", message)
 
 
 app.get('/', (req,res)=>{

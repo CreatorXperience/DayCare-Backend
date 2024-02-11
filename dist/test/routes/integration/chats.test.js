@@ -74,7 +74,7 @@ describe("chats", () => {
             yield mongoose_1.default.connection.dropCollection("chats");
             let response = yield (0, supertest_1.default)(__1.app).get(`/chat/single-chat/${secondUserRes.body.message._id}`).set("authorization", token);
             expect(response.status).toBe(404);
-            expect(response.body.body.message).toBe("chats not found");
+            expect(response.body.message).toBe("chat not found");
         }));
     });
 });
