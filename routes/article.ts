@@ -7,8 +7,6 @@ import _ from "lodash"
 
 const router = express.Router()
 
-
-
 type TArticle = {
     title: string,
     cover_image: string,

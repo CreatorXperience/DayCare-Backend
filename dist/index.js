@@ -19,22 +19,13 @@ const mongodb_connection_1 = __importDefault(require("./startup/mongodb-connecti
 const get_uri_1 = __importDefault(require("./startup/get-uri"));
 const routers_1 = __importDefault(require("./utils/routers"));
 const connection_logger_1 = require("./logger/connection-logger");
-const http_1 = __importDefault(require("http"));
-const socket_io_1 = require("socket.io");
+const socket_1 = __importDefault(require("./socket"));
 require("express-async-errors");
 dotenv_1.default.config();
 (0, connection_logger_1.exceptionRejectionLogger)();
 const app = (0, express_1.default)();
 exports.app = app;
-let socketServer = http_1.default.createServer(app);
-let io = new socket_io_1.Server(socketServer, {
-    cors: {
-        origin: "http://localhost:3000"
-    }
-});
-io.on("connection", () => {
-    console.log("connected to io server");
-});
+let httpServer = (0, socket_1.default)();
 let PORT = process.env.PORT || "3030";
 exports.PORT = PORT;
 let server;
@@ -42,15 +33,11 @@ function get_uri_and_connect(connect_database) {
     return __awaiter(this, void 0, void 0, function* () {
         let { server: mockServer, uri } = yield (0, get_uri_1.default)();
         exports.server = server = mockServer;
-        connect_database(app, uri);
+        let items = { server: httpServer, app, uri, port: PORT };
+        connect_database(items);
     });
 }
 get_uri_and_connect(mongodb_connection_1.default);
-if (process.env.NODE_ENV !== "test") {
-    socketServer.listen(PORT, () => {
-        connection_logger_1.connection_logger.info("Listening on port" + " " + PORT);
-    });
-}
 if (process.env.NODE_ENV === "test") {
     (0, routers_1.default)(app);
 }

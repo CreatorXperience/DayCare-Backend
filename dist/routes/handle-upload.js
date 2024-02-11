@@ -12,12 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const stream_1 = require("stream");
 const __1 = require("..");
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
-const router = express_1.default.Router();
 let UploadImageRoutes = (options) => {
     let { collection, storage, bucket, path } = options;
     __1.app.post(path, [profile_middleware_1.default, storage.single("file")], (req, res) => __awaiter(void 0, void 0, void 0, function* () {

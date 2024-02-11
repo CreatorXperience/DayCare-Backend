@@ -38,15 +38,15 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (error) {
         return res.status(404).send({ message: error.details[0].message, status: "failed" });
     }
-    let child_care = yield user_account_model_1.default.findOne({ email: req.body.email });
-    if (!child_care) {
+    let user = yield user_account_model_1.default.findOne({ email: req.body.email });
+    if (!user) {
         return res.status(404).send({ message: "user with the specified email doesn't exist", status: "failed" });
     }
-    let isPasswordEqual = yield bcryptjs_1.default.compare(req.body.password, child_care.password);
+    let isPasswordEqual = yield bcryptjs_1.default.compare(req.body.password, user.password);
     if (!isPasswordEqual) {
         return res.status(404).send({ message: "Invalid email or Password" });
     }
-    let token = child_care.generateAuthToken();
+    let token = user.generateAuthToken();
     res.setHeader("authorization", token).send({ message: "user logged in successfully", status: "successfull" });
 }));
 exports.default = router;

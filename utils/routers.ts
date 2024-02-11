@@ -3,13 +3,15 @@ import express from "express";
 import signup from "../routes/signup"
 import auth from "../routes/auth"
 import verify_email from "../routes/verify-otp"
-import create_profile from "../routes/create-childcare-profile"
+import create_profile from "../routes/childcare-profile"
 import error from "../middlewares/error";
 import child_care_location from "../routes/get-childcares"
 import seach_childcares from "../routes/search-childcares"
 import favorite from "../routes/favorites"
 import create_user_profile from "../routes/create-user-profile"
 import article from "../routes/article"
+import chat from "../routes/chat"
+import message from "../routes/message"
 
 
 
@@ -26,6 +28,8 @@ app.use("/search-childcares", seach_childcares)
 app.use("/favorite", favorite)
 app.use("/create-user-profile", create_user_profile)
 app.use("/article",  article)
+app.use("/chat",chat)
+app.use("/message", message)
 
 
 app.get('/', (req,res)=>{

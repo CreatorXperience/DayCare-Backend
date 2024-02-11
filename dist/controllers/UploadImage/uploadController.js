@@ -12,20 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
+exports.download = exports.upload = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-const stream_1 = require("stream");
-const __1 = require("..");
-const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
-const router = express_1.default.Router();
-let handleUploadChildCareProfile = (options) => {
-    let { collection, storage, bucket, path } = options;
-    __1.app.post(path, [profile_middleware_1.default, storage.single("file")], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const xoauth2_1 = require("nodemailer/lib/xoauth2");
+const upload = (collection, bucket) => {
+    return (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         let user = req.user;
-        let getImage = yield collection.findOne({ owner: user });
-        if (getImage) {
-            return res.send;
-        }
         if (!user) {
             return res.status(404).send({ message: "owner params is missing" });
         }
@@ -40,7 +32,7 @@ let handleUploadChildCareProfile = (options) => {
             type: mimetype,
             length: buffer.length
         });
-        let read = new stream_1.Readable();
+        let read = new xoauth2_1.Readable();
         read.push(buffer);
         read.push(null);
         let uploadStream = bucket.openUploadStream(fieldname);
@@ -58,14 +50,17 @@ let handleUploadChildCareProfile = (options) => {
             return res.status(404).send({ message: "couldn't save image" });
         }
         res.send({ message: "image successfully uploaded", id: uploadStream.id });
-    }));
-    __1.app.get("/upload/:id", (req, res) => {
+    });
+};
+exports.upload = upload;
+const download = (bucket) => {
+    return (req, res) => {
         let { id } = req.params;
         let downloadStream = bucket.openDownloadStream(new mongoose_1.default.Types.ObjectId(id));
         downloadStream.on("file", (file) => {
             res.set("Content-Type", file.type);
         });
         downloadStream.pipe(res);
-    });
+    };
 };
-exports.default = handleUploadChildCareProfile;
+exports.download = download;
