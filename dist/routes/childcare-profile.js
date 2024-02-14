@@ -18,6 +18,8 @@ const profile_middleware_1 = __importDefault(require("../middlewares/profile-mid
 const validation_1 = __importDefault(require("../utils/childcares/validation"));
 const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const user_account_model_1 = __importDefault(require("../models/user-account-model"));
+const mongoose_1 = __importDefault(require("mongoose"));
 dotenv_1.default.config();
 const router = express_1.default.Router();
 router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -39,6 +41,7 @@ router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, v
     requestPayload.location = { type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude] };
     let newProfile = new child_care_profile_1.child_care_model(requestPayload);
     let saved = yield newProfile.save();
+    let user = yield user_account_model_1.default.updateOne({ _id: new mongoose_1.default.Types.ObjectId(req.user) }, { $set: { day_care_owner: true } });
     if (!saved) {
         return res.status(404).send({ message: "couldn't save profile to database", status: "successfull" });
     }

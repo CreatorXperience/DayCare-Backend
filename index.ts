@@ -14,6 +14,10 @@ dotenv.config()
 
 exceptionRejectionLogger()
 
+
+if(!process.env.DAYCARE_PRIVATE_KEY){
+  process.exit(1)
+}
 const app = express()
 
 let httpServer = socketConnection()

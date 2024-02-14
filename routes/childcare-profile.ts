@@ -4,6 +4,8 @@ import authMiddleware from "../middlewares/profile-middleware"
 import validation from "../utils/childcares/validation"
 import axios from "axios"
 import dotenv from "dotenv"
+import user_signup_model from "../models/user-account-model"
+import mongoose from "mongoose"
 dotenv.config()
 
 const router = express.Router()
@@ -36,6 +38,7 @@ requestPayload.location = {type: "Point", coordinates: [location_data[0].longitu
 
 	 let newProfile = new child_care_model(requestPayload)
 	 let saved =  await newProfile.save()
+	 let user = await user_signup_model.updateOne({_id: new mongoose.Types.ObjectId(req.user)}, {$set: {day_care_owner: true}})
 	 if(!saved){
 return res.status(404).send({message: "couldn't save profile to database", status: "successfull"})
 	 }
