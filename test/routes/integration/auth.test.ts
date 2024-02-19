@@ -31,9 +31,6 @@ describe("Send Request to  /auth", ()=>{
             expect(response.body.status).toMatch(/successfull/i)
         })
 
-
-
-
         test("should return 404 response status if payload is bad or incomplete", async()=>{
             let response = await signInUser(_.pick(userPayload, ["email"]))
             expect(response.status).toBe(404)

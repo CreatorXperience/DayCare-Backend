@@ -29,17 +29,19 @@ describe("POST /locate-childcares", () => {
     let profile_payload = {
         title: "David's Daycare",
         amount: "50",
-        perDuration: 2,
+        from: "2024-10-20",
+        to: "2024-12-12",
         rating: 5,
         description: "Am gonna do you well",
         owner: "Peter Parker",
         phonenumber: "0099999999",
         isOpen: "yes",
         image: "daycare.png",
-        location: { type: "Point", coordinates: [3.005, 2.0344] },
+        location: "Abuja,Nigeria",
         userId: "659bdb0ad66c81e2ac3e5628"
     };
     let token;
+    let daycareId;
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         let newuser = {
             fullname: "peterson samuell",
@@ -55,7 +57,8 @@ describe("POST /locate-childcares", () => {
         };
         let response = yield (0, signin_1.default)(existing_user);
         token = response.header.authorization;
-        yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profile_payload).set("authorization", token);
+        let profileRes = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profile_payload).set("authorization", token);
+        daycareId = profileRes.body._id;
     }));
     describe("POST /locate-childcares", () => {
         let locationPayload = {
@@ -81,6 +84,12 @@ describe("POST /locate-childcares", () => {
             };
             let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(badPayload).set("authorization", token);
             expect(response.status).toBe(404);
+        }));
+    });
+    describe("GET /:daycareId", () => {
+        test("should return  200  if daycare exist", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).get(`/locate-childcares/${daycareId}`).set("authorization", token);
+            expect(response.status).toBe(200);
         }));
     });
     describe("POST /locate-childcares/filter", () => {

@@ -29,7 +29,7 @@ router.post("/", async(req,res)=>{
     return res.status(404).send({message: "wrong otp"})
     }
 	
-    let updateUser =  await user_signup_model.updateOne({_id: req.body.ownerId}, {$set: {is_verfied: true}})
+    let updateUser =  await user_signup_model.updateOne({_id: req.body.ownerId}, {$set: {is_verified: true}})
     if(!updateUser){
 	return res.status(500).send({message: "error occured while updating user"})
     }

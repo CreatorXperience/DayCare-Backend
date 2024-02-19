@@ -18,6 +18,7 @@ const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const get_childcare_validation_1 = require("../utils/childcares/get-childcare-validation");
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
+const mongoose_1 = __importDefault(require("mongoose"));
 dotenv_1.default.config();
 const router = express_1.default.Router();
 router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -30,6 +31,17 @@ router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, v
         return res.status(404).send({ message: "No child care is available at the specified location" });
     }
     res.send(child_care);
+}));
+router.get("/:daycareId", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { daycareId } = req.params;
+    if (!mongoose_1.default.isValidObjectId(daycareId)) {
+        return res.status(404).send({ message: "Invalid Object Id" });
+    }
+    let daycare = yield child_care_profile_1.child_care_model.findOne({ _id: new mongoose_1.default.Types.ObjectId(daycareId) });
+    if (!daycare) {
+        return res.status(404).send({ message: "couldn't find daycare" });
+    }
+    res.send(daycare);
 }));
 router.post("/filter", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { error } = (0, get_childcare_validation_1.filterChildCareValidation)(req.body);

@@ -16,9 +16,17 @@ let requestPayload = {...req.body, userId: req.user }
 
 let {error} = validation(requestPayload)
 
+
+
 if(error){ 
 return res.status(404).send({message: error.details[0].message})
 }
+
+let getProfile = await child_care_model.findOne({userId: requestPayload.userId})
+if(getProfile){
+	return res.send(getProfile)
+}
+
 
 let [city, country] = requestPayload.location.split(",")
 
@@ -39,7 +47,7 @@ requestPayload.location = {type: "Point", coordinates: [location_data[0].longitu
 	 let newProfile = new child_care_model(requestPayload)
 	 let saved =  await newProfile.save()
 	 let user = await user_signup_model.updateOne({_id: new mongoose.Types.ObjectId(req.user)}, {$set: {day_care_owner: true}})
-	 if(!saved){
+	 if(!saved && !user){
 return res.status(404).send({message: "couldn't save profile to database", status: "successfull"})
 	 }
 	   return res.send(saved)

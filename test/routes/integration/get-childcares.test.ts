@@ -20,18 +20,20 @@ describe("POST /locate-childcares", ()=>{
      let profile_payload = {
         title:  "David's Daycare",
         amount: "50",
-        perDuration: 2,
+        from: "2024-10-20",
+        to: "2024-12-12",
         rating: 5,
         description: "Am gonna do you well",
         owner: "Peter Parker", 
         phonenumber: "0099999999", 
         isOpen: "yes",
         image: "daycare.png",
-        location: {type: "Point", coordinates: [3.005,2.0344]},
+        location: "Abuja,Nigeria",
         userId: "659bdb0ad66c81e2ac3e5628"
     }
 
     let token: string;
+    let daycareId: string
 
      beforeAll(async()=>{
         let newuser = {
@@ -49,7 +51,9 @@ describe("POST /locate-childcares", ()=>{
         }
         let response = await signInUser(existing_user)
    token = response.header.authorization
-        await request(app).post("/create-childcare-profile").send(profile_payload).set("authorization", token)
+      let profileRes =   await request(app).post("/create-childcare-profile").send(profile_payload).set("authorization", token)
+        daycareId = profileRes.body._id
+   
      })
 
 
@@ -85,6 +89,14 @@ describe("POST /locate-childcares", ()=>{
       let response = await request(app).post("/locate-childcares").send(badPayload).set("authorization", token)
      expect(response.status).toBe(404)
     })
+  })
+
+  describe("GET /:daycareId",  ()=>{
+test("should return  200  if daycare exist", async()=>{
+  let response = await request(app).get(`/locate-childcares/${daycareId}`).set("authorization", token)
+     expect(response.status).toBe(200)
+})
+
   })
 
 

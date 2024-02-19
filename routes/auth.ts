@@ -3,6 +3,7 @@ import Joi from "joi"
 import complexPassword from "joi-password-complexity"
 import user_signup_model from "../models/user-account-model"
 import bcrypt from "bcryptjs"
+import _ from "lodash"
 
 const router = express.Router()
 
@@ -27,6 +28,7 @@ const validateUserPayload = (userPayload: TUser)=>{
 
    return  validation.validate(userPayload)
 }
+
 router.post("/", async (req,res)=>{
 
 let {error} = validateUserPayload(req.body)
@@ -45,7 +47,7 @@ if(!isPasswordEqual){
 }
 
 let token = user.generateAuthToken()
-res.setHeader("authorization", token).send({message: "user logged in successfully", status: "successfull"})
+res.setHeader("authorization", token).send({message: _.pick(user, ["_id","is_verified", "day_care_owner","favorite"]), status: "successfull"})
 
 })
 

@@ -8,6 +8,8 @@ import { exceptionRejectionLogger } from "./logger/connection-logger"
 import socketConnection from "./socket"
 import { TConnectionArgs } from "./type"
 
+// TODO:  run `npm run build` before start the server
+
 require("express-async-errors")
 
 dotenv.config()

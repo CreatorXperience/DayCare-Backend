@@ -28,6 +28,10 @@ router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, v
     if (error) {
         return res.status(404).send({ message: error.details[0].message });
     }
+    let getProfile = yield child_care_profile_1.child_care_model.findOne({ userId: requestPayload.userId });
+    if (getProfile) {
+        return res.send(getProfile);
+    }
     let [city, country] = requestPayload.location.split(",");
     let get_location = yield axios_1.default.get(`https://api.api-ninjas.com/v1/geocoding?city=${city}&country=${country}`, {
         headers: {
@@ -42,7 +46,7 @@ router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, v
     let newProfile = new child_care_profile_1.child_care_model(requestPayload);
     let saved = yield newProfile.save();
     let user = yield user_account_model_1.default.updateOne({ _id: new mongoose_1.default.Types.ObjectId(req.user) }, { $set: { day_care_owner: true } });
-    if (!saved) {
+    if (!saved && !user) {
         return res.status(404).send({ message: "couldn't save profile to database", status: "successfull" });
     }
     return res.send(saved);

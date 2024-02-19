@@ -2,9 +2,9 @@ import express from "express"
 import {child_care_model} from "../models/child-care-profile"
 import axios from "axios"
 import dotenv from "dotenv"
-import validation from "../utils/childcares/validation"
 import { filterChildCareValidation,locateUserValidation} from "../utils/childcares/get-childcare-validation"
 import authMiddleware from "../middlewares/profile-middleware"
+import mongoose from "mongoose"
 
 dotenv.config()
 
@@ -24,6 +24,23 @@ if(!child_care){
 
 res.send(child_care)
 })
+
+
+
+router.get("/:daycareId", authMiddleware, async (req,res)=>{
+let  {daycareId} = req.params
+if(!mongoose.isValidObjectId(daycareId)){
+    return res.status(404).send({message: "Invalid Object Id"}) 
+}
+
+let daycare = await child_care_model.findOne({_id: new mongoose.Types.ObjectId(daycareId)})
+if(!daycare){
+    return res.status(404).send({message: "couldn't find daycare"})
+}
+
+res.send(daycare)
+})
+
 
 
 router.post("/filter", authMiddleware, async(req,res)=>{

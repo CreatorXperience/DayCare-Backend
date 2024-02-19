@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const signup_1 = __importDefault(require("../routes/signup"));
 const auth_1 = __importDefault(require("../routes/auth"));
 const verify_otp_1 = __importDefault(require("../routes/verify-otp"));
@@ -16,7 +17,9 @@ const create_user_profile_1 = __importDefault(require("../routes/create-user-pro
 const article_1 = __importDefault(require("../routes/article"));
 const chat_1 = __importDefault(require("../routes/chat"));
 const message_1 = __importDefault(require("../routes/message"));
+const registerChild_1 = __importDefault(require("../routes/registerChild"));
 const Router = (app) => {
+    app.use((0, cors_1.default)());
     app.use(express_1.default.json());
     app.use(express_1.default.urlencoded({ extended: true }));
     app.use("/signup", signup_1.default);
@@ -25,6 +28,7 @@ const Router = (app) => {
     app.use("/create-childcare-profile", childcare_profile_1.default);
     app.use("/locate-childcares", get_childcares_1.default);
     app.use("/search-childcares", search_childcares_1.default);
+    app.use("/register", registerChild_1.default);
     app.use("/favorite", favorites_1.default);
     app.use("/create-user-profile", create_user_profile_1.default);
     app.use("/article", article_1.default);
