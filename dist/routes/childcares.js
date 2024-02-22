@@ -44,11 +44,29 @@ router.get("/:daycareId", profile_middleware_1.default, (req, res) => __awaiter(
     }
     res.send(daycare);
 }));
-router.patch("", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let userId = req.user;
     let { error } = (0, validation_1.childCareProfileUpdateSchema)(req.body);
     if (error) {
         return res.status(404).send({ message: error.details[0].message });
+    }
+    if (req.body.location) {
+        let [city, country] = req.body.location.split(",");
+        let get_location = yield axios_1.default.get(`https://api.api-ninjas.com/v1/geocoding?city=${city}&country=${country}`, {
+            headers: {
+                "X-Api-Key": process.env.API_KEY
+            }
+        });
+        let location_data = get_location.data;
+        if (!location_data) {
+            return res.status(500).send({ message: "error occured, couldn't get location" });
+        }
+        let location = { type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude] };
+        let user = yield child_care_profile_1.child_care_model.updateOne({ userId: userId }, { $set: Object.assign(Object.assign({}, req.body), { location: location }) });
+        if (!user) {
+            return res.status(404).send({ message: "Couldn't update profile" });
+        }
+        return res.send(user);
     }
     let user = yield child_care_profile_1.child_care_model.updateOne({ userId: userId }, { $set: req.body });
     if (!user) {

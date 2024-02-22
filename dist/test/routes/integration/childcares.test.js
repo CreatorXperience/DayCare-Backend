@@ -102,4 +102,19 @@ describe("POST /locate-childcares", () => {
             expect(response.status).toBe(500);
         }));
     });
+    describe("PATCH /locate-childcares", () => {
+        test("should return 500 if axios failed to fetch location coordinates", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).patch("/locate-childcares").send(profile_payload).set("authorization", token);
+            expect(response.status).toBe(500);
+        }));
+        test("should return 200 if payload is valid and token is set", () => __awaiter(void 0, void 0, void 0, function* () {
+            axios_1.default.get = jest.fn().mockResolvedValue({ data: [{ "latitude": 1.0, "longitude": 2.1 }] });
+            let response = yield (0, supertest_1.default)(__1.app).patch("/locate-childcares").send(profile_payload).set("authorization", token);
+            expect(response.status).toBe(200);
+        }));
+        test("should return 404 if payload is invalid and token is set", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).patch("/locate-childcares").send({ testing: "123" }).set("authorization", token);
+            expect(response.status).toBe(404);
+        }));
+    });
 });
