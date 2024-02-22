@@ -1,22 +1,26 @@
-import express from "express"
+import express, { Request } from "express"
 import {child_care_model} from "../models/child-care-profile"
 import axios from "axios"
 import dotenv from "dotenv"
-import { filterChildCareValidation,locateUserValidation} from "../utils/childcares/get-childcare-validation"
+import { filterChildCareValidation} from "../utils/childcares/get-childcare-validation"
 import authMiddleware from "../middlewares/profile-middleware"
 import mongoose from "mongoose"
+import { childCareProfileUpdateSchema } from "../utils/childcares/validation"
 
 dotenv.config()
 
 const router = express.Router()
 
 
-router.post("/", authMiddleware, async (req,res)=> {
-let {error} = locateUserValidation(req.body)
-if(error){
-return  res.status(404).send({message: error.details[0].message})
+
+router.get("/:long/:lat", authMiddleware, async (req,res)=> {
+let  {long, lat}  = req.params
+
+if(!long && !lat){
+   return   res.status(404).send({message: "Invalid longitude and latitude"})
 }
-let child_care = await child_care_model.find({location: {$nearSphere: {$geometry: {type: "Point", coordinates: [req.body.long, req.body.lat]}}}})
+
+let child_care = await child_care_model.find({location: {$nearSphere: {$geometry: {type: "Point", coordinates: [long, lat]}}}})
 
 if(!child_care){
     return res.status(404).send({message: "No child care is available at the specified location"})
@@ -39,6 +43,19 @@ if(!daycare){
 }
 
 res.send(daycare)
+})
+
+router.patch("", authMiddleware, async (req: Request & {user?:string}, res)=>{
+let userId = req.user;
+let {error} =  childCareProfileUpdateSchema(req.body)
+if(error){
+    return res.status(404).send({message: error.details[0].message})
+}
+let user  = await child_care_model.updateOne({userId: userId}, {$set: req.body})
+if(!user){
+   return res.status(404).send({message: "Couldn't update profile"})
+}
+res.send(user)
 })
 
 

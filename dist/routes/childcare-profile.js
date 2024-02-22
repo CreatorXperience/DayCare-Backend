@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const child_care_profile_1 = require("../models/child-care-profile");
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
-const validation_1 = __importDefault(require("../utils/childcares/validation"));
+const validation_1 = require("../utils/childcares/validation");
 const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const user_account_model_1 = __importDefault(require("../models/user-account-model"));
@@ -24,7 +24,7 @@ dotenv_1.default.config();
 const router = express_1.default.Router();
 router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let requestPayload = Object.assign(Object.assign({}, req.body), { userId: req.user });
-    let { error } = (0, validation_1.default)(requestPayload);
+    let { error } = (0, validation_1.validation)(requestPayload);
     if (error) {
         return res.status(404).send({ message: error.details[0].message });
     }

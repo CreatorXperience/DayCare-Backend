@@ -19,14 +19,15 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const get_childcare_validation_1 = require("../utils/childcares/get-childcare-validation");
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const validation_1 = require("../utils/childcares/validation");
 dotenv_1.default.config();
 const router = express_1.default.Router();
-router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { error } = (0, get_childcare_validation_1.locateUserValidation)(req.body);
-    if (error) {
-        return res.status(404).send({ message: error.details[0].message });
+router.get("/:long/:lat", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { long, lat } = req.params;
+    if (!long && !lat) {
+        return res.status(404).send({ message: "Invalid longitude and latitude" });
     }
-    let child_care = yield child_care_profile_1.child_care_model.find({ location: { $nearSphere: { $geometry: { type: "Point", coordinates: [req.body.long, req.body.lat] } } } });
+    let child_care = yield child_care_profile_1.child_care_model.find({ location: { $nearSphere: { $geometry: { type: "Point", coordinates: [long, lat] } } } });
     if (!child_care) {
         return res.status(404).send({ message: "No child care is available at the specified location" });
     }
@@ -42,6 +43,18 @@ router.get("/:daycareId", profile_middleware_1.default, (req, res) => __awaiter(
         return res.status(404).send({ message: "couldn't find daycare" });
     }
     res.send(daycare);
+}));
+router.patch("", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let userId = req.user;
+    let { error } = (0, validation_1.childCareProfileUpdateSchema)(req.body);
+    if (error) {
+        return res.status(404).send({ message: error.details[0].message });
+    }
+    let user = yield child_care_profile_1.child_care_model.updateOne({ userId: userId }, { $set: req.body });
+    if (!user) {
+        return res.status(404).send({ message: "Couldn't update profile" });
+    }
+    res.send(user);
 }));
 router.post("/filter", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { error } = (0, get_childcare_validation_1.filterChildCareValidation)(req.body);

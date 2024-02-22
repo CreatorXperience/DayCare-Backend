@@ -33,7 +33,6 @@ describe("POST /locate-childcares", () => {
         to: "2024-12-12",
         rating: 5,
         description: "Am gonna do you well",
-        owner: "Peter Parker",
         phonenumber: "0099999999",
         isOpen: "yes",
         image: "daycare.png",
@@ -66,29 +65,18 @@ describe("POST /locate-childcares", () => {
             lat: "5.3"
         };
         test("should return 200 response status if input is a valid payload", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(locationPayload).set("authorization", token);
+            let response = yield (0, supertest_1.default)(__1.app).get(`/locate-childcares/${locationPayload.long}/${locationPayload.lat}`).set("authorization", token);
             expect(response.status).toBe(200);
         }));
         test("should return 401 error response if no token is provided but with valid payload", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(locationPayload);
+            let response = yield (0, supertest_1.default)(__1.app).get(`/locate-childcares/${locationPayload.long}/${locationPayload.lat}`);
             expect(response.status).toBe(401);
-        }));
-        test("should return 401 error response if no token is provided and with invalid payload", () => __awaiter(void 0, void 0, void 0, function* () {
-            let badPayload = {};
-            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(badPayload);
-            expect(response.status).toBe(401);
-        }));
-        test("should return 404 response status if input is an  invalid payload", () => __awaiter(void 0, void 0, void 0, function* () {
-            let badPayload = {
-                long: ""
-            };
-            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(badPayload).set("authorization", token);
-            expect(response.status).toBe(404);
         }));
     });
     describe("GET /:daycareId", () => {
         test("should return  200  if daycare exist", () => __awaiter(void 0, void 0, void 0, function* () {
             let response = yield (0, supertest_1.default)(__1.app).get(`/locate-childcares/${daycareId}`).set("authorization", token);
+            console.log(response.status);
             expect(response.status).toBe(200);
         }));
     });
@@ -102,15 +90,6 @@ describe("POST /locate-childcares", () => {
         test("should return 200 response status if input is a valid payload", () => __awaiter(void 0, void 0, void 0, function* () {
             let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares/filter").send(locationPayload).set("authorization", token);
             expect(response.status).toBe(200);
-        }));
-        test("should return 401 error response if no token is provided but with valid payload", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(locationPayload);
-            expect(response.status).toBe(401);
-        }));
-        test("should return 401 error response if no token is provided but with invalid payload", () => __awaiter(void 0, void 0, void 0, function* () {
-            let badPayload = {};
-            let response = yield (0, supertest_1.default)(__1.app).post("/locate-childcares").send(badPayload);
-            expect(response.status).toBe(401);
         }));
         test("should return 404 response status if input is a bad or incomplete payload", () => __awaiter(void 0, void 0, void 0, function* () {
             let badPayload = {};

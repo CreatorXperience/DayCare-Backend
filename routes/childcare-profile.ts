@@ -1,7 +1,7 @@
 import express, { Request } from "express"
 import {child_care_model} from "../models/child-care-profile"
 import authMiddleware from "../middlewares/profile-middleware"
-import validation from "../utils/childcares/validation"
+import {validation} from "../utils/childcares/validation"
 import axios from "axios"
 import dotenv from "dotenv"
 import user_signup_model from "../models/user-account-model"

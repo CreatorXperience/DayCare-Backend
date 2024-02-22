@@ -22,7 +22,6 @@ let profile = {
     to: "2024-12-12",
     rating: 5,
     description: "Am gonna do you well",
-    owner: "Segun",
     phonenumber: "0099999999",
     isOpen: "yes",
     image: "daycare.png",

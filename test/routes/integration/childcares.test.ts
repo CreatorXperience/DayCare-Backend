@@ -24,7 +24,6 @@ describe("POST /locate-childcares", ()=>{
         to: "2024-12-12",
         rating: 5,
         description: "Am gonna do you well",
-        owner: "Peter Parker", 
         phonenumber: "0099999999", 
         isOpen: "yes",
         image: "daycare.png",
@@ -65,35 +64,21 @@ describe("POST /locate-childcares", ()=>{
                 
     test("should return 200 response status if input is a valid payload", async ()=>{
 
-      let response = await request(app).post("/locate-childcares").send(locationPayload).set("authorization", token)
+      let response = await request(app).get(`/locate-childcares/${locationPayload.long}/${locationPayload.lat}`).set("authorization", token)
      expect(response.status).toBe(200)
     })
 
     test("should return 401 error response if no token is provided but with valid payload", async()=>{
 
-      let response = await request(app).post("/locate-childcares").send(locationPayload)
+      let response = await request(app).get(`/locate-childcares/${locationPayload.long}/${locationPayload.lat}`)
       expect(response.status).toBe(401)
-    })
-
-    test("should return 401 error response if no token is provided and with invalid payload", async()=>{
-      let badPayload = {
-                }
-      let response = await request(app).post("/locate-childcares").send(badPayload)
-      expect(response.status).toBe(401)
-    })
-
-    test("should return 404 response status if input is an  invalid payload", async ()=>{
-      let badPayload = {
-        long: ""
-      }
-      let response = await request(app).post("/locate-childcares").send(badPayload).set("authorization", token)
-     expect(response.status).toBe(404)
     })
   })
 
   describe("GET /:daycareId",  ()=>{
 test("should return  200  if daycare exist", async()=>{
   let response = await request(app).get(`/locate-childcares/${daycareId}`).set("authorization", token)
+  console.log(response.status)
      expect(response.status).toBe(200)
 })
 
@@ -111,18 +96,6 @@ test("should return  200  if daycare exist", async()=>{
   test("should return 200 response status if input is a valid payload", async ()=>{
     let response = await request(app).post("/locate-childcares/filter").send(locationPayload).set("authorization", token)
    expect(response.status).toBe(200)
-  })
-
-
-  test("should return 401 error response if no token is provided but with valid payload", async()=>{
-    let response = await request(app).post("/locate-childcares").send(locationPayload)
-    expect(response.status).toBe(401)
-  })
-
-  test("should return 401 error response if no token is provided but with invalid payload", async()=>{
-    let badPayload = {}
-    let response = await request(app).post("/locate-childcares").send(badPayload)
-    expect(response.status).toBe(401)
   })
 
 

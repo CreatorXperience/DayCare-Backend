@@ -6,7 +6,7 @@ import auth from "../routes/auth"
 import verify_email from "../routes/verify-otp"
 import create_profile from "../routes/childcare-profile"
 import error from "../middlewares/error";
-import child_care_location from "../routes/get-childcares"
+import child_care_location from "../routes/childcares"
 import seach_childcares from "../routes/search-childcares"
 import favorite from "../routes/favorites"
 import create_user_profile from "../routes/create-user-profile"

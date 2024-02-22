@@ -27,7 +27,6 @@ let profile_payload = {
     to: "2024-12-12",
     rating: 5,
     description: "Am gonna do you well",
-    owner: "Peter Parker",
     phonenumber: "0099999999",
     isOpen: "yes",
     image: "daycare.png",

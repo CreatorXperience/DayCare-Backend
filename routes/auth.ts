@@ -47,7 +47,14 @@ if(!isPasswordEqual){
 }
 
 let token = user.generateAuthToken()
-res.setHeader("authorization", token).send({message: _.pick(user, ["_id","is_verified", "day_care_owner","favorite"]), status: "successfull"})
+
+let responsePaylaod = {message: _.pick(user, ["_id","is_verified", "day_care_owner","favorite"]), status: "successfull"}
+    
+res.header("Access-Control-Allow-Headers",  "Origin, authorization, X-Requested-With, Content-Type, Accept")
+.header("Access-Control-Allow-Methods", "GET, UPDATE, DELETE, POST, PATCH")
+.header("Access-Control-Allow-Origin", "*")
+.header("Access-Control-Expose-Headers", "*")
+.setHeader("authorization", token).send(responsePaylaod)
 
 })
 

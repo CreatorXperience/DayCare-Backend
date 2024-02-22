@@ -10,7 +10,7 @@ const auth_1 = __importDefault(require("../routes/auth"));
 const verify_otp_1 = __importDefault(require("../routes/verify-otp"));
 const childcare_profile_1 = __importDefault(require("../routes/childcare-profile"));
 const error_1 = __importDefault(require("../middlewares/error"));
-const get_childcares_1 = __importDefault(require("../routes/get-childcares"));
+const childcares_1 = __importDefault(require("../routes/childcares"));
 const search_childcares_1 = __importDefault(require("../routes/search-childcares"));
 const favorites_1 = __importDefault(require("../routes/favorites"));
 const create_user_profile_1 = __importDefault(require("../routes/create-user-profile"));
@@ -26,7 +26,7 @@ const Router = (app) => {
     app.use("/auth", auth_1.default);
     app.use("/verify-email", verify_otp_1.default);
     app.use("/create-childcare-profile", childcare_profile_1.default);
-    app.use("/locate-childcares", get_childcares_1.default);
+    app.use("/locate-childcares", childcares_1.default);
     app.use("/search-childcares", search_childcares_1.default);
     app.use("/register", registerChild_1.default);
     app.use("/favorite", favorites_1.default);
