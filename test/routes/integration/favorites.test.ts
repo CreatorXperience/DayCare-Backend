@@ -6,20 +6,10 @@ import signInUser from "./test-utils/signin"
 import _ from "lodash"
 import axios from "axios"
 import userPayload from "./test-utils/signupPayload"
+import profile_payload from "./test-utils/profilePayload"
 
 
-let profile_payload = {
-    title:  "David's Daycare",
-    amount: "50",
-    from: "2024-10-20",
-    to: "2024-12-12",
-    rating: 5,
-    description: "Am gonna do you well",
-    phonenumber: "0099999999", 
-    isOpen: "yes",
-    image: "daycare.png",
-    location: "Abuja,Lagos",
-}
+
 
 let axiosMock = jest.mock("axios")
 axios.get = jest.fn().mockResolvedValue({data: [{"latitude": 1.0, "longitude": 2.1}]})

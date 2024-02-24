@@ -4,6 +4,7 @@ import request from "supertest"
 import axios from "axios"
 import { signupUser } from "./test-utils/signup"
 import signInUser from "./test-utils/signin"
+import profile_payload from "./test-utils/profilePayload"
 
 
 let axiosMock = jest.mock("axios")
@@ -17,19 +18,7 @@ describe("POST /locate-childcares", ()=>{
         await server.stop()
      })
 
-     let profile_payload = {
-        title:  "David's Daycare",
-        amount: "50",
-        from: "2024-10-20",
-        to: "2024-12-12",
-        rating: 5,
-        description: "Am gonna do you well",
-        phonenumber: "0099999999", 
-        isOpen: "yes",
-        image: "daycare.png",
-        location: "Abuja,Nigeria",
-        userId: "659bdb0ad66c81e2ac3e5628"
-    }
+     
 
     let token: string;
     let daycareId: string

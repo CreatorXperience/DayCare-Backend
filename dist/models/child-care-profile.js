@@ -18,7 +18,9 @@ const child_care_profile_schema = new mongoose_1.default.Schema({
     isOpen: { type: Boolean, required: true },
     image: { type: String, required: true },
     location: { type: location_schema_1.default, required: true },
-    userId: { type: String, required: true }
+    userId: { type: String, required: true },
+    owner: { type: String, required: true, minLength: 5, maxLength: 30 },
+    role: { type: String, required: true, minLength: 5, maxLength: 30 }
 });
 exports.child_care_profile_schema = child_care_profile_schema;
 child_care_profile_schema.index({ location: "2dsphere" });

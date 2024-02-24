@@ -5,6 +5,7 @@ import _ from "lodash"
 import { signupUser } from "./test-utils/signup"
 import axios from "axios"
 import userPayload from "./test-utils/signupPayload"
+import profile_payload from "./test-utils/profilePayload"
 
 let axiosMock = jest.mock("axios")
 axios.get = jest.fn().mockResolvedValue({data: [{"latitude": 1.0, "longitude": 2.1}]})
@@ -31,18 +32,7 @@ token = response.header.authorization
 })
 
 
-let profile_payload = {
-    title:  "David's Daycare",
-    amount: "50",
-    from: "2024-10-20",
-    to: "2024-12-12",
-    rating: 5,
-    description: "Am gonna do you well",
-    phonenumber: "0099999999", 
-    isOpen: "yes",
-    image: "daycare.png",
-    location: "Abuja,Lagos",
-}
+
 
 test("should return 200 response status if sent to /profile correct input",async ()=> {
     let response = await request(app).post("/create-childcare-profile").send(profile_payload).set("authorization", token)

@@ -14,7 +14,9 @@ const child_care_profile_schema = new mongoose.Schema({
         isOpen: {type: Boolean, required: true},
         image: {type: String, required: true},
         location:  {type: location_schema, required: true},
-        userId: {type: String, required: true}
+        userId: {type: String, required: true},
+        owner: { type: String, required: true, minLength: 5, maxLength: 30 },
+        role: { type: String, required: true, minLength: 5, maxLength: 30 }
 })
 
 

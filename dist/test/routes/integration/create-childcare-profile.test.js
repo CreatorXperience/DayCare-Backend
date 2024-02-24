@@ -19,6 +19,7 @@ const lodash_1 = __importDefault(require("lodash"));
 const signup_1 = require("./test-utils/signup");
 const axios_1 = __importDefault(require("axios"));
 const signupPayload_1 = __importDefault(require("./test-utils/signupPayload"));
+const profilePayload_1 = __importDefault(require("./test-utils/profilePayload"));
 let axiosMock = jest.mock("axios");
 axios_1.default.get = jest.fn().mockResolvedValue({ data: [{ "latitude": 1.0, "longitude": 2.1 }] });
 describe("POST /profile", () => {
@@ -36,20 +37,8 @@ describe("POST /profile", () => {
             let response = yield (0, supertest_1.default)(__1.app).post("/auth").send(lodash_1.default.pick(signupPayload_1.default, ["email", "password"]));
             token = response.header.authorization;
         }));
-        let profile_payload = {
-            title: "David's Daycare",
-            amount: "50",
-            from: "2024-10-20",
-            to: "2024-12-12",
-            rating: 5,
-            description: "Am gonna do you well",
-            phonenumber: "0099999999",
-            isOpen: "yes",
-            image: "daycare.png",
-            location: "Abuja,Lagos",
-        };
         test("should return 200 response status if sent to /profile correct input", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profile_payload).set("authorization", token);
+            let response = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profilePayload_1.default).set("authorization", token);
             expect(response.status).toBe(200);
         }));
         test("should return 404 error if a token is provided to /payload  but with bad payload", () => __awaiter(void 0, void 0, void 0, function* () {
@@ -62,7 +51,7 @@ describe("POST /profile", () => {
             expect(response.status).toBe(404);
         }));
         test("should return a 401 error if token is not provided to /profile", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profile_payload);
+            let response = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profilePayload_1.default);
             expect(response.status).toBe(401);
         }));
     });

@@ -17,7 +17,9 @@ let childCareProfileUpdateSchema = (profile) => {
         isOpen: joi_1.default.string(),
         image: joi_1.default.string(),
         location: joi_1.default.string(),
-        userId: joi_1.default.string()
+        userId: joi_1.default.string(),
+        owner: joi_1.default.string(),
+        role: joi_1.default.string()
     });
     return payloadSchema.validate(profile);
 };
@@ -34,7 +36,9 @@ const validation = (profilePayload) => {
         isOpen: joi_1.default.string().required(),
         image: joi_1.default.string().required(),
         location: joi_1.default.string().required(),
-        userId: joi_1.default.string().required()
+        userId: joi_1.default.string().required(),
+        owner: joi_1.default.string().required().max(50),
+        role: joi_1.default.string().required().max(30),
     });
     return payloadSchema.validate(profilePayload);
 };

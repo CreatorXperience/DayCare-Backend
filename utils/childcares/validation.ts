@@ -9,7 +9,12 @@ export type TProfile = {
 	owner: string;
 	phonenumber: string;
 	isOpen: string;
-	image: string
+	image: string, 
+    role: string,
+    from: string,
+    location: string,
+    to: string,
+    userId: string
 }
 
 let childCareProfileUpdateSchema =  (profile: Partial<TProfile>)=>{
@@ -24,7 +29,9 @@ let childCareProfileUpdateSchema =  (profile: Partial<TProfile>)=>{
         isOpen: Joi.string(),
         image: Joi.string(),
         location:  Joi.string(),
-        userId: Joi.string()
+        userId: Joi.string(),
+        owner: Joi.string(),
+        role: Joi.string()
         })
 
      return    payloadSchema.validate(profile)
@@ -42,7 +49,9 @@ phonenumber: Joi.string().required().min(10).max(10),
 isOpen: Joi.string().required(),
 image: Joi.string().required(),
 location:  Joi.string().required(),
-userId: Joi.string().required()
+userId: Joi.string().required(),
+owner:  Joi.string().required().max(50),
+role: Joi.string().required().max(30),
 })
 
 
