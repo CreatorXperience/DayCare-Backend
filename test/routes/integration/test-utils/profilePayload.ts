@@ -11,7 +11,8 @@ let profile_payload = {
     location: "Abuja,Nigeria",
     userId: "659bdb0ad66c81e2ac3e5628",
     owner: "Peter Parker",
-    role: "Teacher"
+    role: "Teacher",
+    exactLocation: "Lagos,Ikeja"
 }
 
 export default profile_payload

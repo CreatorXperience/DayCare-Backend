@@ -110,6 +110,7 @@ if(!location_data){
 
 let child_care = await child_care_model.find({location: {$nearSphere: {$geometry: {type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude]}}}, amount: {$lt: req.body.maxp, $gt: req.body.minp}})
 
+
 if(!child_care){
     return res.status(404).send({message:"Couldn't get childcares at the specified location"})
 }

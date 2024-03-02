@@ -19,7 +19,8 @@ let childCareProfileUpdateSchema = (profile) => {
         location: joi_1.default.string(),
         userId: joi_1.default.string(),
         owner: joi_1.default.string(),
-        role: joi_1.default.string()
+        role: joi_1.default.string(),
+        exactLocation: joi_1.default.string().required().max(30),
     });
     return payloadSchema.validate(profile);
 };
@@ -39,6 +40,7 @@ const validation = (profilePayload) => {
         userId: joi_1.default.string().required(),
         owner: joi_1.default.string().required().max(50),
         role: joi_1.default.string().required().max(30),
+        exactLocation: joi_1.default.string().required().max(30),
     });
     return payloadSchema.validate(profilePayload);
 };

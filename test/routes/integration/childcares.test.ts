@@ -76,7 +76,6 @@ test("should return  200  if daycare exist", async()=>{
 
   describe("POST /locate-childcares/filter",()=>{
     let locationPayload = {
-        "sortby": "reviews",
         "location": "Abuja,Nigeria",
         "maxp": 100,
         "minp": 20

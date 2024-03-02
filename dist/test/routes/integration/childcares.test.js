@@ -70,7 +70,6 @@ describe("POST /locate-childcares", () => {
     });
     describe("POST /locate-childcares/filter", () => {
         let locationPayload = {
-            "sortby": "reviews",
             "location": "Abuja,Nigeria",
             "maxp": 100,
             "minp": 20
