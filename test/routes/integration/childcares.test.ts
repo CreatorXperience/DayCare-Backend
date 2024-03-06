@@ -5,13 +5,14 @@ import axios from "axios"
 import { signupUser } from "./test-utils/signup"
 import signInUser from "./test-utils/signin"
 import profile_payload from "./test-utils/profilePayload"
+import { child_care_model } from "../../../models/child-care-profile"
 
 
 let axiosMock = jest.mock("axios")
 axios.get = jest.fn().mockResolvedValue({data: [{"latitude": 1.0, "longitude": 2.1}]})
 
 
-describe("POST /locate-childcares", ()=>{
+describe("POST /childcares", ()=>{
     afterAll(async()=>{
         await mongoose.connection.dropDatabase()
         await mongoose.connection.close()
@@ -22,6 +23,7 @@ describe("POST /locate-childcares", ()=>{
 
     let token: string;
     let daycareId: string
+    let userId: string
 
      beforeAll(async()=>{
         let newuser = {
@@ -39,13 +41,14 @@ describe("POST /locate-childcares", ()=>{
         }
         let response = await signInUser(existing_user)
    token = response.header.authorization
+   userId = response.body.message._id
       let profileRes =   await request(app).post("/create-childcare-profile").send(profile_payload).set("authorization", token)
         daycareId = profileRes.body._id
    
      })
 
 
-     describe("POST /locate-childcares",()=>{
+     describe("POST /childcares",()=>{
       let locationPayload = {
         long: "10.00",
         lat: "5.3"
@@ -67,14 +70,30 @@ describe("POST /locate-childcares", ()=>{
   describe("GET /:daycareId",  ()=>{
 test("should return  200  if daycare exist", async()=>{
   let response = await request(app).get(`/locate-childcares/${daycareId}`).set("authorization", token)
-  console.log(response.status)
      expect(response.status).toBe(200)
 })
-
   })
 
+  describe("GET /user/:id",  ()=>{
+    test("should return  200  if the specified id has a daycare associated with it", async()=>{
+      let response = await request(app).get(`/locate-childcares/user?id=${userId}`).set("authorization", token)
+      expect(response.status).toBe(200)
+    })
 
-  describe("POST /locate-childcares/filter",()=>{
+    test("should return  404  if not id is specified", async()=>{
+      let response = await request(app).get(`/locate-childcares/user`).set("authorization", token)
+      expect(response.status).toBe(404)
+    })
+
+    test("should return  404  if no daycare is associated with the specified id", async()=>{
+      await child_care_model.deleteOne({userId: userId})
+      let response = await request(app).get(`/locate-childcares/user?id=${userId}`).set("authorization", token)
+      expect(response.status).toBe(404)
+    })
+      })
+
+
+  describe("POST /childcares/filter",()=>{
     let locationPayload = {
         "location": "Abuja,Nigeria",
         "maxp": 100,
@@ -101,8 +120,6 @@ test("should return  200  if daycare exist", async()=>{
 })
 
 describe("PATCH /locate-childcares", ()=>{
-
-
   test("should return 500 if axios failed to fetch location coordinates", async ()=>{
     let response = await request(app).patch("/locate-childcares").send(profile_payload).set("authorization", token)
     expect(response.status).toBe(500)

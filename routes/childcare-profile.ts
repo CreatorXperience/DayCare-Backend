@@ -16,18 +16,20 @@ let requestPayload = {...req.body, userId: req.user }
 
 let {error} = validation(requestPayload)
 
-
-
 if(error){ 
 return res.status(404).send({message: error.details[0].message})
 }
+
 
 let getProfile = await child_care_model.findOne({userId: requestPayload.userId})
 if(getProfile){
 	return res.send(getProfile)
 }
 
-
+let existingUser = await user_signup_model.findById(requestPayload.user_id)
+if(existingUser){
+	requestPayload.owner = existingUser?.fullname
+}
 let [city, country] = requestPayload.location.split(",")
 
 let get_location =  await axios.get(`https://api.api-ninjas.com/v1/geocoding?city=${city}&country=${country}`, {
@@ -41,7 +43,7 @@ let location_data = get_location.data
 if(!location_data){
     return res.status(500).send({message: "error occured, couldn't get location"})
 }
-
+requestPayload.exactLocation = requestPayload.location
 requestPayload.location = {type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude]}
 
 	 let newProfile = new child_care_model(requestPayload)

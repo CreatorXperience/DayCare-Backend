@@ -14,13 +14,17 @@ import article from "../routes/article"
 import chat from "../routes/chat"
 import message from "../routes/message"
 import registerChild from  "../routes/registerChild"
+import multer from "multer"
+import mongoose from "mongoose";
+import article_image_model from "../models/article-image-model";
+import childcare_image_model from "../models/child-care-image";
+import UploadImageRoutes from "../routes/handle-upload";
 
 
-const Router = (app: Application)=>{
+const Router = (app: Application, bucket?: mongoose.mongo.GridFSBucket )=>{
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-
 app.use("/signup", signup)
 app.use("/auth", auth)
 app.use("/verify-email", verify_email)
@@ -33,13 +37,37 @@ app.use("/create-user-profile", create_user_profile)
 app.use("/article",  article)
 app.use("/chat",chat)
 app.use("/message", message)
-
-
+createUploadRoute(app,bucket)
 app.get('/', (req,res)=>{
   res.send("Welcome to this API")
 })
-
 app.use(error)
 }
 
+
+const createUploadRoute = ( app: Application,bucket?: mongoose.mongo.GridFSBucket)=>{
+  if(bucket){
+    let storage = multer.memoryStorage()
+    let upload = multer({storage})
+    let uploadOptions = [
+      {
+        storage: upload,
+        bucket,
+        collection: article_image_model,
+        path: "/upload/article"
+      },
+      {
+        storage: upload,
+        bucket,
+        collection: childcare_image_model,
+        path: "/upload/childcares"
+      }
+    ]
+    
+    uploadOptions.forEach((options)=> app.use(UploadImageRoutes(options)))
+  }
+}
+
 export default Router
+
+

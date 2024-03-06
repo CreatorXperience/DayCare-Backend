@@ -32,6 +32,10 @@ router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, v
     if (getProfile) {
         return res.send(getProfile);
     }
+    let existingUser = yield user_account_model_1.default.findById(requestPayload.user_id);
+    if (existingUser) {
+        requestPayload.owner = existingUser === null || existingUser === void 0 ? void 0 : existingUser.fullname;
+    }
     let [city, country] = requestPayload.location.split(",");
     let get_location = yield axios_1.default.get(`https://api.api-ninjas.com/v1/geocoding?city=${city}&country=${country}`, {
         headers: {
@@ -42,6 +46,7 @@ router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, v
     if (!location_data) {
         return res.status(500).send({ message: "error occured, couldn't get location" });
     }
+    requestPayload.exactLocation = requestPayload.location;
     requestPayload.location = { type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude] };
     let newProfile = new child_care_profile_1.child_care_model(requestPayload);
     let saved = yield newProfile.save();

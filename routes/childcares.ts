@@ -30,6 +30,21 @@ res.send(child_care)
 })
 
 
+router.get("/user", authMiddleware, async(req,res)=>{
+let {id} = req.query
+
+if(!id){
+    return res.status(404).send({message: "Id not provided"})
+}
+    
+let daycare = await child_care_model.findOne({userId: id})
+if(!daycare){
+return res.status(404).send({message: "Could not find daycare with associated with these user"})
+}
+return res.send(daycare)
+
+})
+
 
 router.get("/:daycareId", authMiddleware, async (req,res)=>{
 let  {daycareId} = req.params
@@ -44,6 +59,9 @@ if(!daycare){
 
 res.send(daycare)
 })
+
+
+
 
 router.patch("/", authMiddleware, async (req: Request & {user?:string}, res)=>{
 let userId = req.user;
@@ -69,18 +87,18 @@ if(req.body.location){
 
     let location  = {type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude]}
 
-    let user  = await child_care_model.updateOne({userId: userId}, {$set: {...req.body, location: location }})
-    if(!user){
+    let childcare  = await child_care_model.updateOne({userId: userId}, {$set: {...req.body, location: location }})
+    if(!childcare){
    return res.status(404).send({message: "Couldn't update profile"})
     }
-    return res.send(user)
+    return res.send(childcare)
 }
 
-let user  = await child_care_model.updateOne({userId: userId}, {$set: req.body})
-if(!user){
+let childcare  = await child_care_model.updateOne({userId: userId}, {$set: req.body})
+if(!childcare){
    return res.status(404).send({message: "Couldn't update profile"})
 }
-res.send(user)
+res.send(childcare)
 
 
 

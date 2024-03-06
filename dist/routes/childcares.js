@@ -33,6 +33,17 @@ router.get("/:long/:lat", profile_middleware_1.default, (req, res) => __awaiter(
     }
     res.send(child_care);
 }));
+router.get("/user", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { id } = req.query;
+    if (!id) {
+        return res.status(404).send({ message: "Id not provided" });
+    }
+    let daycare = yield child_care_profile_1.child_care_model.findOne({ userId: id });
+    if (!daycare) {
+        return res.status(404).send({ message: "Could not find daycare with associated with these user" });
+    }
+    return res.send(daycare);
+}));
 router.get("/:daycareId", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { daycareId } = req.params;
     if (!mongoose_1.default.isValidObjectId(daycareId)) {
@@ -62,17 +73,17 @@ router.patch("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, 
             return res.status(500).send({ message: "error occured, couldn't get location" });
         }
         let location = { type: "Point", coordinates: [location_data[0].longitude, location_data[0].latitude] };
-        let user = yield child_care_profile_1.child_care_model.updateOne({ userId: userId }, { $set: Object.assign(Object.assign({}, req.body), { location: location }) });
-        if (!user) {
+        let childcare = yield child_care_profile_1.child_care_model.updateOne({ userId: userId }, { $set: Object.assign(Object.assign({}, req.body), { location: location }) });
+        if (!childcare) {
             return res.status(404).send({ message: "Couldn't update profile" });
         }
-        return res.send(user);
+        return res.send(childcare);
     }
-    let user = yield child_care_profile_1.child_care_model.updateOne({ userId: userId }, { $set: req.body });
-    if (!user) {
+    let childcare = yield child_care_profile_1.child_care_model.updateOne({ userId: userId }, { $set: req.body });
+    if (!childcare) {
         return res.status(404).send({ message: "Couldn't update profile" });
     }
-    res.send(user);
+    res.send(childcare);
 }));
 router.post("/filter", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { error } = (0, get_childcare_validation_1.filterChildCareValidation)(req.body);

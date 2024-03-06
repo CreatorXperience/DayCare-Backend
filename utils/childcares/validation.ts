@@ -15,7 +15,6 @@ export type TProfile = {
     location: string,
     to: string,
     userId: string,
-    exactLocation: string
 }
 
 let childCareProfileUpdateSchema =  (profile: Partial<TProfile>)=>{
@@ -27,13 +26,12 @@ let childCareProfileUpdateSchema =  (profile: Partial<TProfile>)=>{
         rating: Joi.number(),
         description: Joi.string().min(10),
         phonenumber: Joi.string().min(10).max(10),
-        isOpen: Joi.string(),
+        isOpen: Joi.boolean(),
         image: Joi.string(),
         location:  Joi.string(),
         userId: Joi.string(),
         owner: Joi.string(),
         role: Joi.string(),
-        exactLocation: Joi.string().required().max(30),
         })
 
      return    payloadSchema.validate(profile)
@@ -48,13 +46,12 @@ to: Joi.string().required(),
 rating: Joi.number().required(),
 description: Joi.string().required().min(10),
 phonenumber: Joi.string().required().min(10).max(10),
-isOpen: Joi.string().required(),
+isOpen: Joi.boolean().required(),
 image: Joi.string().required(),
 location:  Joi.string().required(),
 userId: Joi.string().required(),
 owner:  Joi.string().required().max(50),
 role: Joi.string().required().max(30),
-exactLocation: Joi.string().required().max(30),
 })
 
 

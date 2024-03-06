@@ -19,9 +19,10 @@ const axios_1 = __importDefault(require("axios"));
 const signup_1 = require("./test-utils/signup");
 const signin_1 = __importDefault(require("./test-utils/signin"));
 const profilePayload_1 = __importDefault(require("./test-utils/profilePayload"));
+const child_care_profile_1 = require("../../../models/child-care-profile");
 let axiosMock = jest.mock("axios");
 axios_1.default.get = jest.fn().mockResolvedValue({ data: [{ "latitude": 1.0, "longitude": 2.1 }] });
-describe("POST /locate-childcares", () => {
+describe("POST /childcares", () => {
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield mongoose_1.default.connection.dropDatabase();
         yield mongoose_1.default.connection.close();
@@ -29,6 +30,7 @@ describe("POST /locate-childcares", () => {
     }));
     let token;
     let daycareId;
+    let userId;
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         let newuser = {
             fullname: "peterson samuell",
@@ -44,10 +46,11 @@ describe("POST /locate-childcares", () => {
         };
         let response = yield (0, signin_1.default)(existing_user);
         token = response.header.authorization;
+        userId = response.body.message._id;
         let profileRes = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profilePayload_1.default).set("authorization", token);
         daycareId = profileRes.body._id;
     }));
-    describe("POST /locate-childcares", () => {
+    describe("POST /childcares", () => {
         let locationPayload = {
             long: "10.00",
             lat: "5.3"
@@ -64,11 +67,25 @@ describe("POST /locate-childcares", () => {
     describe("GET /:daycareId", () => {
         test("should return  200  if daycare exist", () => __awaiter(void 0, void 0, void 0, function* () {
             let response = yield (0, supertest_1.default)(__1.app).get(`/locate-childcares/${daycareId}`).set("authorization", token);
-            console.log(response.status);
             expect(response.status).toBe(200);
         }));
     });
-    describe("POST /locate-childcares/filter", () => {
+    describe("GET /user/:id", () => {
+        test("should return  200  if the specified id has a daycare associated with it", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).get(`/locate-childcares/user?id=${userId}`).set("authorization", token);
+            expect(response.status).toBe(200);
+        }));
+        test("should return  404  if not id is specified", () => __awaiter(void 0, void 0, void 0, function* () {
+            let response = yield (0, supertest_1.default)(__1.app).get(`/locate-childcares/user`).set("authorization", token);
+            expect(response.status).toBe(404);
+        }));
+        test("should return  404  if no daycare is associated with the specified id", () => __awaiter(void 0, void 0, void 0, function* () {
+            yield child_care_profile_1.child_care_model.deleteOne({ userId: userId });
+            let response = yield (0, supertest_1.default)(__1.app).get(`/locate-childcares/user?id=${userId}`).set("authorization", token);
+            expect(response.status).toBe(404);
+        }));
+    });
+    describe("POST /childcares/filter", () => {
         let locationPayload = {
             "location": "Abuja,Nigeria",
             "maxp": 100,
