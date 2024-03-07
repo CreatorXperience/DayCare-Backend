@@ -5,8 +5,6 @@ import authMiddleware from "../middlewares/profile-middleware"
 const router =  express.Router()
 
 
-
-
 router.post("/:secondId", authMiddleware,  async (req: Request & {user?: string},res)=> {
     let userId = req.user
     let {secondId} = req.params

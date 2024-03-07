@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 import user_signup_model from "../models/user-account-model"
 import validate_signup_payload from "../utils/signup/validate"
 import sendOtp from "../utils/signup/sendOtp"
+import mongoose from "mongoose"
 
 dotenv.config()
 
@@ -49,6 +50,7 @@ return  res.send({
     status: " verification email sent succesfully"
 })
 })
+
 
 
 export default router

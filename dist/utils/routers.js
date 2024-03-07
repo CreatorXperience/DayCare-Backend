@@ -22,6 +22,7 @@ const multer_1 = __importDefault(require("multer"));
 const article_image_model_1 = __importDefault(require("../models/article-image-model"));
 const child_care_image_1 = __importDefault(require("../models/child-care-image"));
 const handle_upload_1 = __importDefault(require("../routes/handle-upload"));
+const users_1 = __importDefault(require("../routes/users"));
 const Router = (app, bucket) => {
     app.use((0, cors_1.default)());
     app.use(express_1.default.json());
@@ -37,6 +38,7 @@ const Router = (app, bucket) => {
     app.use("/create-user-profile", create_user_profile_1.default);
     app.use("/article", article_1.default);
     app.use("/chat", chat_1.default);
+    app.use("/user", users_1.default);
     app.use("/message", message_1.default);
     createUploadRoute(app, bucket);
     app.get('/', (req, res) => {

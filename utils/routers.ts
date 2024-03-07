@@ -19,6 +19,7 @@ import mongoose from "mongoose";
 import article_image_model from "../models/article-image-model";
 import childcare_image_model from "../models/child-care-image";
 import UploadImageRoutes from "../routes/handle-upload";
+import user_routes  from "../routes/users"
 
 
 const Router = (app: Application, bucket?: mongoose.mongo.GridFSBucket )=>{
@@ -36,6 +37,7 @@ app.use("/favorite", favorite)
 app.use("/create-user-profile", create_user_profile)
 app.use("/article",  article)
 app.use("/chat",chat)
+app.use("/user", user_routes)
 app.use("/message", message)
 createUploadRoute(app,bucket)
 app.get('/', (req,res)=>{
