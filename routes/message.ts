@@ -8,13 +8,13 @@ const router = express.Router()
 
 
 
-router.get("/", authMiddleware, (req,res)=> {
+router.get("/", authMiddleware, async (req,res)=> {
     let {chatId} = req.query
     let isValid = mongoose.isValidObjectId(chatId)
     if(!isValid){
         return res.status(404).send({message: "Invalid Chat Id"})
     }
-    let messages = MessageModel.find({chatId: new mongoose.Types.ObjectId(chatId as string)})
+    let messages = await MessageModel.find({chatId: chatId})
     if(!messages){
         return res.status(404).send({message: "message not found"})
     }

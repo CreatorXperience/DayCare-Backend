@@ -38,7 +38,7 @@ const Router = (app, bucket) => {
     app.use("/create-user-profile", create_user_profile_1.default);
     app.use("/article", article_1.default);
     app.use("/chat", chat_1.default);
-    app.use("/user", users_1.default);
+    app.use("/users", users_1.default);
     app.use("/message", message_1.default);
     createUploadRoute(app, bucket);
     app.get('/', (req, res) => {

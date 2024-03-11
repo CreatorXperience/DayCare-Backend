@@ -15,13 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const user_account_model_1 = __importDefault(require("../models/user-account-model"));
+const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const router = express_1.default.Router();
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { id, chatId } = req.query;
     if (!id || id === "undefined" || !mongoose_1.default.isValidObjectId(id)) {
         return res.status(404).send({ messsage: "Invalid or no query id" });
     }
-    let user = yield user_account_model_1.default.findOne({ _id: id }, { password: 0 });
+    let user = yield user_account_model_1.default.findOne({ _id: id }, { password: 0, email: 0, favorite: 0, is_verified: 0 });
     if (!user) {
         return res.status(404).send({ message: "user not found" });
     }

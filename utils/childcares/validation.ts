@@ -6,7 +6,6 @@ export type TProfile = {
 	perDuration: number;
 	rating: number;
 	description: string;
-	owner: string;
 	phonenumber: string;
 	isOpen: string;
 	image: string, 
@@ -25,12 +24,11 @@ let childCareProfileUpdateSchema =  (profile: Partial<TProfile>)=>{
         to: Joi.string(),
         rating: Joi.number(),
         description: Joi.string().min(10),
-        phonenumber: Joi.string().min(10).max(10),
+        phonenumber: Joi.string().min(11).max(11),
         isOpen: Joi.boolean(),
         image: Joi.string(),
         location:  Joi.string(),
         userId: Joi.string(),
-        owner: Joi.string(),
         role: Joi.string(),
         })
 
@@ -45,12 +43,11 @@ from: Joi.string().required(),
 to: Joi.string().required(),
 rating: Joi.number().required(),
 description: Joi.string().required().min(10),
-phonenumber: Joi.string().required().min(10).max(10),
+phonenumber: Joi.string().required().min(11).max(11),
 isOpen: Joi.boolean().required(),
 image: Joi.string().required(),
 location:  Joi.string().required(),
 userId: Joi.string().required(),
-owner:  Joi.string().required().max(50),
 role: Joi.string().required().max(30),
 })
 

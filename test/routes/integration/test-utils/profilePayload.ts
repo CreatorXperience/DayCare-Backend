@@ -5,12 +5,11 @@ let profile_payload = {
     to: "2024-12-12",
     rating: 5,
     description: "Am gonna do you well",
-    phonenumber: "0099999999", 
+    phonenumber: "00999999990", 
     isOpen: true,
     image: "daycare.png",
     location: "Abuja,Nigeria",
     userId: "659bdb0ad66c81e2ac3e5628",
-    owner: "Peter Parker",
     role: "Teacher"
 }
 

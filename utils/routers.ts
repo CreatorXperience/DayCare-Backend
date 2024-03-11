@@ -37,7 +37,7 @@ app.use("/favorite", favorite)
 app.use("/create-user-profile", create_user_profile)
 app.use("/article",  article)
 app.use("/chat",chat)
-app.use("/user", user_routes)
+app.use("/users", user_routes)
 app.use("/message", message)
 createUploadRoute(app,bucket)
 app.get('/', (req,res)=>{

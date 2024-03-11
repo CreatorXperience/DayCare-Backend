@@ -13,12 +13,11 @@ let childCareProfileUpdateSchema = (profile) => {
         to: joi_1.default.string(),
         rating: joi_1.default.number(),
         description: joi_1.default.string().min(10),
-        phonenumber: joi_1.default.string().min(10).max(10),
+        phonenumber: joi_1.default.string().min(11).max(11),
         isOpen: joi_1.default.boolean(),
         image: joi_1.default.string(),
         location: joi_1.default.string(),
         userId: joi_1.default.string(),
-        owner: joi_1.default.string(),
         role: joi_1.default.string(),
     });
     return payloadSchema.validate(profile);
@@ -32,12 +31,11 @@ const validation = (profilePayload) => {
         to: joi_1.default.string().required(),
         rating: joi_1.default.number().required(),
         description: joi_1.default.string().required().min(10),
-        phonenumber: joi_1.default.string().required().min(10).max(10),
+        phonenumber: joi_1.default.string().required().min(11).max(11),
         isOpen: joi_1.default.boolean().required(),
         image: joi_1.default.string().required(),
         location: joi_1.default.string().required(),
         userId: joi_1.default.string().required(),
-        owner: joi_1.default.string().required().max(50),
         role: joi_1.default.string().required().max(30),
     });
     return payloadSchema.validate(profilePayload);
