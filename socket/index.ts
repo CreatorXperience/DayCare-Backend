@@ -1,6 +1,8 @@
 import http from "http"
 import { app } from ".."
 import {Server} from "socket.io"
+import user_signup_model from "../models/user-account-model"
+import RegisteredDaycareModel from "../models/registeredDaycares"
 
 let onlineUsers: Array<{userId: string, socketId: string}> = []
 
@@ -32,12 +34,19 @@ const socketConnection = ()=> {
     let online  =  onlineUsers.filter((user)=> user.userId === message.reciever)
     console.log(online)
 
-    if(online[0].socketId)
+    if(online[0].socketId){
       io.to(online[0].socketId).emit("getMessage", message)
+      io.to(online[0].socketId).emit("newMessageNotification", message)
+    }
+  
   })
 
 
 
+
+
+  
+  
 
   socket.on("disconnect", ()=>{
     let online = onlineUsers.filter((item) => item.socketId !== socket.id)

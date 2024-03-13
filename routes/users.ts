@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import user_signup_model from "../models/user-account-model"
 import authMiddleware from "../middlewares/profile-middleware"
 
+
 const router = express.Router()
 
 
@@ -17,6 +18,7 @@ router.get("/", authMiddleware ,  async (req,res)=>{
     }
     res.send({...user, chatId: chatId})
 })
+
 
 
 export default router
