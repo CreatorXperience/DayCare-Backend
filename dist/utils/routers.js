@@ -23,6 +23,7 @@ const article_image_model_1 = __importDefault(require("../models/article-image-m
 const child_care_image_1 = __importDefault(require("../models/child-care-image"));
 const handle_upload_1 = __importDefault(require("../routes/handle-upload"));
 const users_1 = __importDefault(require("../routes/users"));
+const resendOtp_1 = __importDefault(require("../routes/resendOtp"));
 const Router = (app, bucket) => {
     app.use((0, cors_1.default)());
     app.use(express_1.default.json());
@@ -40,6 +41,7 @@ const Router = (app, bucket) => {
     app.use("/chat", chat_1.default);
     app.use("/users", users_1.default);
     app.use("/message", message_1.default);
+    app.use("/otp", resendOtp_1.default);
     createUploadRoute(app, bucket);
     app.get('/', (req, res) => {
         res.send("Welcome to this API");

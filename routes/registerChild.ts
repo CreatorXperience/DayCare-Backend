@@ -36,4 +36,17 @@ router.get("/registeredDaycares", authMiddleware,  async (req: Request & {user?:
     res.send(user)
 })
 
+router.get("/registered/:daycareId", authMiddleware, async (req: Request & {user?: string},res)=>{
+    let  {daycareId} = req.params
+    if(!daycareId){
+        return res.status(404).send({message: "daycare id not provided"})
+    }
+    let registered = await RegisteredDaycareModel.findOne({registered: {$all: [req.user, daycareId]}})
+
+    if(!registered){
+        return res.status(404).send({message: "Not Registered"})
+    }
+    res.send(registered)
+})
+
 export default router

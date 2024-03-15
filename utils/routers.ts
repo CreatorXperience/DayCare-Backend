@@ -20,6 +20,7 @@ import article_image_model from "../models/article-image-model";
 import childcare_image_model from "../models/child-care-image";
 import UploadImageRoutes from "../routes/handle-upload";
 import user_routes  from "../routes/users"
+import resendOtp  from  "../routes/resendOtp"
 
 
 const Router = (app: Application, bucket?: mongoose.mongo.GridFSBucket )=>{
@@ -39,6 +40,7 @@ app.use("/article",  article)
 app.use("/chat",chat)
 app.use("/users", user_routes)
 app.use("/message", message)
+app.use("/otp",resendOtp)
 createUploadRoute(app,bucket)
 app.get('/', (req,res)=>{
   res.send("Welcome to this API")

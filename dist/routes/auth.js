@@ -48,7 +48,7 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(404).send({ message: "Invalid email or Password" });
     }
     let token = user.generateAuthToken();
-    let responsePaylaod = { message: lodash_1.default.pick(user, ["_id", "is_verified", "day_care_owner", "favorite"]), status: "successfull" };
+    let responsePaylaod = { message: lodash_1.default.pick(user, ["_id", "is_verified", "day_care_owner", "favorite", "email"]), status: "successfull" };
     res.header("Access-Control-Allow-Headers", "Origin, authorization, X-Requested-With, Content-Type, Accept")
         .header("Access-Control-Allow-Methods", "GET, UPDATE, DELETE, POST, PATCH")
         .header("Access-Control-Allow-Origin", "*")

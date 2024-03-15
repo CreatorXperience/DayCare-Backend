@@ -46,10 +46,26 @@ describe("Sends request to /create-article", () => {
             expect(response.status).toBe(200);
         }));
     });
-    describe("GET /", () => {
+    describe("/registered/:id", () => {
         test("should return 200 if daycareId and userId is provided", () => __awaiter(void 0, void 0, void 0, function* () {
-            let response = yield (0, supertest_1.default)(__1.app).get(`/register/registeredDaycares`).set("authorization", token);
+            let register = yield (0, supertest_1.default)(__1.app).post(`/register/${daycareId}`).set("authorization", token);
+            let response = yield (0, supertest_1.default)(__1.app).get(`/register/registered/${daycareId}`).set("authorization", token);
             expect(response.status).toBe(200);
+            expect(register.status).toBe(200);
         }));
     });
+    describe("/register/registerDaycares", () => {
+        test("should return 200 if daycareId and userId is provided", () => __awaiter(void 0, void 0, void 0, function* () {
+            let register = yield (0, supertest_1.default)(__1.app).post(`/register/${daycareId}`).set("authorization", token);
+            let response = yield (0, supertest_1.default)(__1.app).get(`/register/registeredDaycares`).set("authorization", token);
+            expect(register.status).toBe(200);
+            expect(response.status).toBe(200);
+            expect(response.body.registered.includes(userId)).toBeTruthy();
+        }));
+    });
+    test("should return 404 if user is not registered to any daycares", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield mongoose_1.default.connection.dropCollection("registereds");
+        let response = yield (0, supertest_1.default)(__1.app).get(`/register/registeredDaycares`).set("authorization", token);
+        expect(response.status).toBe(404);
+    }));
 });

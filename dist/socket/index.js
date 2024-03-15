@@ -28,7 +28,7 @@ const socketConnection = () => {
             console.log(message);
             let online = onlineUsers.filter((user) => user.userId === message.reciever);
             console.log(online);
-            if (online[0].socketId) {
+            if (online[0] && online[0].socketId) {
                 io.to(online[0].socketId).emit("getMessage", message);
                 io.to(online[0].socketId).emit("newMessageNotification", message);
             }

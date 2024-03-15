@@ -41,4 +41,15 @@ router.get("/registeredDaycares", profile_middleware_1.default, (req, res) => __
     }
     res.send(user);
 }));
+router.get("/registered/:daycareId", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { daycareId } = req.params;
+    if (!daycareId) {
+        return res.status(404).send({ message: "daycare id not provided" });
+    }
+    let registered = yield registeredDaycares_1.default.findOne({ registered: { $all: [req.user, daycareId] } });
+    if (!registered) {
+        return res.status(404).send({ message: "Not Registered" });
+    }
+    res.send(registered);
+}));
 exports.default = router;

@@ -41,10 +41,33 @@ describe("Sends request to /create-article", () => {
     });
   });
 
-  describe("GET /", ()=>{
+
+  describe("/registered/:id", ()=>{
     test("should return 200 if daycareId and userId is provided", async() => {
-        let response = await request(app).get(`/register/registeredDaycares`).set("authorization", token)
+      let register = await request(app).post(`/register/${daycareId}`).set("authorization", token)
+        let response = await request(app).get(`/register/registered/${daycareId}`).set("authorization", token)
         expect(response.status).toBe(200)
+        expect(register.status).toBe(200)
     });
   })
+
+
+  describe("/register/registerDaycares", ()=>{
+
+    test("should return 200 if daycareId and userId is provided", async() => {
+      let register = await request(app).post(`/register/${daycareId}`).set("authorization", token)
+      let response = await request(app).get(`/register/registeredDaycares`).set("authorization", token)
+      expect(register.status).toBe(200)
+      expect(response.status).toBe(200)
+      expect(response.body.registered.includes(userId)).toBeTruthy()
+    });
+  })
+  
+  test("should return 404 if user is not registered to any daycares", async() => {
+      await mongoose.connection.dropCollection("registereds")
+      let response = await request(app).get(`/register/registeredDaycares`).set("authorization", token)
+      expect(response.status).toBe(404)
+  });
+
+
 });
