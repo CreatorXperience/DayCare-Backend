@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --watchAll",
     "build": "npx tsc --watch",
-    "dev": "concurrently  \"npm run  build\" \"nodemon -q ./dist/index.js\"  \"npm test\""
+    "dev": "concurrently  \"npm run  build\" \"nodemon -q ./dist/index.js\"  \"npm test\"", 
+    "start": "npm run  build && node ./dist/index.js"
   },
   "repository": {
     "type": "git",
