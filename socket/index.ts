@@ -8,7 +8,7 @@ let onlineUsers: Array<{userId: string, socketId: string}> = []
 const socketConnection = ()=> {
     let httpServer = http.createServer(app)
 
-      let environment = process.env.NODE == "prod" ? "https://daycare-app-frontend.vercel.app" : "http://localhost:3000"
+      let environment = process.env.NODE_ENV == "production" ? "https://daycare-app-frontend.vercel.app" : "http://localhost:3000"
 
     let io  = new Server(httpServer, {
      cors: {
