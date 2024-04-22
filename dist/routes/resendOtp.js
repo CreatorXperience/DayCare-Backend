@@ -12,19 +12,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserProfile = void 0;
-const schema_1 = __importDefault(require("./schema"));
-const userprofile_1 = __importDefault(require("../../models/userprofile"));
-const createUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { error } = (0, schema_1.default)(req.body);
-    if (error) {
-        return res.status(404).send({ message: "Bad Payload" });
+const express_1 = __importDefault(require("express"));
+const sendOtp_1 = __importDefault(require("../utils/signup/sendOtp"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const otp_model_1 = __importDefault(require("../models/otp-model"));
+const router = express_1.default.Router();
+router.get("/:email/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { email, id } = req.params;
+    if (!email || email === "undefined" || !mongoose_1.default.isValidObjectId(id)) {
+        return res.status(404).send({ message: "Invalid email provided" });
     }
-    const userProfile = new userprofile_1.default(req.body);
-    let saved = yield userProfile.save();
-    if (!saved) {
-        return res.status(404).send({ message: "error occurred while saving user" });
+    let userId = new mongoose_1.default.Types.ObjectId(id);
+    let removeOtp = yield otp_model_1.default.deleteMany({ owner: id });
+    if (!removeOtp) {
+        res.status(500).send({ message: "could not remove previous otp" });
     }
-    res.send(saved);
-});
-exports.createUserProfile = createUserProfile;
+    yield (0, sendOtp_1.default)(email, userId);
+}));
+exports.default = router;

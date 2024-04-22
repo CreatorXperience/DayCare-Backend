@@ -18,18 +18,18 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const schemaValidation_1 = __importDefault(require("../utils/message/schemaValidation"));
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const router = express_1.default.Router();
-router.get("/", profile_middleware_1.default, (req, res) => {
+router.get("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { chatId } = req.query;
     let isValid = mongoose_1.default.isValidObjectId(chatId);
     if (!isValid) {
         return res.status(404).send({ message: "Invalid Chat Id" });
     }
-    let messages = message_model_1.default.find({ chatId: new mongoose_1.default.Types.ObjectId(chatId) });
+    let messages = yield message_model_1.default.find({ chatId: chatId });
     if (!messages) {
         return res.status(404).send({ message: "message not found" });
     }
     res.send(messages);
-});
+}));
 router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { error } = (0, schemaValidation_1.default)(req.body);
     if (error) {

@@ -20,19 +20,7 @@ const signin_1 = __importDefault(require("./test-utils/signin"));
 const lodash_1 = __importDefault(require("lodash"));
 const axios_1 = __importDefault(require("axios"));
 const signupPayload_1 = __importDefault(require("./test-utils/signupPayload"));
-let profile_payload = {
-    title: "David's Daycare",
-    amount: "50",
-    from: "2024-10-20",
-    to: "2024-12-12",
-    rating: 5,
-    description: "Am gonna do you well",
-    owner: "Peter Parker",
-    phonenumber: "0099999999",
-    isOpen: "yes",
-    image: "daycare.png",
-    location: "Abuja,Lagos",
-};
+const profilePayload_1 = __importDefault(require("./test-utils/profilePayload"));
 let axiosMock = jest.mock("axios");
 axios_1.default.get = jest.fn().mockResolvedValue({ data: [{ "latitude": 1.0, "longitude": 2.1 }] });
 describe("Send request to /favorite/:id", () => {
@@ -49,7 +37,7 @@ describe("Send request to /favorite/:id", () => {
         token = res.header.authorization;
     }));
     beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
-        let profileRes = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profile_payload).set("authorization", token);
+        let profileRes = yield (0, supertest_1.default)(__1.app).post("/create-childcare-profile").send(profilePayload_1.default).set("authorization", token);
         daycare_id = profileRes.body._id.toString();
     }));
     describe("POST /favorie/:id", () => {

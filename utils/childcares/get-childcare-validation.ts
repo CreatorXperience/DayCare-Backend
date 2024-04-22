@@ -20,7 +20,6 @@ const locateUserValidation = (payload: {long: number,lat: number})=> {
      
     const  filterChildCareValidation = (payload: TPayload)=>{
         let schema = Joi.object({
-            sortby: Joi.string().required(),
            location: Joi.string().required(),
            maxp: Joi.number().required(),
            minp: Joi.number().required()

@@ -8,12 +8,18 @@ import { exceptionRejectionLogger } from "./logger/connection-logger"
 import socketConnection from "./socket"
 import { TConnectionArgs } from "./type"
 
+// TODO:  run `npm run build` before start the server
+
 require("express-async-errors")
 
 dotenv.config()
 
 exceptionRejectionLogger()
 
+
+if(!process.env.DAYCARE_PRIVATE_KEY){
+  process.exit(1)
+}
 const app = express()
 
 let httpServer = socketConnection()

@@ -12,21 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createArticle = void 0;
+const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const userProfileValidation_1 = __importDefault(require("../../utils/childcares/userProfile/userProfileValidation"));
-const article_1 = __importDefault(require("../../models/article"));
-const createArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let payloadArticle = Object.assign(Object.assign({}, req.body), { author: new mongoose_1.default.Types.ObjectId(req.user) });
-    let { error } = (0, userProfileValidation_1.default)(payloadArticle);
-    if (error) {
-        return res.status(404).send({ message: "Bad Payload" });
+const user_account_model_1 = __importDefault(require("../models/user-account-model"));
+const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
+const router = express_1.default.Router();
+router.get("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { id, chatId } = req.query;
+    if (!id || id === "undefined" || !mongoose_1.default.isValidObjectId(id)) {
+        return res.status(404).send({ messsage: "Invalid or no query id" });
     }
-    let article = new article_1.default(payloadArticle);
-    let saved = yield article.save();
-    if (!saved) {
-        return res.status(404).send({ message: "error occured while saving article" });
+    let user = yield user_account_model_1.default.findOne({ _id: id }, { password: 0, email: 0, favorite: 0, is_verified: 0 });
+    if (!user) {
+        return res.status(404).send({ message: "user not found" });
     }
-    return res.send(saved);
-});
-exports.createArticle = createArticle;
+    res.send(Object.assign(Object.assign({}, user), { chatId: chatId }));
+}));
+exports.default = router;

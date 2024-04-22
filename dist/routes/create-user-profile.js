@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const userprofile_1 = __importDefault(require("../models/userprofile"));
-const userProfileValidation_1 = __importDefault(require("../utils/childcares/userProfile/userProfileValidation"));
+const userProfileValidation_1 = __importDefault(require("../utils/userProfile/userProfileValidation"));
 const router = express_1.default.Router();
 router.post("/", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { error } = (0, userProfileValidation_1.default)(req.body);

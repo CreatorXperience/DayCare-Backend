@@ -15,7 +15,6 @@ return  res.status(400).send({message: "Permission denied. Bad token"})
 }
 
 let user = await user_signup_model.findOne({_id: userPayload._id})
-
 if(!user){
 return  res.status(400).send({message: "Permission denied. User not found"})
 }

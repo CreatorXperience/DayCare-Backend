@@ -14,18 +14,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const stream_1 = require("stream");
-const __1 = require("..");
 const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
+const express_1 = __importDefault(require("express"));
+const child_care_profile_1 = require("../models/child-care-profile");
+const router = express_1.default.Router();
 let UploadImageRoutes = (options) => {
     let { collection, storage, bucket, path } = options;
-    __1.app.post(path, [profile_middleware_1.default, storage.single("file")], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    router.post(path, [profile_middleware_1.default, storage.single("file")], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         let user = req.user;
-        if (!user) {
-            return res.status(404).send({ message: "owner params is missing" });
-        }
         let file = req.file;
         if (!file) {
             return res.status(404).send({ message: "file not attached" });
+        }
+        let imageId = "";
+        try {
+            let exsitingImage = yield collection.findOne({ owner: user });
+            if (exsitingImage) {
+                imageId = exsitingImage.imageString;
+                bucket.delete(new mongoose_1.default.Types.ObjectId(imageId));
+                yield collection.deleteOne({ owner: user });
+            }
+        }
+        catch (e) {
+            console.log(e);
         }
         let { fieldname, originalname, mimetype, buffer, size } = file;
         let newProfileImage = new collection({
@@ -48,18 +59,28 @@ let UploadImageRoutes = (options) => {
         newProfileImage.imageString = uploadStream.id.toString();
         newProfileImage.owner = user;
         let savedImage = yield newProfileImage.save();
+        if (imageId) {
+            yield child_care_profile_1.child_care_model.updateOne({ image: imageId }, { $set: { image: uploadStream.id.toString() } });
+        }
+        else {
+            yield child_care_profile_1.child_care_model.updateOne({ userId: user }, { $set: { image: uploadStream.id.toString() } });
+        }
         if (!savedImage) {
             return res.status(404).send({ message: "couldn't save image" });
         }
         res.send({ message: "image successfully uploaded", id: uploadStream.id });
     }));
-    __1.app.get("/upload/:id", (req, res) => {
+    router.get("/upload/:id", (req, res) => {
         let { id } = req.params;
+        if (!id || id === "undefined" || id === undefined || !mongoose_1.default.isValidObjectId(id)) {
+            return res.status(404).send({ message: "Invalid" });
+        }
         let downloadStream = bucket.openDownloadStream(new mongoose_1.default.Types.ObjectId(id));
         downloadStream.on("file", (file) => {
             res.set("Content-Type", file.type);
         });
         downloadStream.pipe(res);
     });
+    return router;
 };
 exports.default = UploadImageRoutes;

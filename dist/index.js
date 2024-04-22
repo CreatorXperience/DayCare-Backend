@@ -20,9 +20,13 @@ const get_uri_1 = __importDefault(require("./startup/get-uri"));
 const routers_1 = __importDefault(require("./utils/routers"));
 const connection_logger_1 = require("./logger/connection-logger");
 const socket_1 = __importDefault(require("./socket"));
+// TODO:  run `npm run build` before start the server
 require("express-async-errors");
 dotenv_1.default.config();
 (0, connection_logger_1.exceptionRejectionLogger)();
+if (!process.env.DAYCARE_PRIVATE_KEY) {
+    process.exit(1);
+}
 const app = (0, express_1.default)();
 exports.app = app;
 let httpServer = (0, socket_1.default)();

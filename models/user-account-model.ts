@@ -2,13 +2,14 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 import { child_care_profile_schema } from "./child-care-profile";
+
 dotenv.config()
 
 const user_signup_schema = new mongoose.Schema({
 fullname: {type: String, required: true, maxLength: 25, minLength: 5},
 email: {type: String, required: true, minLength: 5, maxLength: 255, unique: true},
 password: {type: String, required: true,  maxLength: 255},
-is_verfied:  {type:  Boolean, default: false}, 
+is_verified:  {type:  Boolean, default: false}, 
 day_care_owner: {type: Boolean, default: false},
 favorite: {type: [child_care_profile_schema],default: [] },
 article: {type:   mongoose.Schema.Types.ObjectId, ref: "articles"}

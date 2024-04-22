@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --watchAll",
     "build": "npx tsc --watch",
-    "dev": "concurrently  \"npm run  build\" \"nodemon -q ./dist/index.js\"  \"npm test\""
+    "dev": "concurrently  \"npm run  build\" \"nodemon -q ./dist/index.js\"  \"npm test\"", 
+    "start": "npm run  build && node ./dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "axios": "^1.6.5",
     "bcryptjs": "^2.4.3",
     "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",

@@ -17,6 +17,7 @@ const joi_1 = __importDefault(require("joi"));
 const joi_password_complexity_1 = __importDefault(require("joi-password-complexity"));
 const user_account_model_1 = __importDefault(require("../models/user-account-model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const lodash_1 = __importDefault(require("lodash"));
 const router = express_1.default.Router();
 const validateUserPayload = (userPayload) => {
     let passwordOption = {
@@ -47,6 +48,11 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(404).send({ message: "Invalid email or Password" });
     }
     let token = user.generateAuthToken();
-    res.setHeader("authorization", token).send({ message: "user logged in successfully", status: "successfull" });
+    let responsePaylaod = { message: lodash_1.default.pick(user, ["_id", "is_verified", "day_care_owner", "favorite", "email"]), status: "successfull" };
+    res.header("Access-Control-Allow-Headers", "Origin, authorization, X-Requested-With, Content-Type, Accept")
+        .header("Access-Control-Allow-Methods", "GET, UPDATE, DELETE, POST, PATCH")
+        .header("Access-Control-Allow-Origin", "*")
+        .header("Access-Control-Expose-Headers", "*")
+        .setHeader("authorization", token).send(responsePaylaod);
 }));
 exports.default = router;

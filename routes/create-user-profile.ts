@@ -1,7 +1,7 @@
 import express from "express"
 import authMiddleware from "../middlewares/profile-middleware";
 import user_profile_model from "../models/userprofile";
-import schemaValidation from "../utils/childcares/userProfile/userProfileValidation";
+import schemaValidation from "../utils/userProfile/userProfileValidation";
 
 const router = express.Router()
 

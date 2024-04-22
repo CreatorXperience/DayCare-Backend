@@ -19,6 +19,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const user_account_model_1 = __importDefault(require("../models/user-account-model"));
 const validate_1 = __importDefault(require("../utils/signup/validate"));
 const sendOtp_1 = __importDefault(require("../utils/signup/sendOtp"));
+const otp_model_1 = __importDefault(require("../models/otp-model"));
 dotenv_1.default.config();
 const router = express_1.default.Router();
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -34,17 +35,21 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(404).send({ message: "user with this email already exist" });
     }
     let child_care_payload = lodash_1.default.pick(req.body, ["fullname", "email", "password"]);
-    let child_care = new user_account_model_1.default(child_care_payload);
+    let user = new user_account_model_1.default(child_care_payload);
     let _salt = yield bcryptjs_1.default.genSalt(10);
-    let _hash = yield bcryptjs_1.default.hash(child_care.password, _salt);
-    child_care.password = _hash;
-    let response = yield child_care.save();
+    let _hash = yield bcryptjs_1.default.hash(user.password, _salt);
+    user.password = _hash;
+    let response = yield user.save();
     if (!response) {
         return res.status(500).send({ message: "couldn't save file to database" });
     }
-    yield (0, sendOtp_1.default)(req.body.email, child_care._id);
+    let removeOtp = yield otp_model_1.default.deleteMany({ owner: user.id });
+    if (!removeOtp) {
+        res.status(500).send({ message: "Internal Server Error" });
+    }
+    yield (0, sendOtp_1.default)(req.body.email, user._id);
     return res.send({
-        message: lodash_1.default.pick(response, ["fullname", "email", "_id"]),
+        message: lodash_1.default.pick(response, ["fullname", "email", "_id", "is_verified"]),
         status: " verification email sent succesfully"
     });
 }));

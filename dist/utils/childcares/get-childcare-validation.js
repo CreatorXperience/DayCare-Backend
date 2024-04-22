@@ -15,7 +15,6 @@ const locateUserValidation = (payload) => {
 exports.locateUserValidation = locateUserValidation;
 const filterChildCareValidation = (payload) => {
     let schema = joi_1.default.object({
-        sortby: joi_1.default.string().required(),
         location: joi_1.default.string().required(),
         maxp: joi_1.default.number().required(),
         minp: joi_1.default.number().required()

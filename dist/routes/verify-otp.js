@@ -38,7 +38,7 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!isOtpEqual) {
         return res.status(404).send({ message: "wrong otp" });
     }
-    let updateUser = yield user_account_model_1.default.updateOne({ _id: req.body.ownerId }, { $set: { is_verfied: true } });
+    let updateUser = yield user_account_model_1.default.updateOne({ _id: req.body.ownerId }, { $set: { is_verified: true } });
     if (!updateUser) {
         return res.status(500).send({ message: "error occured while updating user" });
     }

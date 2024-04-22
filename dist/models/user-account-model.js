@@ -12,7 +12,7 @@ const user_signup_schema = new mongoose_1.default.Schema({
     fullname: { type: String, required: true, maxLength: 25, minLength: 5 },
     email: { type: String, required: true, minLength: 5, maxLength: 255, unique: true },
     password: { type: String, required: true, maxLength: 255 },
-    is_verfied: { type: Boolean, default: false },
+    is_verified: { type: Boolean, default: false },
     day_care_owner: { type: Boolean, default: false },
     favorite: { type: [child_care_profile_1.child_care_profile_schema], default: [] },
     article: { type: mongoose_1.default.Schema.Types.ObjectId, ref: "articles" }
