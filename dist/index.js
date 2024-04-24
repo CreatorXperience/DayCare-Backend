@@ -30,7 +30,7 @@ if (!process.env.DAYCARE_PRIVATE_KEY) {
 const app = (0, express_1.default)();
 exports.app = app;
 let httpServer = (0, socket_1.default)();
-let PORT = process.env.PORT || "3030";
+let PORT = "3000" || process.env.PORT;
 exports.PORT = PORT;
 let server;
 function get_uri_and_connect(connect_database) {

@@ -9,9 +9,10 @@ const socket_io_1 = require("socket.io");
 let onlineUsers = [];
 const socketConnection = () => {
     let httpServer = http_1.default.createServer(__1.app);
+    let environment = process.env.NODE_ENV == "production" ? "https://daycare-app-frontend.vercel.app" : "http://localhost:3000";
     let io = new socket_io_1.Server(httpServer, {
         cors: {
-            origin: "http://localhost:3000"
+            origin: environment
         }
     });
     io.on("connection", (socket) => {
