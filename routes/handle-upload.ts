@@ -80,7 +80,7 @@ let UploadImageRoutes = (options: TUploadOptions)=> {
         })
 
 
-       router.get("/upload/:id", (req,res)=>{
+       router.get(`${path}/:id`, (req,res)=>{
             let {id} = req.params
 
             if(!id || id === "undefined" || id === undefined ||  !mongoose.isValidObjectId(id)){
