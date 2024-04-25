@@ -21,6 +21,7 @@ import childcare_image_model from "../models/child-care-image";
 import UploadImageRoutes from "../routes/handle-upload";
 import user_routes  from "../routes/users"
 import resendOtp  from  "../routes/resendOtp"
+import user_image_model from "../models/user-image";
 
 
 const Router = (app: Application, bucket?: mongoose.mongo.GridFSBucket )=>{
@@ -65,6 +66,12 @@ const createUploadRoute = ( app: Application,bucket?: mongoose.mongo.GridFSBucke
         bucket,
         collection: childcare_image_model,
         path: "/upload/childcares"
+      },
+      {
+        storage: upload,
+        bucket,
+        collection: user_image_model,
+        path: "/upload/user"
       }
     ]
     
