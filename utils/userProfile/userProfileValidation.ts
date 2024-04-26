@@ -21,7 +21,25 @@ const schemaValidation = (payload: TPayload)=>{
             age: Joi.number().required(),
             drop: Joi.string().required(),
             take: Joi.string().required(),
-            role: Joi.string().required()
+            role: Joi.string().required(),
+            user: Joi.string().required()
+        }
+    )
+
+ return   schema.validate(payload)
+}
+
+const profileSchemaValidation = (payload: TPayload)=>{
+    let schema = Joi.object(
+        {
+            name: Joi.string().min(5).max(25),
+            children_name: Joi.string().min(5).max(25),
+            gender: Joi.string(),
+            age: Joi.number(),
+            drop: Joi.string(),
+            take: Joi.string(),
+            role: Joi.string(),
+            user: Joi.string()
         }
     )
 
@@ -29,4 +47,4 @@ const schemaValidation = (payload: TPayload)=>{
 }
 
 
-export default schemaValidation
+export { schemaValidation, profileSchemaValidation}
