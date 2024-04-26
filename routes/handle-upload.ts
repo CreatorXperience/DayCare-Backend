@@ -66,10 +66,10 @@ let UploadImageRoutes = (options: TUploadOptions)=> {
            let savedImage =  await newProfileImage.save()
            
            if(imageId){
-            await child_care_model.updateOne({image: imageId}, {$set: {image: uploadStream.id.toString()} })
+            await collection.updateOne({image: imageId}, {$set: {image: uploadStream.id.toString()} })
            }
            else{
-            await child_care_model.updateOne({userId: user}, {$set: {image: uploadStream.id.toString()} })
+            await collection.updateOne({userId: user}, {$set: {image: uploadStream.id.toString()} })
            }
 
            if(!savedImage){
@@ -87,6 +87,12 @@ let UploadImageRoutes = (options: TUploadOptions)=> {
                return res.status(404).send({message: "Invalid"})
             }
 
+
+           let item =  bucket.find({_id: new mongoose.Types.ObjectId(id)})
+
+           if(!item){
+            return res.status(404).send({message: "image with the given id not found"})
+           }
 
            let downloadStream =  bucket.openDownloadStream(new mongoose.Types.ObjectId(id))
         
