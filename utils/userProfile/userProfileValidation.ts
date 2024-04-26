@@ -17,12 +17,12 @@ const schemaValidation = (payload: TPayload)=>{
         {
             name: Joi.string().required().min(5).max(25),
             children_name: Joi.string().required().min(5).max(25),
-            gender: Joi.string().required(),
+            gender: Joi.string().required().min(1),
             age: Joi.number().required(),
-            drop: Joi.string().required(),
-            take: Joi.string().required(),
-            role: Joi.string().required(),
-            user: Joi.string().required()
+            drop: Joi.string().required().min(1),
+            take: Joi.string().required().min(1),
+            role: Joi.string().required().min(1),
+            user: Joi.string().required().min(1)
         }
     )
 
