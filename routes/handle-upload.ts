@@ -81,21 +81,25 @@ let UploadImageRoutes = (options: TUploadOptions)=> {
 
 
        router.get(`${path}/:id`, (req,res)=>{
+        console.log("reach line 84")
+
             let {id} = req.params
 
             if(!id || id === "undefined" || id === undefined ||  !mongoose.isValidObjectId(id)){
                return res.status(404).send({message: "Invalid"})
             }
 
-
+            console.log("reach line 92")
            let item =  bucket.find({_id: new mongoose.Types.ObjectId(id)})
+           console.log("reach line 94")
 
            if(!item){
             return res.status(404).send({message: "image with the given id not found"})
            }
+           console.log("reach line 99")
 
            let downloadStream =  bucket.openDownloadStream(new mongoose.Types.ObjectId(id))
-        
+           
            downloadStream.on("file", (file)=>{
             res.set("Content-Type", file.type)
            })
