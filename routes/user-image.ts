@@ -1,9 +1,10 @@
 import express from "express"
 import user_image_model from "../models/user-image"
+import authMiddleware from "../middlewares/profile-middleware"
 const router = express.Router()
 
 
-router.get("/user/:id", async(req,res)=>{
+router.get("/:id",authMiddleware, async(req,res)=>{
     let {id} = req.params
     const getImage = await user_image_model.findOne({owner: id})
     if(!getImage){
