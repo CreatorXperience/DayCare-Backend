@@ -22,6 +22,7 @@ import UploadImageRoutes from "../routes/handle-upload";
 import user_routes  from "../routes/users"
 import resendOtp  from  "../routes/resendOtp"
 import user_image_model from "../models/user-image";
+import user_image_routes from "../routes/user-image"
 
 
 const Router = (app: Application, bucket?: mongoose.mongo.GridFSBucket )=>{
@@ -43,6 +44,7 @@ app.use("/users", user_routes)
 app.use("/message", message)
 app.use("/otp",resendOtp)
 createUploadRoute(app,bucket)
+app.use("/user", user_image_routes)
 app.get('/', (req,res)=>{
   res.send("Welcome to this API")
 })
