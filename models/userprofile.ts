@@ -9,7 +9,8 @@ const user_profile_schema =  new mongoose.Schema({
     age: {type:  Number, required: true},
     drop: {type: String, required: true},
     take: {type: String, required: true},
-    role: {type: String, required: true}
+    role: {type: String, required: true},
+    user:  {type: String, required: true}
 })
 
 
