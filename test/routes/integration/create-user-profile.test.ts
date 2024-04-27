@@ -18,7 +18,8 @@ describe("Send request to /favorite/:id", ()=>{
         age: 5,
         drop: "13:00:00",
         take:  "13:00:00",
-        role: "mother"
+        role: "mother",
+        user: "267867890"
     }
 
     afterAll(async()=>{

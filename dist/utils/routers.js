@@ -24,6 +24,8 @@ const child_care_image_1 = __importDefault(require("../models/child-care-image")
 const handle_upload_1 = __importDefault(require("../routes/handle-upload"));
 const users_1 = __importDefault(require("../routes/users"));
 const resendOtp_1 = __importDefault(require("../routes/resendOtp"));
+const user_image_1 = __importDefault(require("../models/user-image"));
+const user_image_2 = __importDefault(require("../routes/user-image"));
 const Router = (app, bucket) => {
     app.use((0, cors_1.default)());
     app.use(express_1.default.json());
@@ -43,6 +45,7 @@ const Router = (app, bucket) => {
     app.use("/message", message_1.default);
     app.use("/otp", resendOtp_1.default);
     createUploadRoute(app, bucket);
+    app.use("/user", user_image_2.default);
     app.get('/', (req, res) => {
         res.send("Welcome to this API");
     });
@@ -64,6 +67,12 @@ const createUploadRoute = (app, bucket) => {
                 bucket,
                 collection: child_care_image_1.default,
                 path: "/upload/childcares"
+            },
+            {
+                storage: upload,
+                bucket,
+                collection: user_image_1.default,
+                path: "/upload/user"
             }
         ];
         uploadOptions.forEach((options) => app.use((0, handle_upload_1.default)(options)));

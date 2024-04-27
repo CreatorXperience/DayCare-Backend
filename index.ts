@@ -24,7 +24,7 @@ const app = express()
 
 let httpServer = socketConnection()
 
-let PORT = "3000" || process.env.PORT
+let PORT = "3001" || process.env.PORT
 
 let server:MongoMemoryServer
 

@@ -19,7 +19,12 @@ if(!removeOtp){
     res.status(500).send({message: "could not remove previous otp"})
 }
 
-await sendOtp(email,userId)
+let message= {
+    title: "Your Verification Code",
+    desc: "To verify your account, enter this code on daily.dev:",
+    details: ""
+}
+await sendOtp(email,userId,message)
 })
 
 export default router
