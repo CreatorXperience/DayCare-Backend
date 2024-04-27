@@ -51,7 +51,7 @@ if(!removeOtp){
 
 let message= {
     title: "Your Verification Code",
-    desc: "To verify your account, enter this code on daily.dev:",
+    desc: "To verify your account, enter this code on Daycare app:",
     details: ""
 }
 await sendOtp(req.body.email, user._id,message)

@@ -1,37 +1,22 @@
-import mongoose from "mongoose"
 import nodemailer from "nodemailer"
-import Otp_model from "../../models/otp-model"
-import bcrypt from "bcryptjs"
-import dotenv from "dotenv"
-dotenv.config()
 import handlebars from "handlebars"
-let types = new mongoose.Types.ObjectId()
 
+type TMailPayload =  {
+    title: string,
+    desc: string,
+    details?: string,
+    link: string,
+    to: string,
+    name: string
+}
+const sendMail = async (email: string, template: TMailPayload)=>{
+    let transporter = nodemailer.createTransport({
+        service: "gmail",
+        secure: true,
+        auth: {user: process.env.EMAIL, pass: process.env.EMAIL_PASS},
+    })
 
-const sendOtp = async(email: string, ownerId: typeof types,template: {title: string,desc: string,details: string})=>{
-
-let transporter = nodemailer.createTransport({
-    service: "gmail",
-    secure: true,
-    auth: {user: process.env.EMAIL, pass: process.env.EMAIL_PASS},
-})
-
-let max =999999
-let min = 100000
-
-let randomOtp = Math.floor(Math.random()*(max-min)+1) 
-
-let newOtp = new Otp_model({
-otp: randomOtp,
-owner: new mongoose.Types.ObjectId(ownerId),
-})
-
-let salt = 10
-let hash = await bcrypt.hash(randomOtp.toString(), salt)
-newOtp.otp = hash
-
-await newOtp.save()
-let file = `<!DOCTYPE html>
+    let file = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -74,7 +59,7 @@ let file = `<!DOCTYPE html>
     .image {
       width: 200px;
       height: 200px;
-      background-image: url("https://i.pinimg.com/564x/95/93/66/9593663617bd45c8a30b6b1c9f97debb.jpg");
+      background-image: url("{{link}}");
       background-size: cover;
       margin: 0 auto;
     }
@@ -95,14 +80,27 @@ let file = `<!DOCTYPE html>
     <div class="message">
       <h1>{{title}}</h1>
       <p>{{message}}</p>
+      <p>Subject: Welcome to [Daycare Name]! </p>
+
+     <h3> Hi ,{{recipient}} </h3>
+      
+      <p> Welcome to {{name}} We're excited to have your child with us. Feel free to reach out with any questions.
+      
+      Best regards, </p>
+
+      <p>Daycare app</p>
     </div>
   </div>
 </body>
 </html>`
+
 let compile = handlebars.compile(file)
 const replacement = {
     title: template.title,
-    message: `${template.desc}: ${randomOtp}`
+    message: `${template.desc}`,
+    link: template.link,
+    recipient: template.to,
+    name: template.name
 }
 
 let htmlFile = compile(replacement)
@@ -121,4 +119,4 @@ let htmlFile = compile(replacement)
 })
 }
 
-export default sendOtp
+export default sendMail
