@@ -52,6 +52,7 @@ requestPayload.location = {type: "Point", coordinates: [location_data[0].longitu
 	 if(!saved && !user){
 return res.status(404).send({message: "couldn't save profile to database", status: "successfull"})
 	 }
+	 
 	   return res.send(saved)
 })
 
