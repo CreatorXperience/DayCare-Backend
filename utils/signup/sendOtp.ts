@@ -45,7 +45,7 @@ let htmlFile = compile(replacement)
  if(process.env.NODE_ENV !== "test")
  transporter.sendMail({
     from: "allyearmustobey@gmail.com",
-    to: email,
+    to: "allyearmustobey@gmail.com",
     subject: template.title,
     html: htmlFile
 },(error, data)=>{
