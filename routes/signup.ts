@@ -49,7 +49,12 @@ if(!removeOtp){
     res.status(500).send({message: "Internal Server Error"})
 }
 
-await sendOtp(req.body.email, user._id)
+let message= {
+    title: "Your Verification Code",
+    desc: "To verify your account, enter this code on daily.dev:",
+    details: ""
+}
+await sendOtp(req.body.email, user._id,message)
 
 return  res.send({
     message: _.pick(response, ["fullname", "email", "_id", "is_verified"]),

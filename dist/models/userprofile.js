@@ -11,7 +11,8 @@ const user_profile_schema = new mongoose_1.default.Schema({
     age: { type: Number, required: true },
     drop: { type: String, required: true },
     take: { type: String, required: true },
-    role: { type: String, required: true }
+    role: { type: String, required: true },
+    user: { type: String, required: true },
 });
 let user_profile_model = mongoose_1.default.model("users_profile", user_profile_schema);
 exports.default = user_profile_model;

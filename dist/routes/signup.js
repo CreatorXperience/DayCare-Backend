@@ -47,7 +47,12 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!removeOtp) {
         res.status(500).send({ message: "Internal Server Error" });
     }
-    yield (0, sendOtp_1.default)(req.body.email, user._id);
+    let message = {
+        title: "Your Verification Code",
+        desc: "To verify your account, enter this code on daily.dev:",
+        details: ""
+    };
+    yield (0, sendOtp_1.default)(req.body.email, user._id, message);
     return res.send({
         message: lodash_1.default.pick(response, ["fullname", "email", "_id", "is_verified"]),
         status: " verification email sent succesfully"

@@ -13,25 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const sendOtp_1 = __importDefault(require("../utils/signup/sendOtp"));
-const mongoose_1 = __importDefault(require("mongoose"));
-const otp_model_1 = __importDefault(require("../models/otp-model"));
+const user_image_1 = __importDefault(require("../models/user-image"));
+const profile_middleware_1 = __importDefault(require("../middlewares/profile-middleware"));
 const router = express_1.default.Router();
-router.get("/:email/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { email, id } = req.params;
-    if (!email || email === "undefined" || !mongoose_1.default.isValidObjectId(id)) {
-        return res.status(404).send({ message: "Invalid email provided" });
+router.get("/:id", profile_middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { id } = req.params;
+    const getImage = yield user_image_1.default.findOne({ owner: id });
+    if (!getImage) {
+        return res.status(404).send({ message: "image not found" });
     }
-    let userId = new mongoose_1.default.Types.ObjectId(id);
-    let removeOtp = yield otp_model_1.default.deleteMany({ owner: id });
-    if (!removeOtp) {
-        res.status(500).send({ message: "could not remove previous otp" });
-    }
-    let message = {
-        title: "Your Verification Code",
-        desc: "To verify your account, enter this code on daily.dev:",
-        details: ""
-    };
-    yield (0, sendOtp_1.default)(email, userId, message);
+    return res.send({ imageId: getImage.imageString });
 }));
 exports.default = router;
