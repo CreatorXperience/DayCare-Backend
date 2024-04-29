@@ -8,7 +8,7 @@ const router = express.Router()
 router.post("/",authMiddleware, async (req,res)=> {
 let {error}=  schemaValidation(req.body)
 if(error){
-    return  res.status(404).send({message: "Bad Payload"})
+    return  res.status(404).send({message: error.details[0].message)
 }
 
 const userProfile = new user_profile_model(req.body)
